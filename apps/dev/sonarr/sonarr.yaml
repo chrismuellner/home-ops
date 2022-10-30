@@ -2,6 +2,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: truecharts-sonarr
+  namespace: mediaserver
 spec:
   releaseName: truecharts-sonarr
   chart:
@@ -14,6 +15,7 @@ spec:
       version: ">=11.0.0"
   interval: 1h0m0s
   install:
+    createNamespace: true
     remediation:
       retries: 3
   values:
