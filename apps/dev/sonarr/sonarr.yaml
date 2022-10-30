@@ -23,7 +23,11 @@ spec:
       - name: TZ
         value: Europe/Vienna
     
-    # persistence:
+    persistence:
+      config:
+        enabled: true
+        existingClaim: sonarr-config
+        mountPath: /config
 
     # ingress:
 
