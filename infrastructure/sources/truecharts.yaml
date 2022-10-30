@@ -1,7 +1,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
-  name: mediaserver
+  name: truecharts
 spec:
   interval: 30m
-  url: https://muellner.dev/helm-mediaserver
+  url: https://charts.truecharts.org/

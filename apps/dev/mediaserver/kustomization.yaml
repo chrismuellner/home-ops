@@ -3,4 +3,4 @@ kind: Kustomization
 namespace: mediaserver
 resources:
   - namespace.yaml
-  - release.yaml
+  - sonarr.yaml
