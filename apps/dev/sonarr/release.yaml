@@ -19,8 +19,6 @@ spec:
   values:
     env:
       TZ: Europe/Vienna
-      SONARR__PORT: &port 80
-      SONARR__APPLICATION_URL: "https://sonarr.media.local"
     
     persistence:
       config:
@@ -28,21 +26,18 @@ spec:
         existingClaim: sonarr-config
         mountPath: /config
 
-    service:
-      main:
-        ports:
-          http:
-            port: *port
-
     ingress:
       main:
         enabled: true
         ingressClassName: "nginx"
         hosts:
-          - host: &host "sonarr.media.local"
+          - host: &host "media.local"
             paths:
-              - path: /
+              - path: /sonarr
                 pathType: Prefix
+                service: 
+                  name: *release
+                  port: 8989
         tls:
           - hosts:
               - *host
