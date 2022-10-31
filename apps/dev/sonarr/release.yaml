@@ -1,9 +1,9 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: truecharts-sonarr
+  name: &release truecharts-sonarr
 spec:
-  releaseName: truecharts-sonarr
+  releaseName: *release
   chart:
     spec:
       chart: sonarr
@@ -32,10 +32,13 @@ spec:
         enabled: true
         ingressClassName: "nginx"
         hosts:
-          - host: &host "sonarr.media.local"
+          - host: &host "media.local"
             paths:
               - path: /
                 pathType: Prefix
+                service:
+                  name: *release
+                  port: 8989
         tls:
           - hosts:
               - *host
