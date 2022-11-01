@@ -16,6 +16,14 @@ spec:
   install:
     remediation:
       retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  rollback:
+    timeout: 5m
+    recreate: true
+    force: false
+    cleanupOnFail: true
   values:
     env:
       TZ: Europe/Vienna
