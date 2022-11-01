@@ -33,6 +33,10 @@ spec:
         enabled: true
         existingClaim: sonarr-config
         mountPath: /config
+      media:
+        enabled: true
+        existingClaim: data
+        mountPath: /data
 
     ingress:
       main:
