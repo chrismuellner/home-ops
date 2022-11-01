@@ -50,4 +50,22 @@ spec:
           - hosts:
               - *host
 
-    # addons:
+    addons:
+      vpn:
+        type: openvpn
+
+        excludedNetworks_IPv4:
+          - 192.168.0.0/16
+
+        configFile:
+          hostPath: /mnt/vpn/config.ovpn
+  
+  valuesFrom:
+    - kind: Secret
+      name: openvpn-credentials
+      valuesKey: username
+      targetPath: addons.vpn.openvpn.username
+    - kind: Secret
+      name: openvpn-credentials
+      valuesKey: password
+      targetPath: addons.vpn.openvpn.password
