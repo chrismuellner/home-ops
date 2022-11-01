@@ -50,15 +50,15 @@ spec:
           - hosts:
               - *host
 
-    # addons:
-    #   vpn:
-    #     type: openvpn
+    addons:
+      vpn:
+        type: openvpn
 
-    #     excludedNetworks_IPv4:
-    #       - 192.168.0.0/16
+        excludedNetworks_IPv4:
+          - 192.168.0.0/16
 
-    #     configFile:
-    #       hostPath: /mnt/vpn/config.ovpn
+        configFile:
+          hostPath: /mnt/vpn/config.ovpn
   
   valuesFrom:
     - kind: Secret
