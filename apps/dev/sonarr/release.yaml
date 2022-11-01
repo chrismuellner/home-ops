@@ -39,9 +39,9 @@ spec:
         enabled: true
         ingressClassName: "nginx"
         hosts:
-          - host: &host "media.local"
+          - host: &host "sonarr.media.local"
             paths:
-              - path: /sonarr
+              - path: /
                 pathType: Prefix
                 service: 
                   name: *release
