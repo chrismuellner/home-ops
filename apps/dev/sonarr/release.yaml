@@ -20,16 +20,21 @@ spec:
 
     env:
       TZ: Europe/Vienna
-    
-    persistence:
-      config:
-        enabled: true
-        existingClaim: sonarr-config
-        mountPath: /config
-      media:
-        enabled: true
-        existingClaim: data
-        mountPath: /data
+      SONARR__INSTANCE_NAME: Sonarr
+      SONARR__PORT: &port 8989
+      SONARR__APPLICATION_URL: "https://sonarr.media.local"
+      SONARR__LOG_LEVEL: info
+      # SONARR__API_KEY:
+      #   valueFrom:
+      #     secretKeyRef:
+      #       name: sonarr-secrets
+      #       key: api_key
+
+    service:
+      main:
+        ports:
+          http:
+            port: *port
 
     ingress:
       main:
@@ -46,3 +51,13 @@ spec:
         tls:
           - hosts:
               - *host
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: sonarr-config
+        mountPath: /config
+      media:
+        enabled: true
+        existingClaim: data
+        mountPath: /data

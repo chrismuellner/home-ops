@@ -20,12 +20,23 @@ spec:
 
     env:
       TZ: Europe/Vienna
-    
-    persistence:
-      config:
-        enabled: true
-        existingClaim: prowlarr-config
-        mountPath: /config
+      PROWLARR__INSTANCE_NAME: Prowlarr
+      PROWLARR__PORT: &port 9696
+      PROWLARR__LOG_LEVEL: info
+      PROWLARR__ANALYTICS_ENABLED: "False"
+      # PROWLARR__API_KEY:
+      #   valueFrom:
+      #     secretKeyRef:
+      #       name: prowlarr-secrets
+      #       key: api_key
+
+    hostname: prowlarr
+
+    service:
+      main:
+        ports:
+          http:
+            port: *port
 
     ingress:
       main:
@@ -42,3 +53,9 @@ spec:
         tls:
           - hosts:
               - *host
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: prowlarr-config
+        mountPath: /config
