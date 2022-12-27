@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: &release truecharts-jackett
+  name: &release jackett
 spec:
   releaseName: *release
   chart:
@@ -9,7 +9,7 @@ spec:
       chart: jackett
       sourceRef:
         kind: HelmRepository
-        name: truecharts
+        name: bjw-s
         namespace: flux-system
       version: ">=11.0.0"
   interval: 1h0m0s
