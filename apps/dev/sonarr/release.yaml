@@ -5,6 +5,7 @@ metadata:
 spec:
   releaseName: *release
   chart:
+    interval: 30m
     spec:
       chart: app-template
       version: 1.2.0
