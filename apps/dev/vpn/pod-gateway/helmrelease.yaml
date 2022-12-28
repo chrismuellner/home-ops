@@ -20,7 +20,7 @@ spec:
       repository: ghcr.io/angelnu/pod-gateway
       tag: v1.8.1
 
-    # DNS: 192.168.10.82
+    DNS: 192.168.1.1
 
     addons:
       vpn:
