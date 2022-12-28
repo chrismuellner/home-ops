@@ -5,3 +5,4 @@ resources:
   - angelnu.yaml
   - bitnami.yaml
   - bjw-s.yaml
+  - jetstack.yaml
