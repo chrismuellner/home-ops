@@ -18,6 +18,9 @@ spec:
       repository: ghcr.io/onedr0p/prowlarr-develop
       tag: 1.0.0.2171
 
+    podAnnotations:
+      setGateway: "true"
+
     env:
       TZ: Europe/Vienna
       PROWLARR__INSTANCE_NAME: Prowlarr
