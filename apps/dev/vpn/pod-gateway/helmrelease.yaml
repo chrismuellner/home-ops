@@ -82,21 +82,6 @@ spec:
     #       - port: 56202
     #         type: tcp
 
-    networkPolicy:
-      enabled: true
-
-      egress:
-        - to:
-          - ipBlock:
-              cidr: 0.0.0.0/0
-          ports:
-          # VPN traffic
-          - port: &vpn_port 51820
-            protocol: UDP
-        - to:
-          - ipBlock:
-              cidr: 10.0.0.0/8
-
     routed_namespaces:
       - mediaserver
 
@@ -105,7 +90,7 @@ spec:
       VPN_BLOCK_OTHER_TRAFFIC: true
       # VPN_INTERFACE: wg0
       VPN_LOCAL_CIDRS: 10.0.0.0/8 192.168.0.0/16
-      VPN_TRAFFIC_PORT: *vpn_port
+      VPN_TRAFFIC_PORT: 51820
       # VXLAN_ID: 1
       # VXLAN_IP_NETWORK: 172.16.1
       IPTABLES_NFT: yes
