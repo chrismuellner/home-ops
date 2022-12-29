@@ -6,3 +6,4 @@ resources:
   - bitnami.yaml
   - bjw-s.yaml
   - jetstack.yaml
+  - ingress-nginx.yaml
