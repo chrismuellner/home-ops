@@ -34,6 +34,10 @@ spec:
             value: mullvad
           - name: VPN_TYPE
             value: wireguard
+          - name: FIREWALL
+            value: "off"
+          - name: DOT
+            value: "off"
           - name: WIREGUARD_PRIVATE_KEY
             valueFrom:
               secretKeyRef:
