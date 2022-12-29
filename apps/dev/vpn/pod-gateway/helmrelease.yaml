@@ -32,34 +32,33 @@ spec:
         env:
           - name: VPN_SERVICE_PROVIDER
             value: mullvad
-          # - name: VPN_TYPE
-          #   value: wireguard
+          # # - name: VPN_TYPE
+          # #   value: wireguard
           - name: FIREWALL
             value: "off"
           - name: DOT
             value: "off"
-          # - name: WIREGUARD_PRIVATE_KEY
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name: gateway-vpnconfig
-          #       key: WIREGUARD_PRIVATE_KEY
-          # - name: WIREGUARD_ADDRESSES
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name: gateway-vpnconfig
-          #       key: WIREGUARD_ADDRESSES
-          - name: VPN_TYPE
-            value: openvpn
-          - name: OPENVPN_USER
+          - name: WIREGUARD_PRIVATE_KEY
             valueFrom:
               secretKeyRef:
                 name: gateway-vpnconfig
-                key: OPENVPN_USER
+                key: WIREGUARD_PRIVATE_KEY
+          - name: WIREGUARD_ADDRESSES
+            valueFrom:
+              secretKeyRef:
+                name: gateway-vpnconfig
+                key: WIREGUARD_ADDRESSES
+          # - name: VPN_TYPE
+          #   value: openvpn
+          # - name: OPENVPN_USER
+          #   valueFrom:
+          #     secretKeyRef:
+          #       name: gateway-vpnconfig
+          #       key: OPENVPN_USER
         securityContext:
-          privileged: true
-          # capabilities:
-          #   add:
-          #     - NET_ADMIN
+          capabilities:
+            add:
+              - NET_ADMIN
 
       netshoot:
         enabled: true
