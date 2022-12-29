@@ -18,9 +18,6 @@ spec:
       repository: ghcr.io/onedr0p/prowlarr-develop
       tag: 1.0.0.2171
 
-    podAnnotations:
-      setGateway: "true"
-
     env:
       TZ: Europe/Vienna
       PROWLARR__INSTANCE_NAME: Prowlarr
@@ -59,3 +56,30 @@ spec:
         enabled: true
         existingClaim: prowlarr-config
         mountPath: /config
+
+    addons:
+      vpn:
+        enabled: true
+        type: gluetun
+        image:
+          repository: docker.io/qmcgaw/gluetun
+          tag: v3.32.0
+        env:
+          - name: VPN_SERVICE_PROVIDER
+            value: mullvad
+          - name: VPN_TYPE
+            value: wireguard
+          - name: FIREWALL
+            value: "off"
+          - name: DOT
+            value: "off"
+          - name: WIREGUARD_PRIVATE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: vpnconfig
+                key: WIREGUARD_PRIVATE_KEY
+          - name: WIREGUARD_ADDRESSES
+            valueFrom:
+              secretKeyRef:
+                name: vpnconfig
+                key: WIREGUARD_ADDRESSES
