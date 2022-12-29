@@ -56,9 +56,10 @@ spec:
                 name: gateway-vpnconfig
                 key: OPENVPN_USER
         securityContext:
-          capabilities:
-            add:
-              - NET_ADMIN
+          privileged: true
+          # capabilities:
+          #   add:
+          #     - NET_ADMIN
 
       netshoot:
         enabled: true
