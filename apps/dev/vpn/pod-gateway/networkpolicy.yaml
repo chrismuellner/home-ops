@@ -8,7 +8,6 @@ metadata:
     app.kubernetes.io/name: pod-gateway
 spec:
   egress:
-  endpointSelector:
     - ports:
         - port: 51820
           protocol: UDP
