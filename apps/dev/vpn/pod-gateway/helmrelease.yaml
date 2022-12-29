@@ -32,8 +32,8 @@ spec:
         env:
           - name: VPN_SERVICE_PROVIDER
             value: mullvad
-          # # - name: VPN_TYPE
-          # #   value: wireguard
+          - name: VPN_TYPE
+            value: wireguard
           - name: FIREWALL
             value: "off"
           - name: DOT
