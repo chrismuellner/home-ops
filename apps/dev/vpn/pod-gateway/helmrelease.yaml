@@ -60,8 +60,18 @@ spec:
             add:
               - NET_ADMIN
 
-      netshoot:
-        enabled: true
+      # netshoot:
+      #   enabled: true
+
+    livenessProbe:
+      exec:
+        command:
+          - sh
+          - -c
+          - if [ $(wget -q -O- https://ipinfo.io/country) == 'AT' ]; then exit 0; else exit $?; fi
+      initialDelaySeconds: 30
+      periodSeconds: 60
+      failureThreshold: 3
 
     # publicPorts:
     #   - IP: 10
@@ -98,6 +108,7 @@ spec:
       VPN_TRAFFIC_PORT: *vpn_port
       # VXLAN_ID: 1
       # VXLAN_IP_NETWORK: 172.16.1
+      IPTABLES_NFT: yes
 
     webhook:
       gatewayAnnotation: setGateway
