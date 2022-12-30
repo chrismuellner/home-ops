@@ -5,3 +5,4 @@ resources:
   - pvc.yaml
   - prowlarr
   - sonarr
+  - qbittorrent
