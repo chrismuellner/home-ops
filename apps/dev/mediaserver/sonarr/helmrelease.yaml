@@ -56,5 +56,6 @@ spec:
         mountPath: /config
       media:
         enabled: true
-        existingClaim: data
-        mountPath: /data
+        existingClaim: media
+        path: /media
+        mountPath: /data/media
