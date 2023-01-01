@@ -9,8 +9,8 @@ spec:
   ref:
     branch: main
   secretRef:
-    name: flux-system
-  url: ssh://git@github.com/chrismuellner/home-infra
+    name: home-ops
+  url: ssh://git@github.com/chrismuellner/home-ops
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
