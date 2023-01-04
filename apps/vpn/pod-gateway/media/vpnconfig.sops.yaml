@@ -3,7 +3,7 @@ kind: Secret
 metadata:
     name: gateway-vpnconfig
     namespace: vpn
-data:
+stringData:
     WIREGUARD_PRIVATE_KEY: ENC[AES256_GCM,data:dS8mW/0i96hHS1/tADjiBK70tfKR5SRwExBhdgtJfAn6bqWdJXpp5swE7OaIIDAiGA28cARBPmMQR66w,iv:oziRKNSCBKooIIgkrKIJowL7RdaNzU5mqFBltOKc6zA=,tag:5+ARde+K5+Qst5l6Hi/BNA==,type:str]
     WIREGUARD_ADDRESSES: ENC[AES256_GCM,data:4wX9GIbyfABJICIBtnlp5zuZHEQ=,iv:O/6e7n0EQnUD04sazYQSS5BNOezjOUnkqzG8K+pnvLA=,tag:G33jvfukyNXAZC/dtDV9Qg==,type:str]
 sops:
