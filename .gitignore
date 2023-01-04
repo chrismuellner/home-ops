@@ -1,0 +1,4 @@
+# sops
+*.agekey
+*.pub
+*.key

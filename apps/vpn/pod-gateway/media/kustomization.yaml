@@ -4,3 +4,4 @@ namespace: vpn
 resources:
   - helmrelease.yaml
   - networkpolicy.yaml
+  - vpnconfig.sops.yaml
