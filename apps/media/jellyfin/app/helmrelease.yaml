@@ -29,7 +29,7 @@ spec:
         enabled: true
         ingressClassName: "nginx"
         hosts:
-          - host: &host "jellyfin.media.local"
+          - host: &host "jellyfin.${SECRET_DOMAIN}"
             paths:
               - path: /
                 pathType: Prefix
