@@ -22,7 +22,7 @@ spec:
       TZ: Europe/Vienna
       RADARR__INSTANCE_NAME: Radarr
       RADARR__PORT: &port 7878
-      RADARR__APPLICATION_URL: "radarr.media.local"
+      RADARR__APPLICATION_URL: &host "radarr.${SECRET_DOMAIN}"
       RADARR__LOG_LEVEL: info
       # RADARR__API_KEY:
       #   valueFrom:
@@ -40,14 +40,17 @@ spec:
       main:
         enabled: true
         ingressClassName: "nginx"
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-production
         hosts:
-          - host: &host "radarr.media.local"
+          - host: *host
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
               - *host
+            secretName: radarr-tls
 
     persistence:
       config:
