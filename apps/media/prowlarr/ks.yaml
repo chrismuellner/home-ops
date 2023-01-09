@@ -12,5 +12,9 @@ spec:
     kind: GitRepository
     name: home-ops
   wait: true
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
   dependsOn:
     - name: apps-pod-gateway-media
