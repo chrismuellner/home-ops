@@ -7,3 +7,5 @@ resources:
   - bjw-s.yaml
   - jetstack.yaml
   - ingress-nginx.yaml
+  - metallb.yaml
+  - k8s-gateway.yaml

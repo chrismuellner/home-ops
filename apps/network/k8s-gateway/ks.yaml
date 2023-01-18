@@ -1,0 +1,27 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: apps-k8s-gateway
+  namespace: flux-system
+spec:
+  path: ./apps/network/k8s-gateway/app
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: home-kubernetes
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+      kind: HelmRelease
+      name: k8s-gateway
+      namespace: network
+  interval: 30m
+  retryInterval: 1m
+  timeout: 3m
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-settings
+  dependsOn:
+    - name: apps-metallb
+    - name: apps-metallb-config
