@@ -12,6 +12,10 @@ spec:
     kind: GitRepository
     name: home-ops
   wait: true
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-settings
   dependsOn:
   - name: apps-cert-manager
   - name: apps-cert-manager-issuers
