@@ -19,3 +19,11 @@ Single-node, k3s cluster.
     ```sh
     kubectl apply --kustomize ./flux/config
     ```
+
+3. Create secret with age private key ([sealed secrets](https://fluxcd.io/flux/guides/mozilla-sops/#encrypting-secrets-using-age))
+    ```sh
+    cat age.agekey |
+    kubectl create secret generic sops-age \
+    --namespace=flux-system \
+    --from-file=age.agekey=/dev/stdin
+    ```
