@@ -43,10 +43,8 @@ spec:
                 resources Ingress Service
                 ttl 300
               }
-              prometheus 0.0.0.0:9153
-              loop
-              reload
-              loadbalance
+
+              prometheus :9153
             }
     
     serviceAccount:
