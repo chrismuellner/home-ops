@@ -6,7 +6,7 @@
     ":disableRateLimiting",
     "docker:enableMajor",
     "docker:pinDigests",
-    ":automergeDigest",
+    ":automergeDigest"
   ],
   "flux": {
     "fileMatch": [".+\\.ya?ml$"]
@@ -31,7 +31,7 @@
       "description": ["Process CRD dependencies - Chart and Github Release are the same version"],
       "fileMatch": ["\\.ya?ml$"],
       "matchStrings": [
-        "# renovate: registryUrl=(?<registryUrl>\\S+) chart=(?<depName>\\S+)\n.*?(?<currentValue>[^-\\s]*)\n",
+        "# renovate: registryUrl=(?<registryUrl>\\S+) chart=(?<depName>\\S+)\n.*?(?<currentValue>[^-\\s]*)\n"
       ],
       "datasourceTemplate": "helm"
     },
@@ -41,10 +41,10 @@
         ".+\\.ya?ml$"
       ],
       "matchStrings": [
-        "https:\\/\\/raw.githubusercontent.com\\/(?<depName>[\\w\\d\\-_]+\\/[\\w\\d\\-_]+)\\/(?<currentValue>[\\w\\d\\.\\-_]+)\\/.*",
+        "https:\\/\\/raw.githubusercontent.com\\/(?<depName>[\\w\\d\\-_]+\\/[\\w\\d\\-_]+)\\/(?<currentValue>[\\w\\d\\.\\-_]+)\\/.*"
       ],
       "datasourceTemplate": "github-releases",
       "versioningTemplate": "semver"
     }
-  ],
+  ]
 }
