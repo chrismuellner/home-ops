@@ -1,6 +1,50 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
-  ]
+    "config:base",
+    ":dependencyDashboard",
+    ":disableRateLimiting",
+    "docker:enableMajor",
+    "docker:pinDigests",
+    ":automergeDigest",
+  ],
+  "flux": {
+    "fileMatch": [".+\\.ya?ml$"]
+  },
+  "helm-values": {
+    "fileMatch": [".+\\.ya?ml$"]
+  },
+  "kubernetes": {
+    "fileMatch": [".+\\.ya?ml$"]
+  },
+  "regexManagers": [
+    {
+      "description": ["Process various dependencies in YAML files"],
+      "fileMatch": [".+\\.ya?ml$"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*=?))?( versionTemplate=(?<versionTemplate>.*=?))?\\n.*: ?(\"?(?<currentValue>[^\"\\n]+=?)\"?)"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
+      "extractVersionTemplate": "{{#if versionTemplate}}{{{versionTemplate}}}{{else}}{{/if}}"
+    },
+    {
+      "description": ["Process CRD dependencies - Chart and Github Release are the same version"],
+      "fileMatch": ["\\.ya?ml$"],
+      "matchStrings": [
+        "# renovate: registryUrl=(?<registryUrl>\\S+) chart=(?<depName>\\S+)\n.*?(?<currentValue>[^-\\s]*)\n",
+      ],
+      "datasourceTemplate": "helm"
+    },
+    {
+      "description": ["Raw GitHub URL Regex manager"],
+      "fileMatch": [
+        ".+\\.ya?ml$"
+      ],
+      "matchStrings": [
+        "https:\\/\\/raw.githubusercontent.com\\/(?<depName>[\\w\\d\\-_]+\\/[\\w\\d\\-_]+)\\/(?<currentValue>[\\w\\d\\.\\-_]+)\\/.*",
+      ],
+      "datasourceTemplate": "github-releases",
+      "versioningTemplate": "semver"
+    }
+  ],
 }
