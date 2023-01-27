@@ -1,6 +1,10 @@
 # home ops
 
-Single-node, k3s cluster.
+Single-node k3s cluster.
+
+Thanks to k8s@home maintainers:
+- https://github.com/onedr0p/flux-cluster-template
+- https://github.com/bjw-s/home-ops
 
 ## Prerequisites
 
@@ -15,15 +19,15 @@ Single-node, k3s cluster.
     kubectl apply --kustomize ./bootstrap
     ```
 
-2. Start Flux reconciliation
-    ```sh
-    kubectl apply --kustomize ./flux/config
-    ```
-
-3. Create secret with age private key ([sealed secrets](https://fluxcd.io/flux/guides/mozilla-sops/#encrypting-secrets-using-age))
+2. Create secret with age private key ([sealed secrets](https://fluxcd.io/flux/guides/mozilla-sops/#encrypting-secrets-using-age))
     ```sh
     cat age.agekey |
     kubectl create secret generic sops-age \
     --namespace=flux-system \
     --from-file=age.agekey=/dev/stdin
+    ```
+
+3. Start Flux reconciliation
+    ```sh
+    kubectl apply --kustomize ./flux/config
     ```
