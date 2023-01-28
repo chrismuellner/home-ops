@@ -1,8 +1,7 @@
 apiVersion: v1
-kind: Secret
-type: Opaque
+kind: ConfigMap
 metadata:
-    name: homeassistant-secret
+    name: homeassistant-config
     namespace: home-automation
 data:
     SECRET_INTERNAL_URL: https://"hass.${SECRET_DOMAIN}"

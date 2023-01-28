@@ -4,7 +4,7 @@ namespace: media
 resources:
   - helmrelease.yaml
   - pvc.yaml
-  - secret.yaml
+  - config.yaml
 commonLabels:
   app.kubernetes.io/name: homeassistant
   app.kubernetes.io/instance: homeassistant

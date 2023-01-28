@@ -24,8 +24,8 @@ spec:
       tag: 2023.1.7
 
     envFrom:
-      - secretRef:
-        name: homeassistant-secret
+      - configMapRef:
+        name: homeassistant-config
 
     service:
       main:
