@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: home-assistant
+  name: homeassistant
   namespace: home-automation
 spec:
   interval: 30m
@@ -23,6 +23,10 @@ spec:
       repository: ghcr.io/home-assistant/home-assistant
       tag: 2023.1.7
 
+    envFrom:
+      - secretRef:
+        name: homeassistant-secret
+
     service:
       main:
         ports:
@@ -36,7 +40,7 @@ spec:
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-production
         hosts:
-          - host: &host "homeassistant.${SECRET_DOMAIN}"
+          - host: &host "hass.${SECRET_DOMAIN}"
             paths:
               - path: /
                 pathType: Prefix
@@ -44,3 +48,9 @@ spec:
           - hosts:
               - *host
             secretName: homeassistant-tls
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: homeassistant-config
+        mountPath: /config

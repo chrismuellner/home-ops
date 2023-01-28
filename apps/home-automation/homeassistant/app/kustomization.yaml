@@ -3,6 +3,8 @@ kind: Kustomization
 namespace: media
 resources:
   - helmrelease.yaml
+  - pvc.yaml
+  - secret.yaml
 commonLabels:
-  app.kubernetes.io/name: home-assistant
-  app.kubernetes.io/instance: home-assistant
+  app.kubernetes.io/name: homeassistant
+  app.kubernetes.io/instance: homeassistant
