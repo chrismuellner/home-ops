@@ -51,6 +51,7 @@ spec:
         type: configMap
         name: homeassistant-config
         mountPath: /config/configuration.yaml
+        subPath: configuration.yaml
       config:
         enabled: true
         existingClaim: homeassistant-config
