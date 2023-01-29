@@ -4,6 +4,36 @@ metadata:
     name: homeassistant-config
     namespace: home-automation
 data:
-    SECRET_INTERNAL_URL: https://"hass.${SECRET_DOMAIN}"
-    SECRET_EXTERNAL_URL: https://"hass.${SECRET_DOMAIN}"
-    SECRET_TRUSTED_PROXIES_1: 10.0.0.0/8
+    configuration.yaml: |
+        # Loads default set of integrations. Do not remove.
+        default_config:
+
+        # Load frontend themes from the themes folder
+        frontend:
+        themes: !include_dir_merge_named themes
+
+        # Text to speech
+        tts:
+        - platform: google_translate
+
+        automation: !include automations.yaml
+        script: !include scripts.yaml
+        scene: !include scenes.yaml
+
+        homeassistant:
+            auth_providers:
+                - type: homeassistant
+                - type: trusted_networks
+                  trusted_networks:
+                    - 192.168.0.0/16
+            external_url: https://"hass.${SECRET_DOMAIN}"
+
+        http:
+            ip_ban_enabled: true
+            login_attempts_threshold: 1
+            use_x_forwarded_for: true
+            trusted_proxies:
+                - 192.168.0.0/16
+                - 10.0.0.0/8
+                - 127.0.0.1
+                - ::1
