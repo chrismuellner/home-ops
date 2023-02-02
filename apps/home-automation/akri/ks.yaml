@@ -1,0 +1,14 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: apps-akri
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: ./apps/home-automation/akri/app
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: home-ops
+  wait: true
