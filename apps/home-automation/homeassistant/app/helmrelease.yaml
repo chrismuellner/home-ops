@@ -56,3 +56,9 @@ spec:
         enabled: true
         existingClaim: homeassistant-config
         mountPath: /config
+
+    resources:
+      limits:
+        akri.sh/conbee-gateway-6e46e8: "1"
+      requests:
+        akri.sh/conbee-gateway-6e46e8: "1"

@@ -23,6 +23,7 @@ spec:
         enabled: true
       configuration:
         enabled: true
+        name: conbee-gateway
         discoveryDetails:
           udevRules:
             - 'SUBSYSTEM=="usb", ATTR{product}=="ConBee II"'
