@@ -61,7 +61,7 @@ spec:
         type: hostPath
         hostPath: /dev/ttyACM0
 
-    podSecurityContext:
+    securityContext:
       privileged: true
     # resources:
     #   limits:
