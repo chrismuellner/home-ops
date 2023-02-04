@@ -56,9 +56,15 @@ spec:
         enabled: true
         existingClaim: homeassistant-config
         mountPath: /config
+      usb:
+        enabled: true
+        type: hostPath
+        hostPath: /dev/ttyACM0
 
-    resources:
-      limits:
-        akri.sh/conbee-gateway-6e46e8: "1"
-      requests:
-        akri.sh/conbee-gateway-6e46e8: "1"
+    podSecurityContext:
+      privileged: true
+    # resources:
+    #   limits:
+    #     akri.sh/conbee-gateway-6e46e8: "1"
+    #   requests:
+    #     akri.sh/conbee-gateway-6e46e8: "1"
