@@ -22,6 +22,34 @@ spec:
   upgrade:
     crds: CreateReplace
   values:
+    alertmanager:
+      ingress:
+        enabled: true
+        ingressClassName: nginx
+        pathType: Prefix
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-production
+        hosts:
+          - &host_alertmanager "alertmanager.${SECRET_DOMAIN}"
+        tls:
+          - hosts:
+              - *host_alertmanager
+            secretName: alertmanager-tls
+
+    grafana:
+      ingress:
+        enabled: true
+        ingressClassName: nginx
+        pathType: Prefix
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-production
+        hosts:
+          - &host_grafana "grafana.${SECRET_DOMAIN}"
+        tls:
+          - hosts:
+              - *host_grafana
+            secretName: grafana-tls
+
     prometheus:
       ingress:
         enabled: true
