@@ -27,8 +27,11 @@ spec:
         enabled: true
         ingressClassName: nginx
         pathType: Prefix
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-production
         hosts:
           - &host_prometheus "prometheus.${SECRET_DOMAIN}"
         tls:
           - hosts:
               - *host_prometheus
+            secretName: prometheus-tls
