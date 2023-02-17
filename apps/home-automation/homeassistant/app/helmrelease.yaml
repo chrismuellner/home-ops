@@ -60,6 +60,10 @@ spec:
         enabled: true
         type: hostPath
         hostPath: /dev/ttyACM0
+      bluetooth:
+        enabled: true
+        type: hostPath
+        hostPath: /run/dbus
 
     securityContext:
       privileged: true
