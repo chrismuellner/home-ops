@@ -19,3 +19,11 @@ spec:
       service:
         annotations:
           metallb.universe.tf/loadBalancerIPs: "${METALLB_INGRESS_ADDR}"
+      
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+          namespace: network
+          namespaceSelector:
+            any: true
