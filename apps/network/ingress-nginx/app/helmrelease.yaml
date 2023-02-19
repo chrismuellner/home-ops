@@ -17,6 +17,8 @@ spec:
   values:
     controller:
       service:
+        enabled: true
+        externalTrafficPolicy: Local
         annotations:
           metallb.universe.tf/loadBalancerIPs: "${METALLB_INGRESS_ADDR}"
       
