@@ -2,7 +2,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: apps-k8s-gateway
+  name: cluster-apps-k8s-gateway
   namespace: flux-system
 spec:
   path: ./apps/network/k8s-gateway/app
@@ -25,5 +25,5 @@ spec:
       - kind: ConfigMap
         name: cluster-settings
   dependsOn:
-    - name: apps-metallb
-    - name: apps-metallb-config
+    - name: cluster-apps-metallb
+    - name: cluster-apps-metallb-config
