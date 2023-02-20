@@ -64,6 +64,12 @@ spec:
         enabled: true
         type: hostPath
         hostPath: /run/dbus
+      binary-sensor-file:
+        enabled: true
+        type: configMap
+        name: homeassistant-binary-sensor
+        mountPath: /config/binary_sensor.yaml
+        subPath: binary_sensor.yaml
 
     securityContext:
       privileged: true

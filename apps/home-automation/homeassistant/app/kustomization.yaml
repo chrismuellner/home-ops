@@ -8,6 +8,9 @@ configMapGenerator:
 - name: homeassistant-config
   files:
   - ./config/configuration.yaml
+- name: homeassistant-binary-sensor
+  files:
+  - ./config/binary_sensor.yaml
 generatorOptions:
   disableNameSuffixHash: true
 commonLabels:

@@ -10,6 +10,7 @@ tts:
 automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
+binary_sensor: !include binary_sensor.yaml
 
 homeassistant:
     name: Home
