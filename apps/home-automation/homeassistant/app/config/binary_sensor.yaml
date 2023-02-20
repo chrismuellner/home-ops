@@ -1,5 +1,4 @@
-binary_sensor:
-  platform: bayesian
+- platform: bayesian
   name: Home
   device_class: presence
   prior: 0.6
