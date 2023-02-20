@@ -1,0 +1,32 @@
+# Loads default set of integrations. Do not remove.
+default_config:
+
+frontend:
+
+# Text to speech
+tts:
+- platform: google_translate
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+homeassistant:
+    name: Home
+    latitude: ${HASS_LATITUDE}
+    longitude: ${HASS_LONGITUDE}
+    # external_url: https://hass.${SECRET_DOMAIN}
+    internal_url: https://hass.${SECRET_DOMAIN}
+    auth_providers:
+        - type: homeassistant
+        - type: trusted_networks
+          trusted_networks:
+            - 192.168.0.0/16
+
+http:
+    ip_ban_enabled: true
+    login_attempts_threshold: 1
+    use_x_forwarded_for: true
+    trusted_proxies:
+        - 192.168.0.0/16
+        - 10.0.0.0/8
