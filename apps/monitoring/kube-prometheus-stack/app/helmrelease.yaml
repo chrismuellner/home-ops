@@ -63,3 +63,6 @@ spec:
           - hosts:
               - *host_prometheus
             secretName: prometheus-tls
+      prometheusSpec:
+        podMonitorSelectorNilUsesHelmValues: false
+        serviceMonitorSelectorNilUsesHelmValues: false
