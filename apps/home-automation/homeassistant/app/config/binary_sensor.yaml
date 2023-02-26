@@ -1,6 +1,6 @@
 - platform: bayesian
-  name: Home
   device_class: presence
+  unique_id: 8e06ed7c-151b-4c5f-918e-e098c2e894a7
   prior: 0.6
   probability_threshold: 0.9
   observations:
