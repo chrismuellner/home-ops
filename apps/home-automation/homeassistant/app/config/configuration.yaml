@@ -16,7 +16,7 @@ homeassistant:
     name: Home
     latitude: ${HASS_LATITUDE}
     longitude: ${HASS_LONGITUDE}
-    # external_url: https://hass.${SECRET_DOMAIN}
+    external_url: ${HASS_REMOTE_URL}
     internal_url: https://hass.${SECRET_DOMAIN}
     auth_providers:
         - type: homeassistant
