@@ -1,23 +1,12 @@
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta2
-kind: GitRepository
-metadata:
-  name: home-ops
-  namespace: flux-system
-spec:
-  interval: 1m0s
-  ref:
-    branch: main
-  url: https://github.com/chrismuellner/home-ops
----
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: cluster
+  name: cluster-lnz
   namespace: flux-system
 spec:
   interval: 10m0s
-  path: ./flux
+  path: ./clusters/lnz
   prune: true
   sourceRef:
     kind: GitRepository
@@ -27,4 +16,4 @@ spec:
     secretRef:
       name: sops-age
   dependsOn:
-    - name: flux
+    - name: cluster

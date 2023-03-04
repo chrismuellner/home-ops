@@ -29,5 +29,5 @@ Thanks to k8s@home maintainers:
 
 3. Start Flux reconciliation
     ```sh
-    kubectl apply --kustomize ./flux/config
+    kubectl apply --kustomize ./clusters/lnz/config
     ```
