@@ -26,13 +26,5 @@ spec:
     kind: GitRepository
     name: home-ops
   wait: true
-  decryption:
-    provider: sops
-    secretRef:
-      name: sops-age
-  postBuild:
-    substituteFrom:
-      - kind: Secret
-        name: cluster-secrets
   dependsOn:
     - name: cluster-apps-cert-manager
