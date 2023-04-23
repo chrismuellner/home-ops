@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/radarr-develop
-      tag: 4.4.2.6956
+      tag: 4.5.0.7106
 
     env:
       TZ: Europe/Vienna
