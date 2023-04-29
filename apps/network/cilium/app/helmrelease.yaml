@@ -15,7 +15,10 @@ spec:
         namespace: flux-system
       interval: 30m
   values:
+    ipam:
+      mode: "kubernetes"
+
     kubeProxyReplacement: "strict"
-    
+
     operator:
       replicas: 1
