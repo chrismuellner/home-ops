@@ -12,3 +12,4 @@ resources:
   - k8s-gateway.yaml
   - prometheus-community.yaml
   - stakater.yaml
+  - cilium.yaml
