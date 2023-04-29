@@ -6,6 +6,7 @@ resources:
   - angelnu.yaml
   - bitnami.yaml
   - bjw-s.yaml
+  - grafana.yaml
   - jetstack.yaml
   - ingress-nginx.yaml
   - metallb.yaml
