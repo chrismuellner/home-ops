@@ -6,4 +6,4 @@ metadata:
   namespace: network
 spec:
   addresses:
-    - "${METALLB_LB_RANGE}"
+    - "${LB_RANGE}"

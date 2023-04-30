@@ -6,4 +6,4 @@ resources:
   - ingress-nginx/ks.yaml
   - metallb/ks.yaml
   - k8s-gateway/ks.yaml
-  - cilium/ks.yaml
+  # - cilium/ks.yaml

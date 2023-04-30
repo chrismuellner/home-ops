@@ -19,8 +19,7 @@ spec:
       service:
         enabled: true
         externalTrafficPolicy: Local
-        annotations:
-          metallb.universe.tf/loadBalancerIPs: "${METALLB_INGRESS_ADDR}"
+        loadBalancerIP: "${SVC_INGRESS_ADDR}"
       
       metrics:
         enabled: true

@@ -15,10 +15,27 @@ spec:
         namespace: flux-system
       interval: 30m
   values:
-    # ipam:
-    #   mode: "kubernetes"
+    cluster:
+      id: 0
+      name: "default"
 
-    # kubeProxyReplacement: "strict"
+    encryption:
+      nodeEncryption: false
+
+    ipam:
+      mode: "cluster-pool"
+      clusterPoolIPv4PodCIDRList:
+        - "${LB_RANGE}"
+
+    kubeProxyReplacement: "disabled"
 
     operator:
       replicas: 1
+
+    serviceAccounts:
+      cilium:
+        name: "cilium"
+      cilium-operator:
+        name: "cilium-operator"
+
+    tunnel: "vxlan"
