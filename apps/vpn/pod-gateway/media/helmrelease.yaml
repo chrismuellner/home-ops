@@ -24,9 +24,12 @@ spec:
       vpn:
         enabled: true
         type: gluetun
-        image:
-          repository: docker.io/qmcgaw/gluetun
-          tag: v3.33.0
+        gluetun:
+          image:
+            repository: docker.io/qmcgaw/gluetun
+            tag: v3.33.0
+        networkPolicy:
+          enabled: false
         env:
           - name: VPN_SERVICE_PROVIDER
             value: mullvad
@@ -36,11 +39,9 @@ spec:
             value: "off"
           - name: DOT
             value: "off"
-
         envFrom:
           - secretRef:
               name: gateway-vpnconfig
-
         securityContext:
           capabilities:
             add:
