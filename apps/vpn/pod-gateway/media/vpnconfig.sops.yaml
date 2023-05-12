@@ -5,8 +5,8 @@ metadata:
     name: gateway-vpnconfig
     namespace: vpn
 data:
-    WIREGUARD_ADDRESSES: ENC[AES256_GCM,data:hQnF/9s63QTUQkd5RCTt+g==,iv:MK6SlEcofWywA4X13PmNi0eQfLyJUUg4OV9TiyF82w8=,tag:2x5rO2k9uxFSsRS+iIOM7g==,type:str]
-    WIREGUARD_PRIVATE_KEY: ENC[AES256_GCM,data:eckRWi7orQyfeMDqBA79+WyfxOeHkNiliJNKEIenNvc9arGnUYWoF7dfXbA=,iv:CEgCnYHoM54/crHCvhQ4/OcKf09qHtA6tgZ+2gIuIKA=,tag:sC6MN5eJTJBfyFbokzVquw==,type:str]
+    WIREGUARD_ADDRESSES: ENC[AES256_GCM,data:ZyRqzBaZRUxvw5FZobtcwtL4vuFh5CaS,iv:xNVdRZM4gS3mQbV0lqHzO52RIvoAx8oVE+gybVYMjes=,tag:1hFqB8tvNzKcKa0zDnYehw==,type:str]
+    WIREGUARD_PRIVATE_KEY: ENC[AES256_GCM,data:D0a5KLHsLkD6TNEI9WBNrwjpsNrt9AvH0LRIuejJaPrl4BFzthxOX6Sw87lDvZBmgy8DhMyONlAyT1R4,iv:eaTMaQ1//JhTMfl7lIXMDjweIVr0n8XJQr2pxasGs2U=,tag:gDvuobebMLp6QUmNfjJW/A==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -16,14 +16,14 @@ sops:
         - recipient: age17ja9fh9emzdtgzy6as2t92x20sjpxp4xt6tvuyu7n2nr2ctrv3aq4ul5tl
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA0Rm1CRmNoQjlUZjB6V2g4
-            amowRFNDQmZXL1MrQTV2N09CZTBmd0dlS2w0CllZWGpKd3JPTXJadnF1WmV2OVR3
-            Yit3dVU1WGlHaGJYVGFnOVZueFlVYVUKLS0tIG1DSXBRL25uMUtrNDQ3UE5uei9U
-            c0xhTmt6TktuemJ3ZUIwTjNyVm5WZUkKGvqKJKwij/dVJHpxWUF0J2rdt1APLebV
-            38V7PZfKWQej+K6I7q3llc0whmH038tBpSlum1FFmkKJj1mbmXFCoA==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBzM0g2NVBxVnNvREJTait5
+            ZWJVMHFNdkJ1NjZNMWdPUFZ1dWFZK3cxRGxZCjQxdWgzYmtQN2ttM0ZYZVFzS1BT
+            aStPSWpKNTVYTDBQaHFaK3FubzZwUWcKLS0tIFZtRFRna2dEL3ZycnFFakdUUXlt
+            YXdTM21mVXEyWmp0VUd0V29jVDRER1UKsWPG3/kNxUNv16CkPyTWpHacjb/FQovo
+            622N+0ogFC6n7NvXsdyVskpl1eV2q27hHfuOlqfBNvHVl8dK25lrtg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2023-05-12T23:15:17Z"
-    mac: ENC[AES256_GCM,data:o0nw85AMmTvvz6Cv6UyHd8fBD8XR2ybrzfHtzXjYvC6IjUlIH0EFaIRHEYmtvJNJOoJ//0c3A10GtKIN7dqsciUDTxxuPpUyY2Y16vGwyupFETNikBHiLG8psYy3WkV2e4aJla2uPUqfNtWQbtg26vakT9PT5z9gZ19KT48t410=,iv:7YhVnBybMmcYbm6jzBL87PD7DUoP464mV6qS20Y7sUg=,tag:WCtjuKUSgwb4hLwpVZ9Ckw==,type:str]
+    lastmodified: "2023-05-12T23:20:58Z"
+    mac: ENC[AES256_GCM,data:2WeZpvWCHLa7g8a3mcsDJKaD5N3s9TE6XV4FwMdND778nzJpzPZV0xEMOi9C+F8SPRcQPqEqhgwGvjZe8Xh9ZtkTV3XL8aCJ92FabGSPVsU1GLLphZpU6toU/wP0xaoAc9xG++yQwOxOYRvVOqCkGSH8Or+g6FX88VHozCV2p6w=,iv:zNRPXdNZFGCsTjSKzQHQNpJG9DYH5uyGhiwce0RcKGY=,tag:zZ9U6WCLWFoFqolgZRq43A==,type:str]
     pgp: []
     encrypted_regex: ^(data|stringData)$
     version: 3.7.3
