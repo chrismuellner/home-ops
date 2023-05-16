@@ -1,5 +1,5 @@
 ---
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: cluster-apps
@@ -27,7 +27,7 @@ spec:
         name: cluster-settings-common
   patches:
     - patch: |-
-        apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+        apiVersion: kustomize.toolkit.fluxcd.io/v1
         kind: Kustomization
         metadata:
           name: not-used
@@ -49,5 +49,5 @@ spec:
                 name: cluster-settings-common
       target:
         group: kustomize.toolkit.fluxcd.io
-        version: v1beta2
+        version: v1
         kind: Kustomization
