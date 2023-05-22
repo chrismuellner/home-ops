@@ -27,7 +27,7 @@ spec:
         gluetun:
           image:
             repository: docker.io/qmcgaw/gluetun
-            tag: v3.34.0
+            tag: v3.34.1
         networkPolicy:
           enabled: false
         env:
