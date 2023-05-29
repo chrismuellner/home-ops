@@ -6,7 +6,8 @@
     ":disableRateLimiting",
     "docker:enableMajor",
     "docker:pinDigests",
-    ":automergeDigest"
+    ":automergeDigest",
+    ":automergeBranch"
   ],
   "flux": {
     "fileMatch": [".+\\.ya?ml$"]
