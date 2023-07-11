@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/sonarr-develop
-      tag: 4.0.0.552
+      tag: 4.0.0.555@sha256:f3602915ae3c62285913e3eacbe61eb22a62d3a031637047c63ec4e7a33e9716
 
     env:
       TZ: Europe/Vienna
