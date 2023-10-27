@@ -19,23 +19,26 @@ spec:
       id: 0
       name: "default"
 
-    encryption:
-      nodeEncryption: false
-
-    ipam:
-      mode: "cluster-pool"
-      clusterPoolIPv4PodCIDRList:
-        - "${LB_RANGE}"
-
-    kubeProxyReplacement: "disabled"
-
     operator:
       replicas: 1
 
-    serviceAccounts:
-      cilium:
-        name: "cilium"
-      cilium-operator:
-        name: "cilium-operator"
+    containerRuntime:
+      integration: containerd
+      socketPath: "/var/run/k3s/containerd/containerd.sock"
+    
+    # kubeProxyReplacement: strict
+    policyEnforcementMode: "never"
 
-    tunnel: "vxlan"
+    ipam:
+      operator:
+        clusterPoolIPv4PodCIDRList: "10.42.0.0/16"
+
+    hubble:
+      enabled: true
+      relay:
+        enabled: true
+      ui:
+        enabled: true
+      metrics:
+        enabled:
+        - dns:query
