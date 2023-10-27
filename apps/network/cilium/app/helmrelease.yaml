@@ -33,11 +33,6 @@ spec:
       operator:
         clusterPoolIPv4PodCIDRList: "10.42.0.0/16"
 
-    bgp:
-      enabled: true
-      announce:
-        
-
     hubble:
       enabled: true
       relay:
