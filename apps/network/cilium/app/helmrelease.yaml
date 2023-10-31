@@ -26,7 +26,6 @@ spec:
       integration: containerd
       socketPath: "/var/run/k3s/containerd/containerd.sock"
     
-    # kubeProxyReplacement: strict
     policyEnforcementMode: "never"
 
     ipam:
