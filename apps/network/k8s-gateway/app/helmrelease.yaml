@@ -57,7 +57,6 @@ spec:
     service:
       main:
         type: ClusterIP
-        externalTrafficPolicy: Cluster
         ports:
           http:
             enabled: false
