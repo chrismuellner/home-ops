@@ -4,15 +4,23 @@ metadata:
   name: agent
   namespace: system-upgrade
 spec:
-  # renovate: datasource=github-releases depName=k3s-io/k3s
-  version: "v1.28.3+k3s1"
-  serviceAccountName: system-upgrade
-  concurrency: 1
+  # renovate: datasource=github-releases depName=rancher/rke2
+  version: "v1.28.3+rke2r2"
+  concurrency: 2
   nodeSelector:
     matchExpressions:
-      - {key: node-role.kubernetes.io/control-plane, operator: DoesNotExist}
+      - {key: rke2-upgrade, operator: Exists}
+      - {key: rke2-upgrade, operator: NotIn, values: ["disabled", "false"]}
+      # When using k8s version 1.19 or older, swap control-plane with master
+      - {key: node-role.kubernetes.io/control-plane, operator: NotIn, values: ["true"]}
   prepare:
-    image: rancher/k3s-upgrade
-    args: ["prepare", "server"]
+    args:
+    - prepare
+    - server-plan
+    image: rancher/rke2-upgrade
+  serviceAccountName: system-upgrade
+  cordon: true
+  drain:
+    force: true
   upgrade:
-    image: rancher/k3s-upgrade
+    image: rancher/rke2-upgrade

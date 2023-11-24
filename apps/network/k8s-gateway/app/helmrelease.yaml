@@ -56,9 +56,7 @@ spec:
 
     service:
       main:
-        type: LoadBalancer
-        annotations:
-           io.cilium/lb-ipam-ips: "${SVC_K8S_GATEWAY_ADDR}"
+        type: ClusterIP
         externalTrafficPolicy: Cluster
         ports:
           http:
