@@ -1,0 +1,71 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: sabnzbd
+  namespace: media
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 2.3.0
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+
+  values:
+    image:
+      repository: ghcr.io/onedr0p/sabnzbd
+      tag: 4.1.0@sha256:7d2eef3351586c6856b69fb4f846969db325d0f5472bc7a315f8d0fe1b0890cb
+
+    env:
+      SABNZBD__PORT: &port 80
+      SABNZBD__HOST_WHITELIST_ENTRIES: >-
+        sabnzbd,
+        sabnzbd.media,
+        sabnzbd.media.svc,
+        sabnzbd.media.svc.cluster,
+        sabnzbd.media.svc.cluster.local,
+        sab.muellner.dev,
+        sabnzbd.muellner.dev
+
+    service:
+      main:
+        ports:
+          http:
+            port: *port
+
+    ingress:
+      main:
+        enabled: true
+        className: nginx
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-production
+        hosts:
+          - host: &host "sabnzbd.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  name: main
+                  port: http
+        tls:
+          - hosts:
+              - *host
+            secretName: sabnzbd-tls
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: sabnzbd-config
+
+      tmp:
+        type: emptyDir
+
+      media:
+        enabled: true
+        existingClaim: media
+        path: /media
+        mountPath: /data/media
