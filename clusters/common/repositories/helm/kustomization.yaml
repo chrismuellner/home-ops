@@ -8,7 +8,6 @@ resources:
   - bjw-s.yaml
   - jetstack.yaml
   - ingress-nginx.yaml
-  - k8s-gateway.yaml
   - prometheus-community.yaml
   - stakater.yaml
   - cilium.yaml
