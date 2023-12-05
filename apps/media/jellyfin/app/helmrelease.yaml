@@ -30,7 +30,6 @@ spec:
         ingressClassName: nginx
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-production
-          external-dns.alpha.kubernetes.io/target: home.muellner.dev
         hosts:
           - host: &host "jellyfin.${SECRET_DOMAIN}"
             paths:

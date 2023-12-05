@@ -20,8 +20,6 @@ spec:
     env:
       - name: CF_API_TOKEN
         value: "${SECRET_CLOUDFLARE_TOKEN}"
-    # extraArgs:
-      # - --ingress-class=external
     policy: sync
     txtOwnerId: default
     txtPrefix: k8s.
