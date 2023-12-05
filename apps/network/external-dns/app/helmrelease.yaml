@@ -18,10 +18,8 @@ spec:
   values:
     provider: cloudflare
     env:
-      - name: CF_API_EMAIL
-        value: "${SECRET_CLOUDFLARE_EMAIL}"
-      - name: CF_API_KEY
-        value: "${SECRET_CLOUDFLARE_KEY}"
+      - name: CF_API_TOKEN
+        value: "${SECRET_CLOUDFLARE_TOKEN}"
     extraArgs:
       - --ingress-class=external
       - --cloudflare-proxied
