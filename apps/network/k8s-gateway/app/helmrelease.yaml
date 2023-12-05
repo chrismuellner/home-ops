@@ -56,7 +56,9 @@ spec:
 
     service:
       main:
-        type: ClusterIP
+        type: LoadBalancer
+        annotations:
+           io.cilium/lb-ipam-ips: 192.168.10.220
         ports:
           http:
             enabled: false
