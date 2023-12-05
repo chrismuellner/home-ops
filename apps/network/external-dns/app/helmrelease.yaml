@@ -22,7 +22,6 @@ spec:
         value: "${SECRET_CLOUDFLARE_TOKEN}"
     extraArgs:
       - --ingress-class=external
-      - --cloudflare-proxied
     policy: sync
     txtOwnerId: default
     txtPrefix: k8s.
