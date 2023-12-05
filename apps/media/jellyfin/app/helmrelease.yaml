@@ -28,7 +28,6 @@ spec:
       main:
         enabled: true
         ingressClassName: nginx
-        className: external
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-production
           external-dns.alpha.kubernetes.io/target: home.muellner.dev
