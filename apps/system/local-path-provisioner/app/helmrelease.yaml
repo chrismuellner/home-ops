@@ -9,7 +9,6 @@ spec:
   chart:
     spec:
       chart: ./deploy/chart/local-path-provisioner
-      # version: 0.0.25-dev
       sourceRef:
         kind: GitRepository
         name: local-path-provisioner

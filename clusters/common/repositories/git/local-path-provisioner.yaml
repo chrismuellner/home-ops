@@ -8,7 +8,7 @@ spec:
   interval: 1m
   url: https://github.com/rancher/local-path-provisioner
   ref:
-    branch: master
+    branch: v0.0.x
   ignore: |
     # exclude all
     /*
