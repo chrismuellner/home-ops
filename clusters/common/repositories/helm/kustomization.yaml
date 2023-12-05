@@ -12,3 +12,4 @@ resources:
   - prometheus-community.yaml
   - stakater.yaml
   - cilium.yaml
+  - external-dns.yaml

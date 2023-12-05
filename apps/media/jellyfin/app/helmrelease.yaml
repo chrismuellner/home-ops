@@ -27,11 +27,13 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: "nginx"
+        ingressClassName: nginx
+        className: external
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-production
+          external-dns.alpha.kubernetes.io/target: home.muellner.dev
         hosts:
-          - host: &host "jellyfin.${SECRET_DOMAIN}"
+          - host: &host "jellyfin.home.${SECRET_DOMAIN}"
             paths:
               - path: /
                 pathType: Prefix

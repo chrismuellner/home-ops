@@ -4,5 +4,3 @@ kind: Kustomization
 namespace: network
 resources:
   - ./helmrelease.yaml
-  - ./clusterrole.yaml
-  - ./clusterrolebinding.yaml
