@@ -1,0 +1,43 @@
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: rke2-ingress-nginx
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    controller:
+      config:
+        use-forwarded-headers: "true"
+      service:
+        enabled: true
+        annotations:
+           io.cilium/lb-ipam-ips: 192.168.10.221
+
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+        namespace: kube-system
+        namespaceSelector:
+          any: true
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: rke2-cilium
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    operator:
+      replicas: 1
+
+    hubble:
+      enabled: true
+      relay:
+        enabled: true
+      ui:
+        enabled: true
+      metrics:
+        enabled:
+        - dns:query
