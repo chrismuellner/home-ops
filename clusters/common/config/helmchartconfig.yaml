@@ -13,7 +13,7 @@ spec:
         enabled: true
         annotations:
            io.cilium/lb-ipam-ips: 192.168.10.221
-           external-dns.alpha.kubernetes.io/hostname: home.muellner.dev
+           external-dns.alpha.kubernetes.io/internal-hostname: home.muellner.dev
 
     metrics:
       enabled: true
