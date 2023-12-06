@@ -8,7 +8,7 @@ spec:
   interval: 30m
   chart:
     spec:
-      chart: akri-dev
+      chart: akri
       version: 0.12.19
       interval: 30m
       sourceRef:
