@@ -6,6 +6,5 @@ resources:
   - prowlarr/ks.yaml
   - sonarr/ks.yaml
   - radarr/ks.yaml
-  - qbittorrent/ks.yaml
   - jellyfin/ks.yaml
   - sabnzbd/ks.yaml
