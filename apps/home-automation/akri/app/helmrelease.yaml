@@ -16,8 +16,6 @@ spec:
         name: akri
         namespace: flux-system
   values:
-    useDevelopmentContainers: false
-
     kubernetesDistro: k3s
 
     udev:
