@@ -15,8 +15,8 @@ spec:
         namespace: flux-system
   values:
     image:
-      repository: ghcr.io/onedr0p/prowlarr-develop
-      tag: 1.17.2.4511@sha256:01dce2a9c0e29a2a5338a9457698ea3e027727bed6b9f0ab7ac4a259cafb991b
+      repository: ghcr.io/linuxserver/prowlarr
+      tag: 1.17.2
 
     env:
       TZ: Europe/Vienna

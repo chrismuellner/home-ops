@@ -22,8 +22,8 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/onedr0p/sabnzbd
-              tag: 4.3.2@sha256:8e70a877c77805dfe93ce30a8da3362fbddf221ef806951d4e4634bb80dc87b5
+              repository: ghcr.io/linuxserver/sabnzbd
+              tag: 4.3.2
 
             env:
               SABNZBD__PORT: &port 80
