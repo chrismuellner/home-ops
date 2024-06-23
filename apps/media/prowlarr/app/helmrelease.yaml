@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: ghcr.io/linuxserver/prowlarr
-      tag: 1.18.0@sha256:6d682b91bd6f818e0489485651989b1e0c8444b1b55f4e9726b38ab1023cb294
+      tag: 1.19.0@sha256:3061e68afda543202ee7382cbfe3bfa94a1ab7d03ebaa242c732ffe2f73088f0
 
     env:
       TZ: Europe/Vienna
