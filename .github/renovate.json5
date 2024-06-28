@@ -5,7 +5,6 @@
     ":dependencyDashboard",
     ":disableRateLimiting",
     "docker:enableMajor",
-    "docker:pinDigests",
     ":automergeDigest",
     ":automergeBranch",
     "github>chrismuellner/home-ops//.github/renovate/groups.json5"
