@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: docker.io/jellyfin/jellyfin
-      tag: 10.9.7@sha256:76930362d2c266e8f0b2f51f1c6b039a5207525d0e138a1cdbec870c66c34b0f
+      tag: 10.9.7
 
     service:
       main:

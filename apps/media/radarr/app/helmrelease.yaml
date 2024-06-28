@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: ghcr.io/linuxserver/radarr
-      tag: 5.7.0@sha256:40f10a3d826f6c231d338738c3c86bf0d23a9546f20f8b1b504c6c579b79992c
+      tag: 5.7.0
 
     env:
       TZ: Europe/Vienna
