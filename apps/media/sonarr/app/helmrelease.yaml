@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: ghcr.io/linuxserver/sonarr
-      tag: 0.6.1385
+      tag: 0.6.1402
 
     env:
       TZ: Europe/Vienna
