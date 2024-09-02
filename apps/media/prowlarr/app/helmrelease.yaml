@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: ghcr.io/linuxserver/prowlarr
-      tag: 1.21.2
+      tag: 1.23.1
 
     env:
       TZ: Europe/Vienna
