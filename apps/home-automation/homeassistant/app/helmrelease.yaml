@@ -65,6 +65,8 @@ spec:
         mountPath: /config/binary_sensor.yaml
         subPath: binary_sensor.yaml
 
+    securityContext:
+      privileged: true
     resources:
       limits:
         akri.sh/conbee-gateway: "1"
