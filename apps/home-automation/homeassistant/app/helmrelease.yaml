@@ -58,14 +58,6 @@ spec:
         enabled: true
         existingClaim: homeassistant-config
         mountPath: /config
-      usb:
-        enabled: true
-        type: hostPath
-        hostPath: /dev/ttyACM0
-      bluetooth:
-        enabled: true
-        type: hostPath
-        hostPath: /run/dbus
       binary-sensor-file:
         enabled: true
         type: configMap
@@ -73,10 +65,8 @@ spec:
         mountPath: /config/binary_sensor.yaml
         subPath: binary_sensor.yaml
 
-    securityContext:
-      privileged: true
-    # resources:
-    #   limits:
-    #     akri.sh/conbee-gateway-6e46e8: "1"
-    #   requests:
-    #     akri.sh/conbee-gateway-6e46e8: "1"
+    resources:
+      limits:
+        akri.sh/conbee-gateway: "1"
+      requests:
+        akri.sh/conbee-gateway: "1"
