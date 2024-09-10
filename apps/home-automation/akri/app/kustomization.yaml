@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: home-automation
 resources:
   - helmrelease.yaml
+  - config/conbee-gateway.yaml
 commonLabels:
   app.kubernetes.io/name: akri
   app.kubernetes.io/instance: akri

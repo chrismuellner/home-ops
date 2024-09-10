@@ -21,9 +21,3 @@ spec:
     udev:
       discovery:
         enabled: true
-      configuration:
-        enabled: true
-        name: conbee-gateway
-        discoveryDetails:
-          udevRules:
-            - 'SUBSYSTEM=="tty", ATTR{product}=="ConBee II"'
