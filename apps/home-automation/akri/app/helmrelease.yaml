@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: akri
-      version: 0.12.9
+      version: 0.12.20
       interval: 30m
       sourceRef:
         kind: HelmRepository
