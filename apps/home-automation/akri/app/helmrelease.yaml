@@ -26,4 +26,4 @@ spec:
         name: conbee-gateway
         discoveryDetails:
           udevRules:
-            - 'SUBSYSTEM=="usb", ATTR{product}=="ConBee II"'
+            - 'SUBSYSTEM=="tty", ATTR{product}=="ConBee II"'
