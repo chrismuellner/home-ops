@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: docker.io/jellyfin/jellyfin
-      tag: 10.10.0
+      tag: 10.10.1
 
     service:
       main:
