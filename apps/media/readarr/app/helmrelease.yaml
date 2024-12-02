@@ -30,6 +30,7 @@ spec:
 
     service:
       app:
+        controller: readarr
         ports:
           http:
             port: *port
