@@ -15,7 +15,7 @@ spec:
         namespace: flux-system
   values:
     controllers:
-      readarr:
+      calibre:
         containers:
           app:
             image:
