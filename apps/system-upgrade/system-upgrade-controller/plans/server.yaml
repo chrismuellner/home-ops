@@ -10,8 +10,8 @@ spec:
   nodeSelector:
     matchExpressions:
       #  - {key: rke2-upgrade, operator: Exists}
-       - {key: rke2-upgrade, operator: NotIn, values: ["disabled", "false"]}
-       - {key: node-role.kubernetes.io/control-plane, operator: In, values: ["true"]}
+      - {key: rke2-upgrade, operator: NotIn, values: ["disabled", "false"]}
+      - {key: node-role.kubernetes.io/control-plane, operator: In, values: ["true"]}
   tolerations:
   - key: "CriticalAddonsOnly"
     operator: "Equal"
