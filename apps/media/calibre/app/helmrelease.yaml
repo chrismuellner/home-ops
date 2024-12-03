@@ -30,6 +30,11 @@ spec:
         ports:
           http:
             port: 8080
+      content-server:
+        controller: calibre
+        ports:
+          http:
+            port: 8081
 
     ingress:
       app:
