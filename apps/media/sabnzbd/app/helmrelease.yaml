@@ -23,7 +23,7 @@ spec:
           main:
             image:
               repository: ghcr.io/linuxserver/sabnzbd
-              tag: 4.4.0
+              tag: 4.4.1
 
             env:
               SABNZBD__PORT: &port 80
