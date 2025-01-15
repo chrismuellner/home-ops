@@ -4,3 +4,4 @@ resources:
   - namespace.yaml
   - akri/ks.yaml
   - homeassistant/ks.yaml
+  - zigbee2mqtt/ks.yaml

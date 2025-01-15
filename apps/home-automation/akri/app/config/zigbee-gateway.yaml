@@ -1,7 +1,7 @@
 apiVersion: akri.sh/v0
 kind: Configuration
 metadata:
-  name: conbee-gateway
+  name: zigbee-gateway
 spec:
   brokerProperties: {}
   capacity: 1
@@ -10,4 +10,4 @@ spec:
     discoveryDetails: |
       groupRecursive: true
       udevRules:
-      - SUBSYSTEM=="tty", ATTR{product}=="ConBee II"
+      - ENV{ID_SERIAL}=="Sonoff", SUBSYSTEM=="tty"
