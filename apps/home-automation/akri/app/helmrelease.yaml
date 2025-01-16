@@ -9,13 +9,15 @@ spec:
   chart:
     spec:
       chart: akri
-      version: 0.13.8
+      version: 0.12.20
       interval: 30m
       sourceRef:
         kind: HelmRepository
         name: akri
         namespace: flux-system
   values:
+    webhookConfiguration:
+      enabled: false
     kubernetesDistro: k3s
 
     udev:
