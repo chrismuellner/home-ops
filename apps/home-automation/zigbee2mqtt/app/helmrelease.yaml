@@ -32,6 +32,13 @@ spec:
                 memory: 600Mi
                 cpu: 200m
                 akri.sh/zigbee-gateway: "1"
+            env:
+              # https://www.zigbee2mqtt.io/guide/configuration/#environment-variables
+              ZIGBEE2MQTT_CONFIG_PERMIT_JOIN: true
+              ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://localhost:1883
+              ZIGBEE2MQTT_CONFIG_SERIAL_PORT: /dev/ttyUSB0
+              ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: zstack # https://www.zigbee2mqtt.io/guide/adapters/zstack.html
+              ZIGBEE2MQTT_CONFIG_FRONTEND_ENABLED: true
 
     service:
       app:
@@ -62,9 +69,3 @@ spec:
         existingClaim: zigbee2mqtt-config
         globalMounts:
           - path: /app/data
-      configuration-file:
-        type: configMap
-        name: zigbee2mqtt-config
-        globalMounts:
-          - path: /app/data/configuration.yaml
-            subPath: configuration.yaml
