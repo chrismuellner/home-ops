@@ -61,4 +61,4 @@ spec:
       config:
         existingClaim: zigbee2mqtt-config
         globalMounts:
-          - path: /config
+          - path: /app/data
