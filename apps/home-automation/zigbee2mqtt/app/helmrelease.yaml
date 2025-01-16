@@ -17,6 +17,7 @@ spec:
   values:
     controllers:
       zigbee2mqtt:
+        type: statefulset
         containers:
           app:
             image:
