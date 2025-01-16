@@ -22,9 +22,10 @@ availability:
 mqtt:
   server: mqtt://localhost:1883
 serial:
+  port: /dev/ttyUSB0
+  adapter: zstack # https://www.zigbee2mqtt.io/guide/adapters/zstack.html
   baudrate: 115200
   disable_led: false
-  port: /dev/ttyUSB0
   rtscts: false
 frontend:
   auth_token: null
