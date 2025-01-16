@@ -20,6 +20,7 @@ spec:
       enabled: false
     kubernetesDistro: k3s
 
-    udev:
-      discovery:
-        enabled: true
+    agent:
+      full: true
+      host:
+        udev: /run/udev
