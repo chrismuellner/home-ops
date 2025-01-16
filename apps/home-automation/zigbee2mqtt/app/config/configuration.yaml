@@ -24,7 +24,7 @@ mqtt:
 serial:
   baudrate: 115200
   disable_led: false
-  port: null # autodetect usb
+  port: /dev/ttyUSB0
   rtscts: false
 frontend:
   auth_token: null
