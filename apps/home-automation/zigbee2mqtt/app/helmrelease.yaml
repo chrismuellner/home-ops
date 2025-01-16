@@ -33,7 +33,6 @@ spec:
                 cpu: 200m
                 akri.sh/zigbee-gateway: "1"
 
-
     service:
       app:
         controller: zigbee2mqtt
@@ -47,7 +46,7 @@ spec:
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-production
         hosts:
-          - host: *host
+          - host: &host "zigbee2mqtt.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
