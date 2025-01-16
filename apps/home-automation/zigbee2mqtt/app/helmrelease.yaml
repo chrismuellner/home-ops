@@ -65,5 +65,6 @@ spec:
       configuration-file:
         type: configMap
         name: zigbee2mqtt-config
-        mountPath: /app/data/configuration.yaml
-        subPath: configuration.yaml
+        globalMounts:
+          - path: /app/data/configuration.yaml
+            subPath: configuration.yaml
