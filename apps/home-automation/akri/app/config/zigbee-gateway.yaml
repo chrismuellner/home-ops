@@ -10,4 +10,4 @@ spec:
     discoveryDetails: |
       groupRecursive: true
       udevRules:
-      - ENV{ID_SERIAL}=="Sonoff", SUBSYSTEM=="tty"
+      - ENV{ID_SERIAL}=="Sonoff Zigbee 3.0 USB Dongle Plus", SUBSYSTEM=="tty"
