@@ -3,7 +3,13 @@ kind: Kustomization
 namespace: home-automation
 resources:
   - helmrelease.yaml
-  # - pvc.yaml
+  - pvc.yaml
+configMapGenerator:
+- name: zigbee2mqtt-config
+  files:
+  - ./config/configuration.yaml
+generatorOptions:
+  disableNameSuffixHash: true
 commonLabels:
   app.kubernetes.io/name: zigbee2mqtt
   app.kubernetes.io/instance: zigbee2mqtt

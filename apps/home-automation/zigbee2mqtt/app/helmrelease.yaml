@@ -8,29 +8,57 @@ spec:
   interval: 30m
   chart:
     spec:
-      chart: zigbee2mqtt
-      version: 2.0.0
-      interval: 30m
+      chart: app-template
+      version: 3.5.1
       sourceRef:
         kind: HelmRepository
-        name: zigbee2mqtt
+        name: bjw-s
         namespace: flux-system
   values:
-    image:
-      repository: koenkk/zigbee2mqtt
-      tag: 2.0.0
-    statefulset:
-      storage:
-        enabled: true
-        size: 100Mi
-        storageClassName: local-path
-        existingVolume: zigbee2mqtt-config
-      resources:
-        requests:
-          memory: 600Mi
-          cpu: 200m
-          akri.sh/zigbee-gateway: "1"
-        limits:
-          memory: 600Mi
-          cpu: 200m
-          akri.sh/zigbee-gateway: "1"
+    controllers:
+      zigbee2mqtt:
+        containers:
+          app:
+            image:
+              repository: koenkk/zigbee2mqtt
+              tag: 2.0.0
+            resources:
+              requests:
+                memory: 600Mi
+                cpu: 200m
+                akri.sh/zigbee-gateway: "1"
+              limits:
+                memory: 600Mi
+                cpu: 200m
+                akri.sh/zigbee-gateway: "1"
+
+
+    service:
+      app:
+        controller: zigbee2mqtt
+        ports:
+          http:
+            port: &port 8080
+
+    ingress:
+      app:
+        className: "nginx"
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-production
+        hosts:
+          - host: *host
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
+        tls:
+          - hosts:
+              - *host
+            secretName: zigbee2mqtt-tls
+
+    persistence:
+      config:
+        existingClaim: zigbee2mqtt-config
+        globalMounts:
+          - path: /config
