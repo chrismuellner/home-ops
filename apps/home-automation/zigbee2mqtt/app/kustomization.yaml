@@ -3,7 +3,7 @@ kind: Kustomization
 namespace: home-automation
 resources:
   - helmrelease.yaml
-  - pvc.yaml
+  # - pvc.yaml
 commonLabels:
   app.kubernetes.io/name: zigbee2mqtt
   app.kubernetes.io/instance: zigbee2mqtt

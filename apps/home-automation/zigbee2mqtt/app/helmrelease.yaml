@@ -22,6 +22,8 @@ spec:
     statefulset:
       storage:
         enabled: true
+        size: 100Mi
+        storageClassName: local-path
         existingVolume: zigbee2mqtt-config
       resources:
         requests:
