@@ -62,3 +62,8 @@ spec:
         existingClaim: zigbee2mqtt-config
         globalMounts:
           - path: /app/data
+      configuration-file:
+        type: configMap
+        name: zigbee2mqtt-config
+        mountPath: /app/data/configuration.yaml
+        subPath: configuration.yaml
