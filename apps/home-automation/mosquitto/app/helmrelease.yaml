@@ -48,11 +48,14 @@ spec:
             secretName: mosquitto-tls
 
     persistence:
+      configuration-file:
+        type: configMap
+        name: mosquitto-conf
+        mountPath: /mosquito/config/mosquitto.conf
+        subPath: configuration.conf
       config:
         existingClaim: mosquitto-config
         globalMounts:
-          - path: /mosquitto/config
-            subPath: config
           - path: /mosquitto/data
             subPath: data
           - path: /mosquitto/log

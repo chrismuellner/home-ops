@@ -4,6 +4,12 @@ namespace: home-automation
 resources:
   - helmrelease.yaml
   - pvc.yaml
+configMapGenerator:
+- name: mosquitto-conf
+  files:
+  - ./config/mosquitto.conf
+generatorOptions:
+  disableNameSuffixHash: true
 commonLabels:
   app.kubernetes.io/name: mosquitto
   app.kubernetes.io/instance: mosquitto
