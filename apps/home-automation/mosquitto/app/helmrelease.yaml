@@ -51,4 +51,9 @@ spec:
       config:
         existingClaim: mosquitto-config
         globalMounts:
-          - path: /mosquitto
+          - path: /mosquitto/config
+            subPath: config
+          - path: /mosquitto/data
+            subPath: data
+          - path: /mosquitto/log
+            subPath: log
