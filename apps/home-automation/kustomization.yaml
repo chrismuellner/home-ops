@@ -5,3 +5,4 @@ resources:
   - akri/ks.yaml
   - homeassistant/ks.yaml
   - zigbee2mqtt/ks.yaml
+  - mosquitto/ks.yaml
