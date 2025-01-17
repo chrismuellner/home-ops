@@ -51,8 +51,9 @@ spec:
       configuration-file:
         type: configMap
         name: mosquitto-conf
-        mountPath: /mosquito/config/mosquitto.conf
-        subPath: configuration.conf
+        globalMounts:
+          - path: /mosquito/config/mosquitto.conf
+            subPath: configuration.conf
       config:
         existingClaim: mosquitto-config
         globalMounts:
