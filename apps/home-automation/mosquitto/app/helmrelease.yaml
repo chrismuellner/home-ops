@@ -52,7 +52,7 @@ spec:
         type: configMap
         name: mosquitto-conf
         globalMounts:
-          - path: /mosquito/config/mosquitto.conf
+          - path: /mosquitto/config/mosquitto.conf
             subPath: configuration.conf
       password-file:
         type: secret
