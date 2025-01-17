@@ -54,6 +54,12 @@ spec:
         globalMounts:
           - path: /mosquito/config/mosquitto.conf
             subPath: configuration.conf
+      password-file:
+        type: secret
+        name: mosquitto-passwd
+        globalMounts:
+          - path: /mosquitto/config/password.txt
+            subPath: passwords.txt
       config:
         existingClaim: mosquitto-config
         globalMounts:

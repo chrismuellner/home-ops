@@ -36,6 +36,8 @@ spec:
               # https://www.zigbee2mqtt.io/guide/configuration/#environment-variables
               ZIGBEE2MQTT_CONFIG_PERMIT_JOIN: true
               ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://mosquitto:1883
+              ZIGBEE2MQTT_CONFIG_MQTT_USER: mqtt
+              ZIGBEE2MQTT_CONFIG_MQTT_PASSWORD: test
               ZIGBEE2MQTT_CONFIG_SERIAL_PORT: /dev/ttyUSB0
               ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: zstack # https://www.zigbee2mqtt.io/guide/adapters/zstack.html
               ZIGBEE2MQTT_CONFIG_FRONTEND_ENABLED: true

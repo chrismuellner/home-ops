@@ -8,6 +8,10 @@ configMapGenerator:
 - name: mosquitto-conf
   files:
   - ./config/mosquitto.conf
+secretGenerator:
+- name: mosquitto-passwd
+  files:
+  - ./config/passwords.txt
 generatorOptions:
   disableNameSuffixHash: true
 commonLabels:
