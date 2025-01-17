@@ -41,6 +41,7 @@ spec:
               ZIGBEE2MQTT_CONFIG_SERIAL_PORT: /dev/ttyUSB0
               ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: zstack # https://www.zigbee2mqtt.io/guide/adapters/zstack.html
               ZIGBEE2MQTT_CONFIG_FRONTEND_ENABLED: true
+              ZIGBEE2MQTT_CONFIG_HOMEASSISTANT: true
 
     service:
       app:
