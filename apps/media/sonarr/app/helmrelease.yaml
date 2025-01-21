@@ -40,17 +40,11 @@ spec:
       main:
         enabled: true
         ingressClassName: "nginx"
-        annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-production
         hosts:
           - host: *host
             paths:
               - path: /
                 pathType: Prefix
-        tls:
-          - hosts:
-              - *host
-            secretName: sonarr-tls
 
     persistence:
       config:

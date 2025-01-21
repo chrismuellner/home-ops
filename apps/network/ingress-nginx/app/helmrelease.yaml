@@ -19,15 +19,20 @@ spec:
     controller:
       config:
         use-forwarded-headers: "true"
+        force-ssl-redirect: "true" # https://kubernetes.github.io/ingress-nginx/user-guide/tls/
+      
       service:
         enabled: true
         annotations:
           io.cilium/lb-ipam-ips: 192.168.10.221
 
-    metrics:
-      enabled: true
-      serviceMonitor:
+      metrics:
         enabled: true
-        namespace: kube-system
-        namespaceSelector:
-          any: true
+        serviceMonitor:
+          enabled: true
+          namespace: kube-system
+          namespaceSelector:
+            any: true
+
+      extraArgs:
+        default-ssl-certificate: "network/muellner-dev-tls"
