@@ -19,7 +19,13 @@ Thanks to k8s@home maintainers:
     kubectl apply --kustomize ./bootstrap
     ```
 
-2. Create secret with age private key ([sealed secrets](https://fluxcd.io/flux/guides/mozilla-sops/#encrypting-secrets-using-age))
+2. Configure RKE2 via [configuration file](https://docs.rke2.io/install/configuration#configuration-file)
+    ```yaml
+    cni: cilium
+    disable: rke2-ingress-nginx
+    ```
+
+3. Create secret with age private key ([sealed secrets](https://fluxcd.io/flux/guides/mozilla-sops/#encrypting-secrets-using-age))
     ```sh
     cat age.agekey |
     kubectl create secret generic sops-age \
@@ -27,7 +33,7 @@ Thanks to k8s@home maintainers:
     --from-file=age.agekey=/dev/stdin
     ```
 
-3. Start Flux reconciliation
+4. Start Flux reconciliation
     ```sh
     kubectl apply --kustomize ./clusters/lnz/config
     ```
