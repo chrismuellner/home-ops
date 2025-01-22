@@ -55,4 +55,3 @@ spec:
         existingClaim: media
         globalMounts:
         - path: /data/media
-          subPath: /media
