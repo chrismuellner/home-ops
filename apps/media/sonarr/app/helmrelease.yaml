@@ -41,8 +41,10 @@ spec:
         hosts:
           - host: *host
             paths:
-              - path: /
-                pathType: Prefix
+            - path: /
+              service:
+                identifier: main
+                port: http
 
     persistence:
       config:
