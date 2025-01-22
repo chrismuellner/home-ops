@@ -9,17 +9,17 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.5.1
+      version: 3.6.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
   values:
     controllers:
-      zigbee2mqtt:
+      main:
         type: statefulset
         containers:
-          app:
+          main:
             image:
               repository: koenkk/zigbee2mqtt
               tag: 2.0.0
@@ -44,28 +44,22 @@ spec:
               ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_ENABLED: true
 
     service:
-      app:
-        controller: zigbee2mqtt
+      main:
+        controller: main
         ports:
           http:
             port: 8080
 
     ingress:
-      app:
+      main:
         className: "nginx"
-        annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-production
         hosts:
-          - host: &host "zigbee2mqtt.${SECRET_DOMAIN}"
+          - host: "zigbee2mqtt.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
-                  identifier: app
+                  identifier: main
                   port: http
-        tls:
-          - hosts:
-              - *host
-            secretName: zigbee2mqtt-tls
 
     persistence:
       config:

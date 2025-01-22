@@ -8,38 +8,36 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.2.1
+      version: 3.6.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
   values:
-    image:
-      repository: ghcr.io/linuxserver/sonarr
-      tag: 4.0.12
-
-    env:
-      TZ: Europe/Vienna
-      SONARR__INSTANCE_NAME: Sonarr
-      SONARR__PORT: &port 8989
-      SONARR__APPLICATION_URL: &host "sonarr.${SECRET_DOMAIN}"
-      SONARR__LOG_LEVEL: info
-      # SONARR__API_KEY:
-      #   valueFrom:
-      #     secretKeyRef:
-      #       name: sonarr-secrets
-      #       key: api_key
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: ghcr.io/linuxserver/sonarr
+              tag: 4.0.12
+            env:
+              TZ: Europe/Vienna
+              SONARR__INSTANCE_NAME: Sonarr
+              SONARR__PORT: &port 8989
+              SONARR__APPLICATION_URL: &host "sonarr.${SECRET_DOMAIN}"
+              SONARR__LOG_LEVEL: info
 
     service:
       main:
+        controller: main
         ports:
           http:
             port: *port
 
     ingress:
       main:
-        enabled: true
-        ingressClassName: "nginx"
+        className: "nginx"
         hosts:
           - host: *host
             paths:
@@ -48,11 +46,11 @@ spec:
 
     persistence:
       config:
-        enabled: true
         existingClaim: sonarr-config
-        mountPath: /config
+        globalMounts:
+        - mountPath: /config
       media:
-        enabled: true
         existingClaim: media
-        path: /media
-        mountPath: /data/media
+        globalMounts:
+        - path: /media
+          mountPath: /data/media
