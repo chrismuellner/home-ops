@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 2.3.0
+      version: 3.6.1
       interval: 30m
       sourceRef:
         kind: HelmRepository
@@ -44,10 +44,7 @@ spec:
 
     ingress:
       main:
-        enabled: true
         className: nginx
-        annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-production
         hosts:
           - host: &host "sabnzbd.${SECRET_DOMAIN}"
             paths:
@@ -55,21 +52,15 @@ spec:
                 service:
                   name: main
                   port: http
-        tls:
-          - hosts:
-              - *host
-            secretName: sabnzbd-tls
 
     persistence:
       config:
-        enabled: true
         existingClaim: sabnzbd-config
-
+        globalMounts:
+        - path: /config
       tmp:
         type: emptyDir
-
       media:
-        enabled: true
         existingClaim: media
-        path: /media
-        mountPath: /data/media
+        globalMounts:
+        - path: /data/media

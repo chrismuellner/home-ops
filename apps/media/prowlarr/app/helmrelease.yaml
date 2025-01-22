@@ -8,54 +8,46 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.2.1
+      version: 3.6.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
   values:
-    image:
-      repository: ghcr.io/linuxserver/prowlarr
-      tag: 1.29.2
-
-    env:
-      TZ: Europe/Vienna
-      PROWLARR__INSTANCE_NAME: Prowlarr
-      PROWLARR__PORT: &port 9696
-      PROWLARR__LOG_LEVEL: info
-      PROWLARR__ANALYTICS_ENABLED: "False"
-      # PROWLARR__API_KEY:
-      #   valueFrom:
-      #     secretKeyRef:
-      #       name: prowlarr-secrets
-      #       key: api_key
-
-    hostname: prowlarr
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: ghcr.io/linuxserver/prowlarr
+              tag: 1.29.2
+            env:
+              TZ: Europe/Vienna
+              PROWLARR__INSTANCE_NAME: Prowlarr
+              PROWLARR__PORT: &port 9696
+              PROWLARR__LOG_LEVEL: info
+              PROWLARR__ANALYTICS_ENABLED: "False"
 
     service:
       main:
+        controller: main
         ports:
           http:
             port: *port
 
     ingress:
       main:
-        enabled: true
-        ingressClassName: "nginx"
-        annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-production
+        className: "nginx"
         hosts:
           - host: &host "prowlarr.${SECRET_DOMAIN}"
             paths:
               - path: /
-                pathType: Prefix
-        tls:
-          - hosts:
-              - *host
-            secretName: prowlarr-tls
+                service:
+                  identifier: main
+                  port: http
 
     persistence:
       config:
-        enabled: true
         existingClaim: prowlarr-config
-        mountPath: /config
+        globalMounts:
+        - path: /config

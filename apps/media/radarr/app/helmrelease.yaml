@@ -8,57 +8,50 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.2.1
+      version: 3.6.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
   values:
-    image:
-      repository: ghcr.io/linuxserver/radarr
-      tag: 5.17.2
-
-    env:
-      TZ: Europe/Vienna
-      RADARR__INSTANCE_NAME: Radarr
-      RADARR__PORT: &port 7878
-      RADARR__APPLICATION_URL: &host "radarr.${SECRET_DOMAIN}"
-      RADARR__LOG_LEVEL: info
-      # RADARR__API_KEY:
-      #   valueFrom:
-      #     secretKeyRef:
-      #       name: radarr-secrets
-      #       key: api_key
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: ghcr.io/linuxserver/radarr
+              tag: 5.17.2
+            env:
+              TZ: Europe/Vienna
+              RADARR__INSTANCE_NAME: Radarr
+              RADARR__PORT: &port 7878
+              RADARR__APPLICATION_URL: &host "radarr.${SECRET_DOMAIN}"
+              RADARR__LOG_LEVEL: info
 
     service:
       main:
+        controller: main
         ports:
           http:
             port: *port
 
     ingress:
       main:
-        enabled: true
-        ingressClassName: "nginx"
-        annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-production
+        className: "nginx"
         hosts:
           - host: *host
             paths:
               - path: /
-                pathType: Prefix
-        tls:
-          - hosts:
-              - *host
-            secretName: radarr-tls
+                service:
+                  identifier: main
+                  port: http
 
     persistence:
       config:
-        enabled: true
         existingClaim: radarr-config
-        mountPath: /config
+        globalMounts:
+          - path: /config
       media:
-        enabled: true
         existingClaim: media
-        path: /media
-        mountPath: /data/media
+        globalMounts:
+          - path: /data/media
