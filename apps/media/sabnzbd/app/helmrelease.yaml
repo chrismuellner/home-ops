@@ -51,7 +51,7 @@ spec:
             paths:
               - path: /
                 service:
-                  identifier:: main
+                  identifier: main
                   port: http
 
     persistence:
