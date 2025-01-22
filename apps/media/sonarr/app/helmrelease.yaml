@@ -48,9 +48,9 @@ spec:
       config:
         existingClaim: sonarr-config
         globalMounts:
-        - mountPath: /config
+        - path: /config
       media:
         existingClaim: media
         globalMounts:
-        - path: /media
-          mountPath: /data/media
+        - path: /data/media
+          subPath: /media
