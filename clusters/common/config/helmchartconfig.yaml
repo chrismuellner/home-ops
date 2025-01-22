@@ -17,14 +17,8 @@ spec:
         enabled: true
         ingress:
           className: nginx
-          annotations:
-            cert-manager.io/cluster-issuer: letsencrypt-production
           hosts:
             - &host "hubble.${SECRET_DOMAIN}"
-          tls:
-            - hosts:
-                - *host
-              secretName: hubble-tls
       metrics:
         enabled:
         - dns:query
