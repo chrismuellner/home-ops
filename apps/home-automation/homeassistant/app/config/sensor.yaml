@@ -3,4 +3,4 @@
   entity_id: sensor.smartplug_washer_power
   state_characteristic: mean
   max_age:
-    minute: 5
+    minutes: 5
