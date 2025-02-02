@@ -11,6 +11,7 @@ tts:
 # script: !include scripts.yaml
 # scene: !include scenes.yaml
 binary_sensor: !include binary_sensor.yaml
+ensor: !include sensor.yaml
 
 homeassistant:
     name: Home

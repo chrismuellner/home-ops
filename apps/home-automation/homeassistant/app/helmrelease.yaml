@@ -62,3 +62,9 @@ spec:
         globalMounts:
         - path: /config/binary_sensor.yaml
           subPath: binary_sensor.yaml
+      sensor-file:
+        type: configMap
+        name: homeassistant-sensor
+        globalMounts:
+        - path: /config/sensor.yaml
+          subPath: sensor.yaml
