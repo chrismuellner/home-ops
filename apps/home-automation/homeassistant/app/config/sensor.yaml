@@ -1,6 +1,0 @@
-- platform: statistics
-  name: "Washer power over last 5 minutes"
-  entity_id: sensor.smartplug_washer_power
-  state_characteristic: mean
-  max_age:
-    minutes: 5
