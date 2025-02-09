@@ -12,6 +12,7 @@ tts:
 # scene: !include scenes.yaml
 binary_sensor: !include binary_sensor.yaml
 sensor: !include sensor.yaml
+template: !include template.yaml
 
 homeassistant:
     name: Home

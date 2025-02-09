@@ -1,0 +1,6 @@
+- binary_sensor:
+  - name: "Washing Machine"
+    delay_off:
+      minutes: 5
+    state: >
+      {{ states('sensor.washer_power_over_last_5_minutes')|float > 10 }}

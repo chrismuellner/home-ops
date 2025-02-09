@@ -68,3 +68,9 @@ spec:
         globalMounts:
         - path: /config/sensor.yaml
           subPath: sensor.yaml
+      template-file:
+        type: configMap
+        name: homeassistant-template
+        globalMounts:
+        - path: /config/template.yaml
+          subPath: template.yaml

@@ -14,6 +14,9 @@ configMapGenerator:
 - name: homeassistant-sensor
   files:
   - ./config/sensor.yaml
+- name: homeassistant-template
+  files:
+  - ./config/template.yaml
 generatorOptions:
   disableNameSuffixHash: true
 commonLabels:
