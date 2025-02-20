@@ -30,17 +30,6 @@ spec:
           http:
             port: 1883
 
-    ingress:
-      app:
-        className: "nginx"
-        hosts:
-          - host: &host "mosquitto.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-
     persistence:
       configuration-file:
         type: configMap
