@@ -5,7 +5,7 @@ metadata:
   namespace: system-upgrade
 spec:
   # renovate: datasource=github-releases depName=rancher/rke2
-  version: "v1.33.0+rke2r1"
+  version: "v1.33.1+rke2r1"
   concurrency: 2
   nodeSelector:
     matchExpressions:
