@@ -20,7 +20,7 @@ spec:
           main:
             image:
               repository: ghcr.io/linuxserver/radarr
-              tag: 5.23.3
+              tag: 5.24.1
             env:
               TZ: Europe/Vienna
               RADARR__INSTANCE_NAME: Radarr
