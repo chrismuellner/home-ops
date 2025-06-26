@@ -27,7 +27,6 @@ spec:
 
             env:
               QBITTORRENT__PORT: &port 8080
-              QBT_BitTorrent__Session__DefaultSavePath: "/data/media/Downloads"
 
     service:
       main:
@@ -57,4 +56,5 @@ spec:
       media:
         existingClaim: media
         globalMounts:
-        - path: /data/media
+        - path: /downloads
+          subPath: /Downloads
