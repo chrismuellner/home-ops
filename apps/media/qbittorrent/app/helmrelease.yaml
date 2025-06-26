@@ -1,0 +1,59 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: qbittorrent
+  namespace: media
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.6.1
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: ghcr.io/linuxserver/qbittorrent
+              tag: 5.1.1
+
+            env:
+              QBITTORRENT__PORT: &port 8080
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: *port
+
+    ingress:
+      main:
+        className: nginx
+        hosts:
+          - host: &host "qbittorrent.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  identifier: main
+                  port: http
+
+    persistence:
+      config:
+        existingClaim: qbittorrent-config
+        globalMounts:
+        - path: /config
+      tmp:
+        type: emptyDir
+      media:
+        existingClaim: media
+        globalMounts:
+        - path: /data/media
