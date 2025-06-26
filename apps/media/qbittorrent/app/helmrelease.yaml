@@ -57,4 +57,4 @@ spec:
         existingClaim: media
         globalMounts:
         - path: /downloads
-          subPath: /Downloads
+          subPath: ./Downloads
