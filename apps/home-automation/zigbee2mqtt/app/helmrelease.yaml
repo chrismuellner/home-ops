@@ -22,7 +22,7 @@ spec:
           main:
             image:
               repository: koenkk/zigbee2mqtt
-              tag: 2.4.0
+              tag: 2.5.0
             resources:
               requests:
                 memory: 600Mi
