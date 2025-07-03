@@ -23,7 +23,7 @@ spec:
           main:
             image:
               repository: ghcr.io/linuxserver/qbittorrent
-              tag: 5.1.2
+              tag: 20.04.1
 
             env:
               QBITTORRENT__PORT: &port 8080
