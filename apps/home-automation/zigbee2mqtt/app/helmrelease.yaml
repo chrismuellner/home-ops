@@ -40,6 +40,8 @@ spec:
               ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: zstack # https://www.zigbee2mqtt.io/guide/adapters/zstack.html
               ZIGBEE2MQTT_CONFIG_FRONTEND_ENABLED: true
               ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_ENABLED: true
+            securityContext:
+              privileged: true
 
     service:
       main:
@@ -67,7 +69,7 @@ spec:
       usb:
         type: hostPath
         hostPath: /dev/ttyUSB0
-        hostPathType: Directory
+        hostPathType: File
         globalMounts:
           - path: /host/dev/ttyUSB0
             readOnly: true
