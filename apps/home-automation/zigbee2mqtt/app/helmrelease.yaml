@@ -69,7 +69,6 @@ spec:
       usb:
         type: hostPath
         hostPath: /dev/ttyUSB0
-        hostPathType: File
         globalMounts:
           - path: /host/dev/ttyUSB0
             readOnly: true
