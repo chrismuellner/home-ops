@@ -20,7 +20,7 @@ spec:
           main:
             image:
               repository: ghcr.io/linuxserver/prowlarr
-              tag: 1.37.0
+              tag: 2.0.5
             env:
               TZ: Europe/Vienna
               PROWLARR__INSTANCE_NAME: Prowlarr
