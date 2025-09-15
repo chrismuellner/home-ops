@@ -4,3 +4,4 @@ resources:
   - namespace.yaml
   - reloader/ks.yaml
   - local-path-provisioner/ks.yaml
+  - csi-driver-smb/ks.yaml

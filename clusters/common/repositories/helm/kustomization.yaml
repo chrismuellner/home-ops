@@ -12,3 +12,4 @@ resources:
   - cilium.yaml
   - external-dns.yaml
   - zigbee2mqtt.yaml
+  - csi.yaml
