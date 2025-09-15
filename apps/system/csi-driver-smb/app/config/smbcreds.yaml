@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: smbcreds
+    namespace: system
+stringData:
+    username: "${NAS_USER}"
+    password: "${NAS_PASSWORD}"
