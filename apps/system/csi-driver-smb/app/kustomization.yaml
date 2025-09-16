@@ -5,4 +5,5 @@ namespace: system
 resources:
   - helmrelease.yaml
   - config/smbcreds.yaml
-  - config/pv-media.yaml
+  - config/pv-shows.yaml
+  - config/pv-movies.yaml

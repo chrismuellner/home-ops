@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: smb-movies
+  namespace: media
+  labels:
+    app.kubernetes.io/name: data
+    app.kubernetes.io/instance: movies
+    app.kubernetes.io/managed-by: smb
+spec:
+  volumeName: pv-movies
+  storageClassName: smb
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi

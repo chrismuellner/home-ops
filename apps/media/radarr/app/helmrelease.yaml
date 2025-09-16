@@ -51,7 +51,11 @@ spec:
         existingClaim: radarr-config
         globalMounts:
           - path: /config
-      media:
-        existingClaim: media
+      downloads:
+        existingClaim: lp-downloads
         globalMounts:
-          - path: /data/media
+          - path: /data/media/downloads
+      movies:
+        existingClaim: smb-movies
+        globalMounts:
+          - path: /data/media/movies

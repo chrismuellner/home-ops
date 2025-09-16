@@ -53,8 +53,7 @@ spec:
         - path: /config
       tmp:
         type: emptyDir
-      media:
-        existingClaim: media
+      downloads:
+        existingClaim: lp-downloads
         globalMounts:
-        - path: /downloads
-          subPath: ./Downloads
+          - path: /data/media/downloads

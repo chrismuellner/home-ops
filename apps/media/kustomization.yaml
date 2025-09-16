@@ -2,7 +2,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - namespace.yaml
-  - pvc.yaml
+  - pvc-shows.yaml
+  - pvc-movies.yaml
+  - pvc-downloads.yaml
   - prowlarr/ks.yaml
   - sonarr/ks.yaml
   - radarr/ks.yaml

@@ -45,7 +45,11 @@ spec:
         existingClaim: jellyfin-config
         globalMounts:
         - path: /config
-      media:
-        existingClaim: media
+      shows:
+        existingClaim: smb-shows
         globalMounts:
-        - path: /data/media
+        - path: /data/media/shows
+      movies:
+        existingClaim: smb-movies
+        globalMounts:
+        - path: /data/media/movies

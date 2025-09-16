@@ -51,7 +51,11 @@ spec:
         existingClaim: sonarr-config
         globalMounts:
         - path: /config
-      media:
-        existingClaim: media
+      downloads:
+        existingClaim: lp-downloads
         globalMounts:
-        - path: /data/media
+          - path: /data/media/downloads
+      shows:
+        existingClaim: smb-shows
+        globalMounts:
+          - path: /data/media/shows

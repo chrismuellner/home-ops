@@ -1,15 +1,16 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: media
+  name: lp-downloads
   namespace: media
   labels:
-    app.kubernetes.io/name: data
-    app.kubernetes.io/instance: media
+    app.kubernetes.io/name: config
+    app.kubernetes.io/instance: downloads
+    app.kubernetes.io/managed-by: local-path-provisioner
 spec:
   accessModes:
     - ReadWriteOnce
   storageClassName: local-path
   resources:
     requests:
-      storage: 10Gi
+      storage: 50Gi
