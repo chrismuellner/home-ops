@@ -12,8 +12,12 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: smb
   mountOptions:
-    - dir_mode=0777
-    - file_mode=0777
+    - dir_mode=0666
+    - file_mode=0666
+    - noperm
+    - mfsymlinks
+    - cache=strict
+    - noserverino
   csi:
     driver: smb.csi.k8s.io
     volumeHandle: "${NAS_IP}#shows#"
