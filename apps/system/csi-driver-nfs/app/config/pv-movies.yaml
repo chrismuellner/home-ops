@@ -11,11 +11,9 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   storageClassName: nfs-csi
-  mountOptions:
-    - nfsvers=4.1
   csi:
     driver: nfs.csi.k8s.io
     volumeHandle: "movies"
     volumeAttributes:
       server: "${NAS_IP}"
-      share: "movies"
+      share: "/var/nfs/shared/movies"
