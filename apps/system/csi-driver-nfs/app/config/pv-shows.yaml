@@ -17,5 +17,5 @@ spec:
     driver: nfs.csi.k8s.io
     volumeHandle: "shows"
     volumeAttributes:
-      server: "//${NAS_IP}"
+      server: "${NAS_IP}"
       share: "shows"
