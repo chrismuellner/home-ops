@@ -2,9 +2,9 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: kubernetes-csi
+  name: csi-driver-nfs
   namespace: flux-system
 spec:
   interval: 30m
-  url: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-smb/master/charts
+  url: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
   timeout: 3m

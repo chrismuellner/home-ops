@@ -56,6 +56,6 @@ spec:
         globalMounts:
           - path: /data/media/downloads
       movies:
-        existingClaim: smb-movies
+        existingClaim: pvc-movies
         globalMounts:
           - path: /data/media/movies

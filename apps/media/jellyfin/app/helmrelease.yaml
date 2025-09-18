@@ -46,10 +46,10 @@ spec:
         globalMounts:
         - path: /config
       shows:
-        existingClaim: smb-shows
+        existingClaim: pvc-shows
         globalMounts:
         - path: /data/media/shows
       movies:
-        existingClaim: smb-movies
+        existingClaim: pvc-movies
         globalMounts:
         - path: /data/media/movies
