@@ -1,0 +1,181 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: immich
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: app-template
+      version: 3.6.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    controllers:
+      server:
+        strategy: RollingUpdate
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          enableServiceLinks: false
+
+        containers:
+          main:
+            image:
+              repository: ghcr.io/immich-app/immich-server
+              tag: v1.142.1
+            env:
+              IMMICH_MEDIA_LOCATION: &mediaLocation /usr/src/app/upload
+              DB_DATABASE_NAME: &databaseName "immich"
+              DB_USERNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-secret
+                    key: POSTGRES_USER
+              DB_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-secret
+                    key: POSTGRES_PASS
+            envFrom:
+              - configMapRef:
+                  name: immich-configmap
+
+      machine-learning:
+        strategy: RollingUpdate
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          enableServiceLinks: false
+
+        containers:
+          main:
+            image:
+              repository: ghcr.io/immich-app/immich-machine-learning
+              tag: v1.142.1
+            env:
+              MPLCONFIGDIR: "/cache/matplotlib"
+              IMMICH_MEDIA_LOCATION: *mediaLocation
+              DB_DATABASE_NAME: &databaseName "immich"
+              DB_USERNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-secret
+                    key: POSTGRES_USER
+              DB_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-secret
+                    key: POSTGRES_PASS
+            envFrom:
+              - configMapRef:
+                  name: immich-configmap
+
+      valkey:
+        containers:
+          app:
+            image:
+              repository: docker.io/valkey/valkey
+              tag: 8-bookworm
+
+      database:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/immich-app/postgres
+              tag: 14-vectorchord0.4.3-pgvectors0.2.0
+            env:
+              POSTGRES_USER:
+                    valueFrom:
+                      secretKeyRef:
+                        name: immich-secret
+                        key: POSTGRES_USER
+              POSTGRES_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-secret
+                    key: POSTGRES_PASS
+              POSTGRES_DB: *databaseName
+              POSTGRES_INITDB_ARGS: '--data-checksums'
+
+    service:
+      server:
+        controller: server
+        ports:
+          http:
+            port: &port 2283
+      machine-learning:
+        controller: machine-learning
+        ports:
+          http:
+            port: 3003
+      valkey:
+        controller: valkey
+        ports:
+          http:
+            port: 6379
+
+    ingress:
+      main:
+        className: nginx
+        hosts:
+          - host: &host "immich.${SECRET_DOMAIN}"
+            paths:
+            - path: /
+              service:
+                identifier: server
+                port: http
+
+    persistence:
+      matplotlib:
+        type: emptyDir
+        advancedMounts:
+          server:
+            main:
+              - path: /config/matplotlib
+
+      library:
+        type: persistentVolumeClaim
+        existingClaim: immich-media
+        globalMounts:
+          - path: *mediaLocation
+
+      cache:
+        type: persistentVolumeClaim
+        existingClaim: immich-machine-learning-cache
+        globalMounts:
+          - path: /cache
+            subPath: cache
+          - path: /.cache
+            subPath: dotCache
+
+      tmpfs:
+        type: emptyDir
+        advancedMounts:
+          server:
+            main:
+              - path: /usr/src/app/.reverse-geocoding-dump
+                subPath: geocoding
+              - path: /usr/src/app/.transformers_cache
+                subPath: transformers
+
+      database:
+        type: persistentVolumeClaim
+        existingClaim: immich-database
+        advancedMounts:
+          database:
+            app:
+            - path: /var/lib/postgresql/data

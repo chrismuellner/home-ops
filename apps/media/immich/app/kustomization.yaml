@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: media
+resources:
+  - helmrelease.yaml
+  - secret.yaml
+  - configmap.yaml
+  - pvc-photos.yaml
+  - pvc-ml.yaml
+  - pvc-db.yaml
+  - pvc.yaml
+commonLabels:
+  app.kubernetes.io/name: immich
+  app.kubernetes.io/instance: immich
