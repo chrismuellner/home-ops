@@ -96,7 +96,7 @@ spec:
           app:
             image:
               repository: ghcr.io/immich-app/postgres
-              tag: 14-vectorchord0.4.3-pgvectors0.2.0
+              tag: 17-vectorchord0.4.3
             env:
               POSTGRES_USER:
                     valueFrom:
