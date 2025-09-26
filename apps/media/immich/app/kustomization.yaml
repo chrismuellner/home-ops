@@ -3,7 +3,7 @@ kind: Kustomization
 namespace: media
 resources:
   - helmrelease.yaml
-  - secret.yaml
+  - secret.sops.yaml
   - configmap.yaml
   - pvc-photos.yaml
   - pvc-ml.yaml
