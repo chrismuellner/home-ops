@@ -9,6 +9,8 @@ data:
   IMMICH_SERVER_URL: http://immich-server.media:3001
   PUBLIC_IMMICH_SERVER_URL: "https://immich.${SECRET_DOMAIN}"
   IMMICH_MACHINE_LEARNING_URL: http://immich-machine-learning.media:3003
+  IMMICH_REDIS_URL: http://immich-valkey.media:6379
+  DB_URL: http://immich-database.media:5432
 
   # General
   NODE_ENV: "production"

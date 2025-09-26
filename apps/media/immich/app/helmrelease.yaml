@@ -127,6 +127,11 @@ spec:
         ports:
           http:
             port: 6379
+      database:
+        controller: database
+        ports:
+          http:
+            port: 5432
 
     ingress:
       main:
