@@ -149,7 +149,7 @@ spec:
 
       library:
         type: persistentVolumeClaim
-        existingClaim: immich-media
+        existingClaim: pvc-photos
         globalMounts:
           - path: *mediaLocation
 
