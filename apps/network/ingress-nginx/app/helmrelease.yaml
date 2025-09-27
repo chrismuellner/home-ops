@@ -20,11 +20,12 @@ spec:
       config:
         use-forwarded-headers: "true"
         force-ssl-redirect: "true" # https://kubernetes.github.io/ingress-nginx/user-guide/tls/
+        proxy-body-size: 50m # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#proxy-body-size
       
       service:
         enabled: true
         annotations:
-          io.cilium/lb-ipam-ips: 192.168.10.221
+          io.cilium/lb-ipam-ips: "${SVC_INGRESS_ADDR}"
 
       metrics:
         enabled: true
