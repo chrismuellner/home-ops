@@ -20,6 +20,7 @@ spec:
   path: ./
   prune: true
   wait: true
+  force: true
   sourceRef:
     kind: OCIRepository
     name: flux-manifests
