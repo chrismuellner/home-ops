@@ -155,11 +155,13 @@ spec:
       library:
         type: persistentVolumeClaim
         existingClaim: pvc-photos
-        globalMounts:
-          - path: *mediaLocation
-            subPath: immich
-          - path: /data/camera
-            subPath: camera
+        advancedMounts:
+          server:
+            main:
+            - path: *mediaLocation
+              subPath: immich
+            - path: /data/camera
+              subPath: camera
 
       cache:
         type: persistentVolumeClaim
