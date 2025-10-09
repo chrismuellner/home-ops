@@ -8,6 +8,8 @@ spec:
   valuesContent: |-
     operator:
       replicas: 1
+      prometheus:
+        enabled: true
 
     hubble:
       enabled: true
@@ -22,3 +24,6 @@ spec:
       metrics:
         enabled:
         - dns:query
+    
+    prometheus:
+      enabled: true
