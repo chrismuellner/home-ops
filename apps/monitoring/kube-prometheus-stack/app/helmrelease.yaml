@@ -41,6 +41,8 @@ spec:
         enabled: true
         type: pvc
         existingClaim: grafana-config
+      initChownData: # https://github.com/grafana/helm-charts/issues/752
+        enabled: false
 
     prometheus:
       ingress:
