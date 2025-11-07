@@ -35,16 +35,13 @@ spec:
           http:
             port: *port
 
-    ingress:
+    route:
       main:
-        className: "nginx"
-        hosts:
-          - host: *host
-            paths:
-              - path: /
-                service:
-                  identifier: main
-                  port: http
+        hostnames:
+          - *host
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
 
     persistence:
       config:

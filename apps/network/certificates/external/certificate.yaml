@@ -2,13 +2,13 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: "muellner-dev"
+  name: muellner-dev
 spec:
-  secretName: "muellner-dev-tls"
+  secretName: muellner-dev-tls
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
-  commonName: "muellner.dev"
+  commonName: muellner.dev
   dnsNames:
     - "muellner.dev"
     - "*.muellner.dev"
