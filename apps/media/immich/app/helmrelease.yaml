@@ -142,15 +142,9 @@ spec:
             namespace: network
         rules:
           - matches:
-            - path:
-                type: PathPrefix
-                value: /
             backendRefs:
-              - kind: Service
+              - identifier: server
                 port: *port
-                name: server
-                namespace: media
-                weight: 1
 
     persistence:
       matplotlib:
