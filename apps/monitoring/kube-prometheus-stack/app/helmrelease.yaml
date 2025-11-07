@@ -30,20 +30,23 @@ spec:
           kind: PrometheusRule
   values:
     alertmanager:
-      ingress:
+      route:
         enabled: true
-        ingressClassName: nginx
-        pathType: Prefix
-        hosts:
+        hostnames:
           - "alertmanager.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
 
     grafana:
-      ingress:
+      route:
         enabled: true
-        ingressClassName: nginx
-        pathType: Prefix
-        hosts:
+        hostnames:
           - "grafana.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+      
       persistence:
         enabled: true
         type: pvc
@@ -52,12 +55,14 @@ spec:
         enabled: false
 
     prometheus:
-      ingress:
+      route:
         enabled: true
-        ingressClassName: nginx
-        pathType: Prefix
-        hosts:
+        hostnames:
           - "prometheus.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+
       prometheusSpec:
         podMonitorSelectorNilUsesHelmValues: false
         serviceMonitorSelectorNilUsesHelmValues: false
