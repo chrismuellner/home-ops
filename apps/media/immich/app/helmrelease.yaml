@@ -140,6 +140,17 @@ spec:
         parentRefs:
           - name: envoy-internal
             namespace: network
+        rules:
+          - matches:
+            - path:
+                type: PathPrefix
+                value: /
+            backendRefs:
+              - kind: Service
+                port: *port
+                name: server
+                namespace: media
+                weight: 1
 
     persistence:
       matplotlib:
