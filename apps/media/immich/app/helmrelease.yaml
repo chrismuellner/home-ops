@@ -142,8 +142,8 @@ spec:
             namespace: network
         rules:
           - backendRefs:
-              - identifier: server
-                port: *port
+            - identifier: server
+              port: *port
 
     persistence:
       matplotlib:
