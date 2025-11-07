@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.6.1
+      version: 4.4.0
       interval: 30m
       sourceRef:
         kind: HelmRepository
@@ -35,16 +35,13 @@ spec:
           http:
             port: *port
 
-    ingress:
+    route:
       main:
-        className: nginx
-        hosts:
-          - host: &host "qbittorrent.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: main
-                  port: http
+        hostnames:
+          - "qbittorrent.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
 
     persistence:
       config:
