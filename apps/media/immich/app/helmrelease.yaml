@@ -141,8 +141,7 @@ spec:
           - name: envoy-internal
             namespace: network
         rules:
-          - matches:
-            backendRefs:
+          - backendRefs:
               - identifier: server
                 port: *port
 
