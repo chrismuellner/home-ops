@@ -40,8 +40,8 @@ spec:
               namespace: network
 
     grafana:
-      main:
-        route:
+      route:
+        main:
           enabled: true
           hostnames:
             - "grafana.${SECRET_DOMAIN}"
