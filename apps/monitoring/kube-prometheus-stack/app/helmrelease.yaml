@@ -40,21 +40,13 @@ spec:
               namespace: network
 
     grafana:
-      route:
-        main:
-          enabled: true
-          hostnames:
-            - "grafana.${SECRET_DOMAIN}"
-          parentRefs:
-            - name: envoy-internal
-              namespace: network
-      
-      persistence:
-        enabled: true
-        type: pvc
-        existingClaim: grafana-config
-      initChownData: # https://github.com/grafana/helm-charts/issues/752
-        enabled: false
+      enabled: false
+      forceDeployDashboards: true
+      operator:
+        dashboardsConfigMapRefEnabled: true
+        folder: observability
+        matchLabels:
+          grafana.internal/instance: grafana
 
     prometheus:
       route:
