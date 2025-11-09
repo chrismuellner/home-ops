@@ -66,5 +66,5 @@ spec:
       storageClassName: local-path
       resources:
         requests:
-          storage: 100Mi
+          storage: 10Gi
   disableDefaultSecurityContext: All
