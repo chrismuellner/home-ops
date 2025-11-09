@@ -5,3 +5,4 @@ resources:
   - ./ocirepository.yaml
   - ./helmrelease.yaml
   - ./grafanadashboard.yaml
+  - ./grafana-admin-password.sops.yaml

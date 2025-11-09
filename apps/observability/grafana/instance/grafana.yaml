@@ -42,8 +42,8 @@ spec:
                 - name: GF_SECURITY_ADMIN_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: grafana-admin-password-secret
-                      key: GF_SECURITY_ADMIN_PASSWORD
+                      name: grafana-admin-password
+                      key: PASSWORD
               securityContext:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true
