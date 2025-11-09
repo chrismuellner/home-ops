@@ -6,11 +6,10 @@ metadata:
   name: flux-instance
 spec:
   interval: 1h
-  path: ./kubernetes/apps/flux-system/flux-instance/app
+  path: ./apps/flux-system/flux-instance/app
   prune: true
   sourceRef:
     kind: GitRepository
-    name: flux-system
-    namespace: flux-system
+    name: home-ops
   targetNamespace: flux-system
   wait: false
