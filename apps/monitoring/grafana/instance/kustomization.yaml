@@ -5,5 +5,5 @@ resources:
   - ./grafana.yaml
   - ./grafanadatasource.yaml
   - ./httproute.yaml
-  - ./secret.sops.yaml
+  - ./grafana-credentials.sops.yaml
   - ./servicemonitor.yaml
