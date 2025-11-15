@@ -3,18 +3,11 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: homeassistant
-  namespace: home-automation
 spec:
+  chartRef:
+    kind: OCIRepository
+    name: homeassistant
   interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 4.4.0
-      interval: 30m
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
   values:
     controllers:
       main:
