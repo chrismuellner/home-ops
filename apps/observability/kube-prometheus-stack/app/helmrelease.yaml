@@ -8,15 +8,9 @@ spec:
   interval: 30m
   maxHistory: 2
   timeout: 20m
-  chart:
-    spec:
-      chart: kube-prometheus-stack
-      version: 78.5.0
-      sourceRef:
-        kind: HelmRepository
-        name: prometheus-community
-        namespace: flux-system
-      interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: kube-prometheus-stack
   install:
     crds: Create
   upgrade:

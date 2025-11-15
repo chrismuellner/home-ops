@@ -3,15 +3,10 @@ kind: HelmRelease
 metadata:
   name: immich
 spec:
+  chartRef:
+    kind: OCIRepository
+    name: immich
   interval: 1h
-  chart:
-    spec:
-      chart: app-template
-      version: 4.4.0
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
   maxHistory: 3
   install:
     createNamespace: true
