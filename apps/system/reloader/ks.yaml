@@ -12,3 +12,4 @@ spec:
     kind: GitRepository
     name: home-ops
   wait: true
+  targetNamespace: system
