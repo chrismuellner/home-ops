@@ -1,0 +1,26 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cilium
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: cilium
+  interval: 1h
+  values:
+    operator:
+      replicas: 1
+      prometheus:
+        enabled: true
+
+    hubble:
+      enabled: true
+      relay:
+        enabled: true
+      metrics:
+        enabled:
+        - dns:query
+    
+    prometheus:
+      enabled: true
