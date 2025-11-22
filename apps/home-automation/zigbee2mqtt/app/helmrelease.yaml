@@ -46,7 +46,7 @@ spec:
     route:
       main:
         hostnames:
-          - "zigbee2mqtt.${SECRET_DOMAIN}"
+          - "zigbee2mqtt.muellner.dev"
         parentRefs:
           - name: envoy-internal
             namespace: network

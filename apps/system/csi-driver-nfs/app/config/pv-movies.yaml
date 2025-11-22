@@ -15,5 +15,5 @@ spec:
     driver: nfs.csi.k8s.io
     volumeHandle: "movies"
     volumeAttributes:
-      server: "${NAS_IP}"
+      server: "192.168.1.200"
       share: "/var/nfs/shared/movies"

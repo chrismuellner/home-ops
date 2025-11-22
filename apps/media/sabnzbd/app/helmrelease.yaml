@@ -38,7 +38,7 @@ spec:
     route:
       main:
         hostnames:
-          - "sabnzbd.${SECRET_DOMAIN}"
+          - "sabnzbd.muellner.dev"
         parentRefs:
           - name: envoy-internal
             namespace: network

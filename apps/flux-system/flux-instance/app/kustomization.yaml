@@ -3,7 +3,5 @@ kind: Kustomization
 resources:
   - ./ocirepository.yaml
   - ./helmrelease.yaml
-  - ./cluster-secrets.sops.yaml
-  - ./cluster-settings.yaml
   - ./grafanadashboard.yaml
   - ./podmonitor.yaml

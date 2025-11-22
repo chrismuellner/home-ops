@@ -33,7 +33,7 @@ spec:
     route:
       main:
         hostnames:
-          - "prowlarr.${SECRET_DOMAIN}"
+          - "prowlarr.muellner.dev"
         parentRefs:
           - name: envoy-internal
             namespace: network

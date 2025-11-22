@@ -16,10 +16,7 @@ template: !include template.yaml
 
 homeassistant:
     name: Home
-    latitude: ${HASS_LATITUDE}
-    longitude: ${HASS_LONGITUDE}
-    external_url: ${HASS_REMOTE_URL}
-    internal_url: https://hass.${SECRET_DOMAIN}
+    internal_url: https://hass.muellner.dev
     auth_providers:
         - type: homeassistant
         - type: trusted_networks

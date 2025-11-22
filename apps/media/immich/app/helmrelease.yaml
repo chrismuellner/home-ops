@@ -131,7 +131,7 @@ spec:
     route:
       main:
         hostnames:
-          - "immich.${SECRET_DOMAIN}"
+          - "immich.muellner.dev"
         parentRefs:
           - name: envoy-internal
             namespace: network

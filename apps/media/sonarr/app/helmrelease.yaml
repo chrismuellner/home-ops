@@ -20,7 +20,7 @@ spec:
               TZ: Europe/Vienna
               SONARR__INSTANCE_NAME: Sonarr
               SONARR__PORT: &port 8989
-              SONARR__APPLICATION_URL: &host "sonarr.${SECRET_DOMAIN}"
+              SONARR__APPLICATION_URL: &host "sonarr.muellner.dev"
               SONARR__LOG_LEVEL: info
 
     service:

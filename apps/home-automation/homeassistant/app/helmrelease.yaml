@@ -29,7 +29,7 @@ spec:
     route:
       main:
         hostnames:
-          - "hass.${SECRET_DOMAIN}"
+          - "hass.muellner.dev"
         parentRefs:
           - name: envoy-internal
             namespace: network

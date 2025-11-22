@@ -26,7 +26,7 @@ spec:
     route:
       main:
         hostnames:
-          - "jellyfin.${SECRET_DOMAIN}"
+          - "jellyfin.muellner.dev"
         parentRefs:
           - name: envoy-internal
             namespace: network

@@ -30,7 +30,7 @@ spec:
     route:
       main:
         hostnames:
-          - "qbittorrent.${SECRET_DOMAIN}"
+          - "qbittorrent.muellner.dev"
         parentRefs:
           - name: envoy-internal
             namespace: network
