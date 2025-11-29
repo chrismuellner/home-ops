@@ -5,6 +5,8 @@ metadata:
   name: jellyfin
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: csi-driver-nfs
   interval: 10m
   path: ./apps/media/jellyfin/app
   prune: true

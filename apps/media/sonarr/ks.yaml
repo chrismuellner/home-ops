@@ -5,6 +5,8 @@ metadata:
   name: sonarr
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: csi-driver-nfs
   interval: 10m
   path: ./apps/media/sonarr/app
   prune: true

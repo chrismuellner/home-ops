@@ -5,6 +5,8 @@ metadata:
   name: immich
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: csi-driver-nfs
   interval: 10m
   path: ./apps/media/immich/app
   prune: true

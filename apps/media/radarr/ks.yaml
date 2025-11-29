@@ -5,6 +5,8 @@ metadata:
   name: radarr
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: csi-driver-nfs
   interval: 10m
   path: ./apps/media/radarr/app
   prune: true
