@@ -5,6 +5,8 @@ metadata:
   name: homeassistant
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: openebs
   interval: 10m
   path: ./apps/home-automation/homeassistant/app
   prune: true

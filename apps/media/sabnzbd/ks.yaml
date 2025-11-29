@@ -5,6 +5,8 @@ metadata:
   name: sabnzbd
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: openebs
   interval: 10m
   path: ./apps/media/sabnzbd/app
   prune: true

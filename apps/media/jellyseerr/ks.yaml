@@ -5,6 +5,8 @@ metadata:
   name: jellyseerr
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: openebs
   interval: 10m
   path: ./apps/media/jellyseerr/app
   prune: true

@@ -5,6 +5,8 @@ metadata:
   name: prowlarr
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: openebs
   interval: 10m
   path: ./apps/media/prowlarr/app
   prune: true

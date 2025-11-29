@@ -5,6 +5,8 @@ metadata:
   name: qbittorrent
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: openebs
   interval: 10m
   path: ./apps/media/qbittorrent/app
   prune: true

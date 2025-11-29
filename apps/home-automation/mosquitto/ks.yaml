@@ -5,6 +5,8 @@ metadata:
   name: mosquitto
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: openebs
   interval: 10m
   path: ./apps/home-automation/mosquitto/app
   prune: true
