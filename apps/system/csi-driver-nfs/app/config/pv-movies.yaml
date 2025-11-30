@@ -17,3 +17,5 @@ spec:
     volumeAttributes:
       server: "192.168.1.200"
       share: "/var/nfs/shared/movies"
+  mountOptions:
+  - nolock
