@@ -17,7 +17,7 @@ spec:
       localpv:
         image:
           registry: quay.io/
-        basePath: &hostPath /var/mnt/local-hostpath
+        basePath: &hostPath /var/mnt/local-storage
       hostpathClass:
         enabled: true
         name: local-path
