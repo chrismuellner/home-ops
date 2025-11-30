@@ -18,22 +18,11 @@ spec:
               repository: ghcr.io/linuxserver/sabnzbd
               tag: 4.5.5
 
-            env:
-              SABNZBD__PORT: &port 80
-              SABNZBD__HOST_WHITELIST_ENTRIES: >-
-                sabnzbd,
-                sabnzbd.media,
-                sabnzbd.media.svc,
-                sabnzbd.media.svc.cluster,
-                sabnzbd.media.svc.cluster.local,
-                sab.muellner.dev,
-                sabnzbd.muellner.dev
-
     service:
       main:
         ports:
           http:
-            port: *port
+            port: 8080
 
     route:
       main:
