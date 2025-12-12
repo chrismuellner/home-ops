@@ -158,6 +158,8 @@ spec:
               subPath: immich
             - path: /data/camera
               subPath: camera
+            - path: /data/phone
+              subPath: phone
 
       cache:
         type: persistentVolumeClaim
