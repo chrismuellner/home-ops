@@ -2,3 +2,9 @@
 *.agekey
 *.pub
 *.key
+
+# talos
+**/talos-secrets.yaml
+talos/talosconfig
+talos/controlplane.yaml
+talos/worker.yaml

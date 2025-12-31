@@ -1,0 +1,34 @@
+machine:
+  install:
+    wipe: true
+  nodeLabels:
+    $patch: delete
+cluster:
+  network:
+    cni:
+      name: none
+  proxy:
+    disabled: true
+  apiServer:
+    certSANs:
+    - cluster.local
+  allowSchedulingOnControlPlanes: true
+---
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: EPHEMERAL
+provisioning:
+  diskSelector:
+    match: system_disk
+  minSize: 600GB
+  maxSize: 600GB
+  grow: false
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: local-storage
+provisioning:
+  diskSelector:
+    match: system_disk
+  minSize: 200GB
+  maxSize: 300GB
