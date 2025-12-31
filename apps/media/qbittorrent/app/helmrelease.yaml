@@ -15,11 +15,45 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/linuxserver/qbittorrent
-              tag: 20.04.1
-
+              repository: ghcr.io/home-operations/qbittorrent
+              tag: 5.1.4
             env:
-              QBITTORRENT__PORT: &port 8080
+              QBT_WEBUI_PORT: &port 80
+              QBT_TORRENTING_PORT: 50469
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v2/app/version
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                memory: 18Gi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
 
     service:
       main:
@@ -35,14 +69,24 @@ spec:
           - name: envoy-internal
             namespace: network
 
+    configMaps:
+      config:
+        data:
+          .qbt.toml: |-
+            [qbittorrent]
+            addr = "http://localhost:80"
     persistence:
       config:
-        existingClaim: qbittorrent-config
+        existingClaim: "{{ .Release.Name }}"
+      config-file:
+        type: configMap
+        identifier: config
         globalMounts:
-        - path: /config
-      tmp:
-        type: emptyDir
+          - path: /config/.qbt.toml
+            subPath: .qbt.toml
       downloads:
         existingClaim: lp-downloads
         globalMounts:
-          - path: /data/media/downloads
+          - path: /media/Downloads/qbittorrent
+      tmp:
+        type: emptyDir
