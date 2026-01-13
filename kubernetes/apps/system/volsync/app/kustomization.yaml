@@ -5,3 +5,4 @@ namespace: system
 resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+  - ./mutatingadmissionpolicy.yaml
