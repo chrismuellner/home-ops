@@ -12,6 +12,9 @@ cluster:
   apiServer:
     certSANs:
     - cluster.local
+    extraArgs:
+      feature-gates: MutatingAdmissionPolicy=true
+      runtime-config: admissionregistration.k8s.io/v1beta1=true
   allowSchedulingOnControlPlanes: true
 ---
 apiVersion: v1alpha1
