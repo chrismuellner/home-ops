@@ -8,10 +8,17 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: paperless
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/media/paperless/app
+  postBuild:
+    substitute:
+      APP: paperless
+      VOLSYNC_CLAIM: paperless-data
+      VOLSYNC_CAPACITY: 15Gi
   prune: true
   sourceRef:
     kind: GitRepository
