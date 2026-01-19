@@ -3,6 +3,18 @@ machine:
     wipe: true
   nodeLabels:
     $patch: delete
+    openebs.io/engine: "mayastor"
+  sysctls:
+    vm.nr_hugepages: "1024"
+  kubelet:
+    extraMounts:
+      - destination: /var/local
+        type: bind
+        source: /var/mnt/local-storage
+        options:
+          - bind
+          - rshared
+          - rw
 cluster:
   network:
     cni:

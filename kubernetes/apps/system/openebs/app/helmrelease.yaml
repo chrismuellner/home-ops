@@ -29,14 +29,29 @@ spec:
     openebs-crds:
       csi:
         volumeSnapshots:
-          enabled: false
-          keep: false
+          enabled: true
+          keep: true
     zfs-localpv:
       enabled: false
     lvm-localpv:
       enabled: false
-    mayastor:
-      enabled: false
+    mayastor: # https://docs.siderolabs.com/kubernetes-guides/csi/storage#deploy-mayastor
+      enabled: true
+      csi:
+        node:
+          initContainers:
+            enabled: false
+      etcd:
+        # -- Kubernetes Cluster Domain
+        clusterDomain: cluster.local
+      localpv-provisioner:
+        enabled: true
+      # crds:
+      #   enabled: false
+      # loki:
+      #   enabled: false
+      # alloy:
+      #   enabled: false
     engines:
       local:
         lvm:
