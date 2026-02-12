@@ -6,11 +6,10 @@ metadata:
   labels:
     app.kubernetes.io/name: config
     app.kubernetes.io/instance: downloads
-    app.kubernetes.io/managed-by: local-path-provisioner
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: local-path
+  storageClassName: host-zfs
   resources:
     requests:
       storage: 50Gi

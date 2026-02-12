@@ -182,8 +182,9 @@ spec:
 
       database:
         type: persistentVolumeClaim
-        existingClaim: immich-database
+        existingClaim: immich-config
         advancedMounts:
           database:
             app:
             - path: /var/lib/postgresql/data
+              subPath: database

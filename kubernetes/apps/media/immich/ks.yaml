@@ -5,11 +5,18 @@ metadata:
   name: immich
   namespace: flux-system
 spec:
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: csi-driver-nfs
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/media/immich/app
+  postBuild:
+    substitute:
+      APP: immich
+      VOLSYNC_CLAIM: immich-config
+      VOLSYNC_CAPACITY: 10Gi
   prune: true
   sourceRef:
     kind: GitRepository
