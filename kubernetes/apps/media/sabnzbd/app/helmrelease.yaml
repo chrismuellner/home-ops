@@ -41,8 +41,15 @@ spec:
         existingClaim: sabnzbd-config
         globalMounts:
         - path: /config
-      tmp:
+      tmpfs:
         type: emptyDir
+        globalMounts:
+          - path: /config/logs
+            subPath: logs
+          - path: /tmp
+            subPath: tmp
+          - path: /scripts
+            subPath: scripts
       downloads:
         existingClaim: lp-downloads
         globalMounts:
