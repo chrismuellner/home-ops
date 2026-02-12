@@ -17,6 +17,9 @@ spec:
             image:
               repository: ghcr.io/linuxserver/sabnzbd
               tag: 4.5.5
+            env:
+              SABNZBD__HOST_WHITELIST_ENTRIES: >-
+                sabnzbd.muellner.dev
 
     service:
       main:
