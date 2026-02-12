@@ -5,10 +5,20 @@ metadata:
   name: mosquitto
   namespace: flux-system
 spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: mosquitto
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/home-automation/mosquitto/app
+  postBuild:
+    substitute:
+      APP: mosquitto
+      VOLSYNC_CLAIM: mosquitto-config
+      VOLSYNC_CAPACITY: 1Gi
   prune: true
   sourceRef:
     kind: GitRepository

@@ -5,10 +5,20 @@ metadata:
   name: jellyseerr
   namespace: flux-system
 spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: jellyseerr
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/media/jellyseerr/app
+  postBuild:
+    substitute:
+      APP: jellyseerr
+      VOLSYNC_CLAIM: jellyseerr-config
+      VOLSYNC_CAPACITY: 10Gi
   prune: true
   sourceRef:
     kind: GitRepository

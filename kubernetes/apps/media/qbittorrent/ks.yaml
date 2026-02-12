@@ -5,10 +5,20 @@ metadata:
   name: qbittorrent
   namespace: flux-system
 spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: qbittorrent
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/media/qbittorrent/app
+  postBuild:
+    substitute:
+      APP: qbittorrent
+      VOLSYNC_CLAIM: qbittorrent-config
+      VOLSYNC_CAPACITY: 1Gi
   prune: true
   sourceRef:
     kind: GitRepository

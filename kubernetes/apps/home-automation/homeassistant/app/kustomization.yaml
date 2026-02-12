@@ -4,7 +4,6 @@ namespace: home-automation
 resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
-  - ./pvc.yaml
 configMapGenerator:
 - name: homeassistant-config
   files:

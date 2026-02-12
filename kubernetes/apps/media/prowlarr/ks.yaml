@@ -5,10 +5,20 @@ metadata:
   name: prowlarr
   namespace: flux-system
 spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: prowlarr
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/media/prowlarr/app
+  postBuild:
+    substitute:
+      APP: prowlarr
+      VOLSYNC_CLAIM: prowlarr-config
+      VOLSYNC_CAPACITY: 1Gi
   prune: true
   sourceRef:
     kind: GitRepository

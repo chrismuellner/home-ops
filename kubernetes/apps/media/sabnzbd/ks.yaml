@@ -5,10 +5,20 @@ metadata:
   name: sabnzbd
   namespace: flux-system
 spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: sabnzbd
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/media/sabnzbd/app
+  postBuild:
+    substitute:
+      APP: sabnzbd
+      VOLSYNC_CLAIM: sabnzbd-config
+      VOLSYNC_CAPACITY: 1Gi
   prune: true
   sourceRef:
     kind: GitRepository

@@ -5,11 +5,21 @@ metadata:
   name: radarr
   namespace: flux-system
 spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: radarr
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: csi-driver-nfs
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/media/radarr/app
+  postBuild:
+    substitute:
+      APP: radarr
+      VOLSYNC_CLAIM: radarr-config
+      VOLSYNC_CAPACITY: 1Gi
   prune: true
   sourceRef:
     kind: GitRepository

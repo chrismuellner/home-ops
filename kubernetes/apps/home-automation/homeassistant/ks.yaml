@@ -5,10 +5,20 @@ metadata:
   name: homeassistant
   namespace: flux-system
 spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: homeassistant
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/home-automation/homeassistant/app
+  postBuild:
+    substitute:
+      APP: homeassistant
+      VOLSYNC_CLAIM: homeassistant-config
+      VOLSYNC_CAPACITY: 10Gi
   prune: true
   sourceRef:
     kind: GitRepository

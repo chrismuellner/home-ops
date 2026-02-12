@@ -5,11 +5,21 @@ metadata:
   name: jellyfin
   namespace: flux-system
 spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: jellyfin
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: csi-driver-nfs
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/media/jellyfin/app
+  postBuild:
+    substitute:
+      APP: jellyfin
+      VOLSYNC_CLAIM: jellyfin-config
+      VOLSYNC_CAPACITY: 1Gi
   prune: true
   sourceRef:
     kind: GitRepository

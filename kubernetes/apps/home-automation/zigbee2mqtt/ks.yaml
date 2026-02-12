@@ -5,10 +5,20 @@ metadata:
   name: zigbee2mqtt
   namespace: flux-system
 spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: zigbee2mqtt
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/home-automation/zigbee2mqtt/app
+  postBuild:
+    substitute:
+      APP: zigbee2mqtt
+      VOLSYNC_CLAIM: zigbee2mqtt-config
+      VOLSYNC_CAPACITY: 1Gi
   prune: true
   sourceRef:
     kind: GitRepository
