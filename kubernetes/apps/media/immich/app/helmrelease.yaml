@@ -162,13 +162,11 @@ spec:
               subPath: phone
 
       cache:
-        type: persistentVolumeClaim
-        existingClaim: immich-machine-learning-cache
-        globalMounts:
-          - path: /cache
-            subPath: cache
-          - path: /.cache
-            subPath: dotCache
+        type: emptyDir
+        advancedMounts:
+          machine-learning:
+            main:
+              - path: /cache
 
       tmpfs:
         type: emptyDir
