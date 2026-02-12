@@ -13,6 +13,7 @@ default:
 [doc('Generate Talos config for a single-node cluster')]
 genconfig endpoint:
     #!/usr/bin/env bash
+    set -euo pipefail
     if [ ! -f "{{ secrets }}" ]; then
         echo "Error: talos-secrets.yaml not found at {{ secrets }}"
         echo "Generate one with: talosctl gen secrets -o {{ secrets }}"

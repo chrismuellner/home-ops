@@ -1,7 +1,10 @@
 machine:
   install:
-    image: https://factory.talos.dev/image/4dd8e3a8b6203d3c14f049da8db4d3bb0d6d3e70c5e89dfcc1e709e81914f63c/v1.12.3/metal-amd64.iso
+    image: factory.talos.dev/metal-installer/4dd8e3a8b6203d3c14f049da8db4d3bb0d6d3e70c5e89dfcc1e709e81914f63c:v1.12.3
     wipe: true
+  kernel:
+    modules:
+      - name: zfs
   nodeLabels:
     $patch: delete
 cluster:

@@ -57,12 +57,13 @@ kubeconfig:
 
 [doc('Wait for nodes to be ready')]
 wait:
-    #!/usr/bin/env bash
     echo "Waiting for nodes to be ready"
-    until kubectl wait nodes --all --for=condition=Ready --timeout=10m 2>/dev/null; do
-        echo "Waiting for nodes to register..."
-        sleep 10
-    done
+    if ! kubectl wait nodes --for=condition=Ready=True --all --timeout=10s &>/dev/null; then \
+        until kubectl wait nodes --for=condition=Ready=False --all --timeout=10s &>/dev/null; do \
+            echo "Nodes not available, waiting for nodes to be available. Retrying in 5 seconds..."; \
+            sleep 5; \
+        done \
+    fi
     echo "All nodes are ready"
 
 [doc('Create namespaces from kubernetes/apps directory structure')]
