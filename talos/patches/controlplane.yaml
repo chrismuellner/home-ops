@@ -1,20 +1,9 @@
 machine:
   install:
+    image: https://factory.talos.dev/image/4dd8e3a8b6203d3c14f049da8db4d3bb0d6d3e70c5e89dfcc1e709e81914f63c/v1.12.3/metal-amd64.iso
     wipe: true
   nodeLabels:
     $patch: delete
-    openebs.io/engine: "mayastor"
-  sysctls:
-    vm.nr_hugepages: "1024"
-  kubelet:
-    extraMounts:
-      - destination: /var/local
-        type: bind
-        source: /var/mnt/local-storage
-        options:
-          - bind
-          - rshared
-          - rw
 cluster:
   network:
     cni:
@@ -35,15 +24,15 @@ name: EPHEMERAL
 provisioning:
   diskSelector:
     match: system_disk
-  minSize: 600GB
-  maxSize: 600GB
+  minSize: 250GB
+  maxSize: 300GB
   grow: false
 ---
 apiVersion: v1alpha1
-kind: UserVolumeConfig
-name: local-storage
+kind: RawVolumeConfig
+name: openebs-zfs
 provisioning:
   diskSelector:
     match: system_disk
-  minSize: 200GB
-  maxSize: 300GB
+  minSize: 500GB
+  maxSize: 800GB

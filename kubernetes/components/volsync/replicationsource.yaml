@@ -22,5 +22,5 @@ spec:
     retain:
       hourly: 24
       daily: 7
-    storageClassName: ${VOLSYNC_STORAGECLASS:=local-path}
-    # volumeSnapshotClassName: ${VOLSYNC_SNAPSHOTCLASS:=?}
+    storageClassName: ${VOLSYNC_STORAGECLASS:=host-zfs}
+    volumeSnapshotClassName: ${VOLSYNC_SNAPSHOTCLASS:=volumesnapshotclass}

@@ -9,8 +9,8 @@ spec:
   dataSourceRef:
     kind: ReplicationDestination
     apiGroup: volsync.backube
-    name: ${APP}-dst
+    name: ${APP}-bootstrap
   resources:
     requests:
       storage: ${VOLSYNC_CAPACITY:=1Gi}
-  storageClassName: ${VOLSYNC_STORAGECLASS:=local-path}
+  storageClassName: ${VOLSYNC_STORAGECLASS:=host-zfs}

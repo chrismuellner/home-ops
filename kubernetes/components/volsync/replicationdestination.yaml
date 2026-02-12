@@ -3,7 +3,7 @@
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationDestination
 metadata:
-  name: "${APP}-dst"
+  name: "${APP}-bootstrap"
   labels:
     kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
 spec:
@@ -24,5 +24,5 @@ spec:
     repository: ${APP}-volsync-secret
     sourceIdentity:
       sourceName: ${APP}
-    storageClassName: ${VOLSYNC_STORAGECLASS:=local-path}
-    # volumeSnapshotClassName: ${VOLSYNC_SNAPSHOTCLASS:=?}
+    storageClassName: ${VOLSYNC_STORAGECLASS:=host-zfs}
+    volumeSnapshotClassName: ${VOLSYNC_SNAPSHOTCLASS:=volumesnapshotclass}

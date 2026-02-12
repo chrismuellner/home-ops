@@ -15,43 +15,20 @@ spec:
       analytics:
         enabled: false
       localpv:
-        image:
-          registry: quay.io/
-        basePath: &hostPath /var/mnt/local-storage
+        enabled: false
       hostpathClass:
-        enabled: true
-        name: local-path
-        isDefaultClass: false
-        basePath: *hostPath
-      helperPod:
-        image:
-          registry: quay.io/
+        enabled: false
     openebs-crds:
       csi:
         volumeSnapshots:
           enabled: true
           keep: true
     zfs-localpv:
-      enabled: false
+      enabled: true
     lvm-localpv:
       enabled: false
     mayastor: # https://docs.siderolabs.com/kubernetes-guides/csi/storage#deploy-mayastor
-      enabled: true
-      csi:
-        node:
-          initContainers:
-            enabled: false
-      etcd:
-        # -- Kubernetes Cluster Domain
-        clusterDomain: cluster.local
-      localpv-provisioner:
-        enabled: true
-      # crds:
-      #   enabled: false
-      # loki:
-      #   enabled: false
-      # alloy:
-      #   enabled: false
+      enabled: false
     engines:
       local:
         lvm:
