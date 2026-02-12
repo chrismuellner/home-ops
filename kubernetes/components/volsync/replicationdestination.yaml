@@ -25,4 +25,4 @@ spec:
     sourceIdentity:
       sourceName: ${APP}
     storageClassName: ${VOLSYNC_STORAGECLASS:=host-zfs}
-    volumeSnapshotClassName: ${VOLSYNC_SNAPSHOTCLASS:=volumesnapshotclass}
+    volumeSnapshotClassName: ${VOLSYNC_SNAPSHOTCLASS:=host-zfs-snapshot}
