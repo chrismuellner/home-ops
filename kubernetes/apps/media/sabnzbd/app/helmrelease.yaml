@@ -11,9 +11,16 @@ spec:
 
   values:
     controllers:
-      main:
+      sabnzbd:
+        pod:
+          securityContext:
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 2000
+            runAsNonRoot: true
+            runAsUser: 2000
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/home-operations/sabnzbd
               tag: 4.5.5
@@ -23,13 +30,13 @@ spec:
                 sabnzbd.muellner.dev
 
     service:
-      main:
+      app:
         ports:
           http:
             port: *port
 
     route:
-      main:
+      app:
         hostnames:
           - "sabnzbd.muellner.dev"
         parentRefs:
@@ -39,8 +46,10 @@ spec:
     persistence:
       config:
         existingClaim: sabnzbd-config
-        globalMounts:
-        - path: /config
+        advancedMounts:
+          sabnzbd:
+            app:
+              - path: /config
       tmpfs:
         type: emptyDir
         globalMounts:
