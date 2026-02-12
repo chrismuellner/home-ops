@@ -19,7 +19,6 @@ spec:
     substitute:
       APP: radarr
       VOLSYNC_CLAIM: radarr-config
-      VOLSYNC_CAPACITY: 1Gi
   prune: true
   sourceRef:
     kind: GitRepository

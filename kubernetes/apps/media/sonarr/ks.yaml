@@ -19,7 +19,6 @@ spec:
     substitute:
       APP: sonarr
       VOLSYNC_CLAIM: sonarr-config
-      VOLSYNC_CAPACITY: 1Gi
   prune: true
   sourceRef:
     kind: GitRepository
