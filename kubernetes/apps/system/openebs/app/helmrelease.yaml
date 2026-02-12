@@ -24,17 +24,17 @@ spec:
           enabled: true
           keep: true
     zfs-localpv:
-      enabled: true
+      enabled: false
     lvm-localpv:
       enabled: false
-    mayastor: # https://docs.siderolabs.com/kubernetes-guides/csi/storage#deploy-mayastor
+    mayastor:
       enabled: false
     engines:
       local:
         lvm:
           enabled: false
         zfs:
-          enabled: false
+          enabled: true
       replicated:
         mayastor:
           enabled: false
