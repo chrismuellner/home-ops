@@ -18,6 +18,7 @@ spec:
     substitute:
       APP: jellyseerr
       VOLSYNC_CLAIM: jellyseerr-config
+      VOLSYNC_CAPACITY: 1Gi
   prune: true
   sourceRef:
     kind: GitRepository
