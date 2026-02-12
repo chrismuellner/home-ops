@@ -23,8 +23,9 @@ spec:
         volumeSnapshots:
           enabled: true
           keep: true
-    zfs-localpv:
-      enabled: false
+    zfs-localpv: # https://github.com/openebs/zfs-localpv/blob/develop/deploy/helm/charts/values.yaml
+      zfsNode:
+        encrKeysDir: /var/openebs/keys # https://github.com/openebs/zfs-localpv/issues/545
     lvm-localpv:
       enabled: false
     mayastor:
@@ -35,6 +36,7 @@ spec:
           enabled: false
         zfs:
           enabled: true
+
       replicated:
         mayastor:
           enabled: false
