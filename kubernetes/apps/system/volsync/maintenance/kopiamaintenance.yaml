@@ -1,0 +1,11 @@
+---
+apiVersion: volsync.backube/v1alpha1
+kind: KopiaMaintenance
+metadata:
+  name: weekly
+spec:
+  enabled: true
+  trigger:
+    schedule: 0 0 * * 0
+  repository:
+    repository: volsync-maintenance-secret

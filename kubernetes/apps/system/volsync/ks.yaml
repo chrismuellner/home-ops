@@ -23,3 +23,20 @@ spec:
     name: home-ops
   wait: true
   targetNamespace: system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: volsync-maintenance
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: volsync
+  interval: 1h
+  path: ./kubernetes/apps/system/volsync/maintenance
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: home-ops
+  targetNamespace: system
+  wait: false
