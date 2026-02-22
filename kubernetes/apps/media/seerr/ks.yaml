@@ -2,22 +2,21 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: jellyseerr
+  name: seerr
   namespace: flux-system
 spec:
   commonMetadata:
     labels:
-      app.kubernetes.io/name: jellyseerr
+      app.kubernetes.io/name: seerr
   components:
     - ../../../../components/volsync
   dependsOn:
     - name: openebs
   interval: 10m
-  path: ./kubernetes/apps/media/jellyseerr/app
+  path: ./kubernetes/apps/media/seerr/app
   postBuild:
     substitute:
-      APP: jellyseerr
-      VOLSYNC_CLAIM: jellyseerr-config
+      APP: seerr
       VOLSYNC_CAPACITY: 1Gi
   prune: true
   sourceRef:
