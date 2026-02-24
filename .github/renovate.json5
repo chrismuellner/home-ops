@@ -54,6 +54,12 @@
       "matchCurrentVersion": "!/^0/",
       "automerge": true,
       "ignoreTests": true
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/siderolabs/installer"],
+      "separateMajorMinor": true,
+      "separateMinorPatch": true
     }
   ]
 }
