@@ -13,35 +13,51 @@ spec:
   values:
     controllers:
       main:
-        pod:
-          securityContext:
-            fsGroup: 2000
-            fsGroupChangePolicy: OnRootMismatch
-            runAsGroup: 2000
-            runAsNonRoot: true
-            runAsUser: 2000
         containers:
-          main:
+          app:
             image:
-              repository: ghcr.io/linuxserver/sonarr
-              tag: 4.0.16
+              repository: ghcr.io/home-operations/sonarr
+              tag: 4.0.16.2946
             env:
+              SONARR__APP__INSTANCENAME: Sonarr
+              SONARR__APP__THEME: dark
+              SONARR__AUTH__METHOD: External
+              SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              SONARR__LOG__DBENABLED: "False"
+              SONARR__LOG__LEVEL: info
+              SONARR__SERVER__PORT: &port 80
+              SONARR__UPDATE__BRANCH: develop
               TZ: Europe/Vienna
-              SONARR__INSTANCE_NAME: Sonarr
-              SONARR__PORT: &port 8989
-              SONARR__APPLICATION_URL: &host "sonarr.muellner.dev"
-              SONARR__LOG_LEVEL: info
+
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                memory: 4Gi
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 2000
+        runAsGroup: 2000
+        fsGroup: 2000
+        fsGroupChangePolicy: OnRootMismatch
 
     service:
-      main:
+      app:
         ports:
           http:
             port: *port
 
     route:
-      main:
+      app:
         hostnames:
-          - *host
+          - sonarr.muellner.dev
         parentRefs:
           - name: envoy-internal
             namespace: network
@@ -59,3 +75,5 @@ spec:
         existingClaim: pvc-shows
         globalMounts:
           - path: /data/media/shows
+      tmp:
+        type: emptyDir
