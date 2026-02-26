@@ -14,19 +14,25 @@ spec:
     controllers:
       main:
         containers:
-          main:
+          app:
             image:
               repository: docker.io/jellyfin/jellyfin
               tag: 10.11.6
+            resources:
+              requests:
+                cpu: 300m
+                memory: 2Gi
+              limits:
+                memory: 8Gi
 
     service:
-      main:
+      app:
         ports:
           http:
             port: 8096
     
     route:
-      main:
+      app:
         hostnames:
           - "jellyfin.muellner.dev"
         parentRefs:

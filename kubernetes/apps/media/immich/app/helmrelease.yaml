@@ -50,6 +50,12 @@ spec:
             envFrom:
               - configMapRef:
                   name: immich-configmap
+            resources:
+              requests:
+                cpu: 300m
+                memory: 2Gi
+              limits:
+                memory: 8Gi
 
       machine-learning:
         strategy: RollingUpdate
@@ -80,6 +86,12 @@ spec:
             envFrom:
               - configMapRef:
                   name: immich-configmap
+            resources:
+              requests:
+                cpu: 300m
+                memory: 1Gi
+              limits:
+                memory: 2Gi
 
       valkey:
         containers:
@@ -87,6 +99,12 @@ spec:
             image:
               repository: docker.io/valkey/valkey
               tag: 8-bookworm
+            resources:
+              requests:
+                cpu: 100m
+                memory: 100Mi
+              limits:
+                memory: 300Mi
 
       database:
         containers:
@@ -107,6 +125,12 @@ spec:
                     key: POSTGRES_PASSWORD
               POSTGRES_DB: *databaseName
               POSTGRES_INITDB_ARGS: '--data-checksums'
+            resources:
+              requests:
+                cpu: 100m
+                memory: 500Mi
+              limits:
+                memory: 800Mi
 
     service:
       server:

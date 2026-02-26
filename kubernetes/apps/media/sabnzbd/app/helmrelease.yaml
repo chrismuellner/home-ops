@@ -30,6 +30,12 @@ spec:
               SABNZBD__HOST_WHITELIST_ENTRIES: >-
                 sabnzbd,
                 sabnzbd.muellner.dev
+            resources:
+              requests:
+                cpu: 30m
+                memory: 100Mi
+              limits:
+                memory: 300Mi
 
     service:
       app:
