@@ -1,7 +1,9 @@
-# home ops
+# Home Ops
+ 
+Single-node talos cluster.
 
-Single-node k3s cluster.
+## Attribution
 
-Thanks to k8s@home maintainers:
-- https://github.com/onedr0p/flux-cluster-template
-- https://github.com/bjw-s/home-ops
+Special thanks to the following people and their repositories:
+- [onedr0p](https://github.com/onedr0p/home-ops)
+- [bjw-s](https://github.com/bjw-s/home-ops)
