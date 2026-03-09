@@ -9,17 +9,6 @@ spec:
     kind: OCIRepository
     name: immich
   interval: 1h
-  maxHistory: 3
-  install:
-    createNamespace: true
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
   values:
     controllers:
       server:
@@ -56,6 +45,10 @@ spec:
                 memory: 2Gi
               limits:
                 memory: 8Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
 
       machine-learning:
         strategy: RollingUpdate
@@ -72,7 +65,7 @@ spec:
             env:
               MPLCONFIGDIR: "/cache/matplotlib"
               IMMICH_MEDIA_LOCATION: *mediaLocation
-              DB_DATABASE_NAME: &databaseName "immich"
+              DB_DATABASE_NAME: *databaseName
               DB_USERNAME:
                 valueFrom:
                   secretKeyRef:
@@ -92,6 +85,10 @@ spec:
                 memory: 1Gi
               limits:
                 memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
 
       valkey:
         containers:
@@ -106,6 +103,11 @@ spec:
               limits:
                 memory: 300Mi
 
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+
       database:
         containers:
           app:
@@ -114,10 +116,10 @@ spec:
               tag: 17-vectorchord0.4.3
             env:
               POSTGRES_USER:
-                    valueFrom:
-                      secretKeyRef:
-                        name: immich-secret
-                        key: POSTGRES_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-secret
+                    key: POSTGRES_USER
               POSTGRES_PASSWORD:
                 valueFrom:
                   secretKeyRef:
@@ -131,6 +133,19 @@ spec:
                 memory: 500Mi
               limits:
                 memory: 800Mi
+
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
 
     service:
       server:
@@ -163,8 +178,8 @@ spec:
             namespace: network
         rules:
           - backendRefs:
-            - identifier: server
-              port: *port
+              - identifier: server
+                port: *port
 
     persistence:
       matplotlib:
@@ -180,12 +195,12 @@ spec:
         advancedMounts:
           server:
             main:
-            - path: *mediaLocation
-              subPath: immich
-            - path: /data/camera
-              subPath: camera
-            - path: /data/phone
-              subPath: phone
+              - path: *mediaLocation
+                subPath: immich
+              - path: /data/camera
+                subPath: camera
+              - path: /data/phone
+                subPath: phone
 
       cache:
         type: emptyDir
@@ -203,6 +218,14 @@ spec:
                 subPath: geocoding
               - path: /usr/src/app/.transformers_cache
                 subPath: transformers
+          machine-learning:
+            main:
+              - path: /tmp
+          database:
+            app:
+              - path: /etc/postgresql
+              - path: /var/run/postgresql
+              - path: /tmp
 
       database:
         type: persistentVolumeClaim
@@ -210,5 +233,5 @@ spec:
         advancedMounts:
           database:
             app:
-            - path: /var/lib/postgresql/data
-              subPath: database
+              - path: /var/lib/postgresql/data
+                subPath: database
