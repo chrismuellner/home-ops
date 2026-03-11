@@ -6,3 +6,11 @@ resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
   - ./paperless-secret.sops.yaml
+
+patches:
+  - patch: |
+      - op: add
+        path: /spec/kopia/sourceIdentity/sourceNamespace
+        value: media
+    target:
+      kind: ReplicationDestination

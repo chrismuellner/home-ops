@@ -14,15 +14,14 @@ spec:
   dependsOn:
     - name: openebs
   interval: 10m
-  path: ./kubernetes/apps/media/paperless/app
+  path: ./kubernetes/apps/selfhosted/paperless/app
   postBuild:
     substitute:
       APP: paperless
-      VOLSYNC_CLAIM: paperless-data
       VOLSYNC_CAPACITY: 15Gi
   prune: true
   sourceRef:
     kind: GitRepository
     name: home-ops
   wait: true
-  targetNamespace: media
+  targetNamespace: selfhosted

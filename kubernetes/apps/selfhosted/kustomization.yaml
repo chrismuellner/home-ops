@@ -5,3 +5,4 @@ kind: Kustomization
 resources:
   - ./namespace.yaml
   - ./tandoorrecipes/ks.yaml
+  - ./paperless/ks.yaml

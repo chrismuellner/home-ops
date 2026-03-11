@@ -46,7 +46,7 @@ spec:
               # Configure OCR
               PAPERLESS_OCR_LANGUAGE: eng+deu
               # Configure redis integration
-              PAPERLESS_REDIS: redis://paperless-redis.media.svc.cluster.local:6379
+              PAPERLESS_REDIS: redis://paperless-redis.selfhosted.svc.cluster.local:6379
               # Configure admin user
               PAPERLESS_ADMIN_USER:
                 valueFrom:
@@ -104,7 +104,7 @@ spec:
 
     persistence:
       data:
-        existingClaim: paperless-data
+        existingClaim: paperless
         advancedMounts:
           paperless:
             app:
