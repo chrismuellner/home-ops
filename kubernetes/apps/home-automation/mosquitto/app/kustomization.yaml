@@ -6,14 +6,11 @@ namespace: home-automation
 resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+  - ./mosquitto-secret.sops.yaml
 configMapGenerator:
-- name: mosquitto-conf
-  files:
-  - ./config/mosquitto.conf
-secretGenerator:
-- name: mosquitto-passwd
-  files:
-  - ./config/passwords.txt
+  - name: mosquitto-conf
+    files:
+      - ./config/mosquitto.conf
 generatorOptions:
   disableNameSuffixHash: true
 commonLabels:

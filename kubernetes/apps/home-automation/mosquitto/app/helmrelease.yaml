@@ -12,6 +12,18 @@ spec:
   values:
     controllers:
       mosquitto:
+        initContainers:
+          init-passwd:
+            image:
+              repository: eclipse-mosquitto
+              tag: 2.0.22
+            command:
+              - /bin/sh
+              - -c
+              - mosquitto_passwd -b -c /passwd/passwords.txt $(MQTT_USERNAME) $(MQTT_PASSWORD)
+            envFrom:
+              - secretRef:
+                  name: mosquitto-credentials
         containers:
           app:
             image:
@@ -32,12 +44,15 @@ spec:
         globalMounts:
           - path: /mosquitto/config/mosquitto.conf
             subPath: mosquitto.conf
-      password-file:
-        type: secret
-        name: mosquitto-passwd
-        globalMounts:
-          - path: /mosquitto/config/passwords.txt
-            subPath: passwords.txt
+      passwd:
+        type: emptyDir
+        advancedMounts:
+          mosquitto:
+            init-passwd:
+              - path: /passwd
+            app:
+              - path: /mosquitto/config/passwords.txt
+                subPath: passwords.txt
       config:
         existingClaim: mosquitto-config
         globalMounts:

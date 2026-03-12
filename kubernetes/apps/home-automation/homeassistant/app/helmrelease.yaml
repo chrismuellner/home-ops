@@ -40,27 +40,27 @@ spec:
         type: configMap
         name: homeassistant-config
         globalMounts:
-        - path: /config/configuration.yaml
-          subPath: configuration.yaml
+          - path: /config/configuration.yaml
+            subPath: configuration.yaml
       config:
         existingClaim: homeassistant-config
         globalMounts:
-        - path: /config
+          - path: /config
       binary-sensor-file:
         type: configMap
         name: homeassistant-binary-sensor
         globalMounts:
-        - path: /config/binary_sensor.yaml
-          subPath: binary_sensor.yaml
+          - path: /config/binary_sensor.yaml
+            subPath: binary_sensor.yaml
       sensor-file:
         type: configMap
         name: homeassistant-sensor
         globalMounts:
-        - path: /config/sensor.yaml
-          subPath: sensor.yaml
+          - path: /config/sensor.yaml
+            subPath: sensor.yaml
       template-file:
         type: configMap
         name: homeassistant-template
         globalMounts:
-        - path: /config/template.yaml
-          subPath: template.yaml
+          - path: /config/template.yaml
+            subPath: template.yaml

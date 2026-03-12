@@ -1,3 +1,4 @@
+---
 # Loads default set of integrations. Do not remove.
 default_config:
 
@@ -5,28 +6,29 @@ frontend:
 
 # Text to speech
 tts:
-- platform: google_translate
+  - platform: google_translate
 
 # automation: !include automations.yaml
 # script: !include scripts.yaml
 # scene: !include scenes.yaml
+
 binary_sensor: !include binary_sensor.yaml
 sensor: !include sensor.yaml
 template: !include template.yaml
 
 homeassistant:
-    name: Home
-    internal_url: https://hass.muellner.dev
-    auth_providers:
-        - type: homeassistant
-        - type: trusted_networks
-          trusted_networks:
-            - 192.168.0.0/16
+  name: Home
+  internal_url: https://hass.muellner.dev
+  auth_providers:
+    - type: homeassistant
+    - type: trusted_networks
+      trusted_networks:
+        - 192.168.0.0/16
 
 http:
-    ip_ban_enabled: true
-    login_attempts_threshold: 5
-    use_x_forwarded_for: true
-    trusted_proxies:
-        - 192.168.0.0/16
-        - 10.0.0.0/8
+  ip_ban_enabled: true
+  login_attempts_threshold: 5
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 192.168.0.0/16
+    - 10.0.0.0/8
