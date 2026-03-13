@@ -1,28 +1,28 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:base",
-    ":dependencyDashboard",
-    ":disableRateLimiting",
-    "docker:enableMajor",
-    ":automergeDigest",
-    ":automergeBranch",
-    "github>chrismuellner/home-ops//.renovate/groups.json5",
-    "github>chrismuellner/home-ops//.renovate/overrides.json5",
-    "github>chrismuellner/home-ops//.renovate/customManagers.json5",
-    "github>chrismuellner/home-ops//.renovate/grafanaDashboards.json5",
-    "github>chrismuellner/home-ops//.renovate/autoMerge.json5"
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: [
+    'config:recommended',
+    ':dependencyDashboard',
+    ':disableRateLimiting',
+    'docker:enableMajor',
+    ':automergeDigest',
+    ':automergeBranch',
+    'github>chrismuellner/home-ops//.renovate/groups.json5',
+    'github>chrismuellner/home-ops//.renovate/overrides.json5',
+    'github>chrismuellner/home-ops//.renovate/customManagers.json5',
+    'github>chrismuellner/home-ops//.renovate/grafanaDashboards.json5',
+    'github>chrismuellner/home-ops//.renovate/autoMerge.json5',
   ],
-  "packageRules": [
+  packageRules: [
     {
-      "matchDatasources": [
-        "docker"
+      matchDatasources: [
+        'docker',
       ],
-      "matchPackageNames": [
-        "ghcr.io/siderolabs/installer"
+      matchPackageNames: [
+        'ghcr.io/siderolabs/installer',
       ],
-      "separateMajorMinor": true,
-      "separateMinorPatch": true
-    }
-  ]
+      separateMajorMinor: true,
+      separateMinorPatch: true,
+    },
+  ],
 }
