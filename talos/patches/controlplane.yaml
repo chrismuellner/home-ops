@@ -7,7 +7,7 @@ machine:
         - os:admin
       enabled: true
   install:
-    image: factory.talos.dev/metal-installer/4dd8e3a8b6203d3c14f049da8db4d3bb0d6d3e70c5e89dfcc1e709e81914f63c:v1.12.3
+    image: factory.talos.dev/metal-installer/4dd8e3a8b6203d3c14f049da8db4d3bb0d6d3e70c5e89dfcc1e709e81914f63c:v1.12.5
     wipe: true
   kernel:
     modules:
