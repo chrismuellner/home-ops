@@ -13,6 +13,29 @@
     'github>chrismuellner/home-ops//.renovate/grafanaDashboards.json5',
     'github>chrismuellner/home-ops//.renovate/autoMerge.json5',
   ],
+  dependencyDashboardTitle: "Renovate Dashboard 🤖",
+  suppressNotifications: [
+    "prEditedNotification",
+    "prIgnoreNotification",
+  ],
+  ignorePaths: [
+    "**/resources/**",
+  ],
+  flux: {
+    managerFilePatterns: [
+      "/\\.yaml(?:\\.j2)?$/"
+    ],
+  },
+  "helm-values": {
+    managerFilePatterns: [
+      "/\\.yaml(?:\\.j2)?$/"
+    ],
+  },
+  kubernetes: {
+    managerFilePatterns: [
+      "/\\.yaml(?:\\.j2)?$/"
+    ],
+  },
   packageRules: [
     {
       matchDatasources: [
