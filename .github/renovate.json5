@@ -7,57 +7,20 @@
     "docker:enableMajor",
     ":automergeDigest",
     ":automergeBranch",
-    "github>chrismuellner/home-ops//.github/renovate/groups.json5"
-  ],
-  "flux": {
-    "fileMatch": [".+\\.ya?ml$"]
-  },
-  "helm-values": {
-    "fileMatch": [".+\\.ya?ml$"]
-  },
-  "kubernetes": {
-    "fileMatch": [".+\\.ya?ml$"]
-  },
-  "regexManagers": [
-    {
-      "description": ["Process various dependencies in YAML files"],
-      "fileMatch": [".+\\.ya?ml$"],
-      "matchStrings": [
-        "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*=?))?( versionTemplate=(?<versionTemplate>.*=?))?\\n.*: ?(\"?(?<currentValue>[^\"\\n]+=?)\"?)"
-      ],
-      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
-      "extractVersionTemplate": "{{#if versionTemplate}}{{{versionTemplate}}}{{else}}{{/if}}"
-    },
-    {
-      "description": ["Process CRD dependencies - Chart and Github Release are the same version"],
-      "fileMatch": ["\\.ya?ml$"],
-      "matchStrings": [
-        "# renovate: registryUrl=(?<registryUrl>\\S+) chart=(?<depName>\\S+)\n.*?(?<currentValue>[^-\\s]*)\n"
-      ],
-      "datasourceTemplate": "helm"
-    },
-    {
-      "description": ["Raw GitHub URL Regex manager"],
-      "fileMatch": [
-        ".+\\.ya?ml$"
-      ],
-      "matchStrings": [
-        "https:\\/\\/raw.githubusercontent.com\\/(?<depName>[\\w\\d\\-_]+\\/[\\w\\d\\-_]+)\\/(?<currentValue>[\\w\\d\\.\\-_]+)\\/.*"
-      ],
-      "datasourceTemplate": "github-releases",
-      "versioningTemplate": "semver"
-    }
+    "github>chrismuellner/home-ops//.renovate/groups.json5",
+    "github>chrismuellner/home-ops//.renovate/overrides.json5",
+    "github>chrismuellner/home-ops//.renovate/customManagers.json5",
+    "github>chrismuellner/home-ops//.renovate/grafanaDashboards.json5",
+    "github>chrismuellner/home-ops//.renovate/autoMerge.json5"
   ],
   "packageRules": [
     {
-      "matchUpdateTypes": ["minor", "patch"],
-      "matchCurrentVersion": "!/^0/",
-      "automerge": true,
-      "ignoreTests": true
-    },
-    {
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["ghcr.io/siderolabs/installer"],
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/siderolabs/installer"
+      ],
       "separateMajorMinor": true,
       "separateMinorPatch": true
     }
