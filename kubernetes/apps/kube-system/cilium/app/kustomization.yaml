@@ -5,5 +5,5 @@ kind: Kustomization
 resources:
   - ./ocirepository.yaml
   - ./helmrelease.yaml
-  - ./loadbalancerippool.yaml
+  - ./networking.yaml
   - ./grafanadashboard.yaml

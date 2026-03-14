@@ -51,6 +51,9 @@ spec:
       replicas: 1
       rollOutPods: true
 
+    l2announcements:
+      enabled: true
+
     dashboards:
       enabled: true
     endpointRoutes:
