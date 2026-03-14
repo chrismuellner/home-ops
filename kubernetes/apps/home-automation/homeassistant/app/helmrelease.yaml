@@ -30,9 +30,9 @@ spec:
     route:
       main:
         hostnames:
-          - "hass.muellner.dev"
+          - "home.muellner.dev"
         parentRefs:
-          - name: envoy-internal
+          - name: envoy-external
             namespace: network
 
     persistence:
