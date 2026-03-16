@@ -221,6 +221,9 @@ spec:
           machine-learning:
             main:
               - path: /tmp
+          valkey:
+            app:
+              - path: /data
           database:
             app:
               - path: /etc/postgresql
