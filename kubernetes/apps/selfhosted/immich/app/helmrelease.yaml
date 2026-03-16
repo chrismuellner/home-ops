@@ -17,6 +17,10 @@ spec:
           reloader.stakater.com/auto: "true"
         pod:
           enableServiceLinks: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
 
         containers:
           main:
@@ -221,6 +225,7 @@ spec:
           machine-learning:
             main:
               - path: /tmp
+              - path: /.cache
           valkey:
             app:
               - path: /data
