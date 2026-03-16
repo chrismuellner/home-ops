@@ -14,4 +14,3 @@ resources:
   - sabnzbd/ks.yaml
   - qbittorrent/ks.yaml
   - seerr/ks.yaml
-  - immich/ks.yaml

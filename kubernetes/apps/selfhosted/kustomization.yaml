@@ -6,3 +6,4 @@ resources:
   - ./namespace.yaml
   - ./tandoorrecipes/ks.yaml
   - ./paperless/ks.yaml
+  - ./immich/ks.yaml

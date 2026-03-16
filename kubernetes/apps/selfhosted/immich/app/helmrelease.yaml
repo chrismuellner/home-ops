@@ -229,7 +229,7 @@ spec:
 
       database:
         type: persistentVolumeClaim
-        existingClaim: immich-config
+        existingClaim: immich
         advancedMounts:
           database:
             app:
