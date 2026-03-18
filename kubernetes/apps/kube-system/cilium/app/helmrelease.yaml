@@ -54,6 +54,12 @@ spec:
     l2announcements:
       enabled: true
 
+    prometheus:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+        trustCRDsExist: true
+
     dashboards:
       enabled: true
     endpointRoutes:
@@ -61,4 +67,18 @@ spec:
     envoy:
       enabled: false
     hubble:
-      enabled: false
+      enabled: true
+      metrics:
+        enabled:
+          - dns
+          - drop
+          - tcp
+          - flow
+          - port-distribution
+          - icmp
+          - httpV2
+        serviceMonitor:
+          enabled: true
+          trustCRDsExist: true
+        dashboards:
+          enabled: true
