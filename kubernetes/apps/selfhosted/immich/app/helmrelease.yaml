@@ -176,7 +176,7 @@ spec:
     route:
       main:
         hostnames:
-          - "immich.muellner.dev"
+          - "photos.muellner.dev"
         parentRefs:
           - name: envoy-internal
             namespace: network
