@@ -20,3 +20,4 @@ spec:
       share: "/volume/04ba54d5-e293-41bf-92ab-4be09c2a4331/.srv/.unifi-drive/shows/.data"
   mountOptions:
     - nolock
+    - nfsvers=3

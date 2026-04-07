@@ -6,3 +6,4 @@ resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
   - ./paperless-secret.sops.yaml
+  - ./pvc-documents.yaml

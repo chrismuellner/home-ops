@@ -4,7 +4,7 @@ kind: PersistentVolume
 metadata:
   annotations:
     pv.kubernetes.io/provisioned-by: nfs.csi.k8s.io
-  name: pv-photos
+  name: pv-documents
 spec:
   capacity:
     storage: 1000Gi
@@ -14,10 +14,10 @@ spec:
   storageClassName: nfs-csi
   csi:
     driver: nfs.csi.k8s.io
-    volumeHandle: "photos"
+    volumeHandle: "documents"
     volumeAttributes:
       server: "192.168.1.200"
-      share: "/volume/04ba54d5-e293-41bf-92ab-4be09c2a4331/.srv/.unifi-drive/photos/.data"
+      share: "/volume/04ba54d5-e293-41bf-92ab-4be09c2a4331/.srv/.unifi-drive/documents/.data"
   mountOptions:
     - nolock
     - nfsvers=3
