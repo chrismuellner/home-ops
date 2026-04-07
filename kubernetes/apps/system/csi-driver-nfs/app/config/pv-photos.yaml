@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -16,6 +17,6 @@ spec:
     volumeHandle: "photos"
     volumeAttributes:
       server: "192.168.1.200"
-      share: "/var/nfs/shared/photos"
+      share: "/volume/04ba54d5-e293-41bf-92ab-4be09c2a4331/.srv/.unifi-drive/photos/.data"
   mountOptions:
-  - nolock
+    - nolock

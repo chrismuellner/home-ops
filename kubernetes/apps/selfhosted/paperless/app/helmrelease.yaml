@@ -111,8 +111,8 @@ spec:
               - path: /data/local
       nas:
         type: nfs
-        path: /var/nfs/shared/documents
-        server: nas.local
+        path: /volume/04ba54d5-e293-41bf-92ab-4be09c2a4331/.srv/.unifi-drive/documents/.data
+        server: 192.168.1.200
         advancedMounts:
           paperless:
             app:
