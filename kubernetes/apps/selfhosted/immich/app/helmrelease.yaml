@@ -26,7 +26,7 @@ spec:
           main:
             image:
               repository: ghcr.io/immich-app/immich-server
-              tag: v2.6.3
+              tag: v2.7.2
             env:
               IMMICH_MEDIA_LOCATION: &mediaLocation /usr/src/app/upload
               DB_DATABASE_NAME: &databaseName "immich"
@@ -65,7 +65,7 @@ spec:
           main:
             image:
               repository: ghcr.io/immich-app/immich-machine-learning
-              tag: v2.6.3
+              tag: v2.7.0
             env:
               MPLCONFIGDIR: "/cache/matplotlib"
               IMMICH_MEDIA_LOCATION: *mediaLocation
