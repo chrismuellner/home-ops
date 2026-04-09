@@ -12,7 +12,7 @@ spec:
   values:
     controllers:
       server:
-        strategy: RollingUpdate
+        strategy: Recreate
         annotations:
           reloader.stakater.com/auto: "true"
         pod:
@@ -55,7 +55,7 @@ spec:
               capabilities: {drop: ["ALL"]}
 
       machine-learning:
-        strategy: RollingUpdate
+        strategy: Recreate
         annotations:
           reloader.stakater.com/auto: "true"
         pod:
