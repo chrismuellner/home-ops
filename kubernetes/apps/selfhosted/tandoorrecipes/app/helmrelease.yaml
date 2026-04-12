@@ -20,6 +20,7 @@ spec:
               tag: 2.6.6
             env:
               DATABASE_URL: sqlite://localhost//opt/recipes/database/db.sqlite3 # db string compliant with custom parser used by tandoorrecipes
+              ALLOWED_HOSTS: &hostname recipes.muellner.dev
             envFrom:
               - secretRef:
                   name: tandoorrecipes-secret
@@ -33,7 +34,7 @@ spec:
     route:
       web:
         hostnames:
-          - "recipes.muellner.dev"
+          - *hostname
         parentRefs:
           - name: envoy-internal
             namespace: network
@@ -45,9 +46,9 @@ spec:
         advancedMounts:
           web:
             main:
-            - path: /opt/recipes/staticfiles
-              subPath: staticfiles
-            - path: /opt/recipes/mediafiles
-              subPath: mediafiles
-            - path: /opt/recipes/database
-              subPath: database
+              - path: /opt/recipes/staticfiles
+                subPath: staticfiles
+              - path: /opt/recipes/mediafiles
+                subPath: mediafiles
+              - path: /opt/recipes/database
+                subPath: database
