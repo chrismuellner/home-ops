@@ -17,7 +17,7 @@ spec:
           main:
             image:
               repository: ghcr.io/tandoorrecipes/recipes
-              tag: 2.6.7
+              tag: 2.6.8
             env:
               DATABASE_URL: sqlite://localhost//opt/recipes/database/db.sqlite3 # db string compliant with custom parser used by tandoorrecipes
               ALLOWED_HOSTS: &hostname recipes.muellner.dev
