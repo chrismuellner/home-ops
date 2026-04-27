@@ -1,0 +1,13 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+configMapGenerator:
+  - name: zfs-scrub-scripts
+    options:
+      disableNameSuffixHash: true
+    files:
+      - zfs_scrub_task.sh
+resources:
+  - ./ocirepository.yaml
+  - ./helmrelease.yaml

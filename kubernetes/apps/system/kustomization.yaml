@@ -9,3 +9,4 @@ resources:
   - ./csi-driver-nfs/ks.yaml
   - ./kopia/ks.yaml
   - ./volsync/ks.yaml
+  - ./zfs-scrub/ks.yaml
