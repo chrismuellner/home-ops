@@ -21,7 +21,7 @@ spec:
             image:
               # docker.io/openebs/zfs-driver is already deployed by openebs and includes zpool
               repository: docker.io/openebs/zfs-driver
-              tag: 2.9.0
+              tag: 2.9.1
             command:
               - "/scripts/zfs_scrub_task.sh"
             env:
