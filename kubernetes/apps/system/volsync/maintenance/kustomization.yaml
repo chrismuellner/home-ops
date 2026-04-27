@@ -6,4 +6,3 @@ namespace: system
 resources:
   - ./kopiamaintenance.yaml
   - ./volsync-maintenance-secret.sops.yaml
-  - ./mutatingadmissionpolicy.yaml

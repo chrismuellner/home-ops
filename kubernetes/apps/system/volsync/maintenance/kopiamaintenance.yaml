@@ -2,10 +2,16 @@
 apiVersion: volsync.backube/v1alpha1
 kind: KopiaMaintenance
 metadata:
-  name: weekly
+  name: daily
 spec:
   enabled: true
   trigger:
     schedule: 0 2 * * *
+  moverVolumes:
+    - mountPath: repository
+      volumeSource:
+        nfs:
+          server: nas.local
+          path: /var/nfs/shared/backups
   repository:
     repository: volsync-maintenance-secret
