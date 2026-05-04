@@ -9,6 +9,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: sabnzbd
+      app.kubernetes.io/instance: sabnzbd
   components:
     - ../../../../components/volsync
   dependsOn:

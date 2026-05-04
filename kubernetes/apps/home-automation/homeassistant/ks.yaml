@@ -9,6 +9,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: homeassistant
+      app.kubernetes.io/instance: homeassistant
   components:
     - ../../../../components/volsync
   dependsOn:

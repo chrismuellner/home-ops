@@ -9,6 +9,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: qbittorrent
+      app.kubernetes.io/instance: qbittorrent
   components:
     - ../../../../components/volsync
   dependsOn:

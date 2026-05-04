@@ -7,20 +7,17 @@ resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
 configMapGenerator:
-- name: homeassistant-config
-  files:
-  - ./config/configuration.yaml
-- name: homeassistant-binary-sensor
-  files:
-  - ./config/binary_sensor.yaml
-- name: homeassistant-sensor
-  files:
-  - ./config/sensor.yaml
-- name: homeassistant-template
-  files:
-  - ./config/template.yaml
+  - name: homeassistant-config
+    files:
+      - ./config/configuration.yaml
+  - name: homeassistant-binary-sensor
+    files:
+      - ./config/binary_sensor.yaml
+  - name: homeassistant-sensor
+    files:
+      - ./config/sensor.yaml
+  - name: homeassistant-template
+    files:
+      - ./config/template.yaml
 generatorOptions:
   disableNameSuffixHash: true
-commonLabels:
-  app.kubernetes.io/name: homeassistant
-  app.kubernetes.io/instance: homeassistant
