@@ -1,0 +1,28 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: esphome
+  namespace: flux-system
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: esphome
+      app.kubernetes.io/instance: esphome
+  components:
+    - ../../../../components/volsync
+  dependsOn:
+    - name: openebs
+  interval: 10m
+  path: ./kubernetes/apps/home-automation/esphome/app
+  postBuild:
+    substitute:
+      APP: esphome
+      VOLSYNC_CAPACITZ: 1Gi
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: home-ops
+  wait: true
+  targetNamespace: home-automation
