@@ -17,7 +17,7 @@ spec:
           esphome:
             image:
               repository: ghcr.io/esphome/esphome
-              tag: 2026.4.3
+              tag: 2026.4.4
             env:
               ESPHOME_DASHBOARD_USE_PING: true # https://github.com/esphome/issues/issues/641#issuecomment-534156628
             securityContext:
