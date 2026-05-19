@@ -1,0 +1,44 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &release events
+spec:
+  releaseName: *release
+  chartRef:
+    kind: OCIRepository
+    name: events
+  interval: 30m
+  values:
+    controllers:
+      web:
+        pod:
+          imagePullSecrets:
+            - name: events-pull-secret
+        containers:
+          main:
+            image:
+              repository: ghcr.io/chrismuellner/event-tracker
+              tag: snapshot
+
+    service:
+      web:
+        ports:
+          http:
+            port: 8080
+
+    route:
+      web:
+        hostnames:
+          - events.muellner.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+
+    persistence:
+      config:
+        type: persistentVolumeClaim
+        existingClaim: *release
+        globalMounts:
+          - path: /data
