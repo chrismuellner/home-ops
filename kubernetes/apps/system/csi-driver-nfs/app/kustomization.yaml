@@ -7,6 +7,7 @@ resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
   - ./config/pv-backups.yaml
+  - ./config/pv-books.yaml
   - ./config/pv-documents.yaml
   - ./config/pv-shows.yaml
   - ./config/pv-movies.yaml

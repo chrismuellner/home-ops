@@ -1,0 +1,65 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &release kavita
+spec:
+  releaseName: *release
+  chartRef:
+    kind: OCIRepository
+    name: kavita
+  interval: 30m
+  values:
+    controllers:
+      kavita:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/kareadita/kavita
+              tag: 0.9.0.2
+            env:
+              TZ: Europe/Vienna
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
+
+    service:
+      app:
+        controller: kavita
+        ports:
+          http:
+            port: &port 5000
+
+    persistence:
+      config:
+        existingClaim: *release
+        advancedMounts:
+          kavita:
+            app:
+              - path: /kavita/config
+      books:
+        existingClaim: pvc-books
+        advancedMounts:
+          kavita:
+            app:
+              - path: /books
+
+    route:
+      app:
+        hostnames:
+          - books.muellner.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
