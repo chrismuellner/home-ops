@@ -17,7 +17,7 @@ spec:
           app:
             image:
               repository: docker.io/jellyfin/jellyfin
-              tag: 10.11.10
+              tag: 10.11.11
             resources:
               requests:
                 cpu: 300m
