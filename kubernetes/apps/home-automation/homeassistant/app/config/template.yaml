@@ -12,6 +12,20 @@
         type: daily
       response_variable: forecast_data
   sensor:
+    - name: "Weather Forecast Day 0 High"
+      unique_id: weather_forecast_day_0_high
+      default_entity_id: sensor.weather_forecast_day_0_high
+      unit_of_measurement: "°C"
+      state: '{{ forecast_data["weather.forecast_home"].forecast[0].temperature | default("N/A") }}'
+    - name: "Weather Forecast Day 0 Low"
+      unique_id: weather_forecast_day_0_low
+      default_entity_id: sensor.weather_forecast_day_0_low
+      unit_of_measurement: "°C"
+      state: '{{ forecast_data["weather.forecast_home"].forecast[0].templow | default("N/A") }}'
+    - name: "Weather Forecast Day 0 Condition"
+      unique_id: weather_forecast_day_0_condition
+      default_entity_id: sensor.weather_forecast_day_0_condition
+      state: '{{ forecast_data["weather.forecast_home"].forecast[0].condition | default("unknown") }}'
     - name: "Weather Forecast Day 1 High"
       unique_id: weather_forecast_day_1_high
       default_entity_id: sensor.weather_forecast_day_1_high
@@ -54,3 +68,30 @@
       unique_id: weather_forecast_day_3_condition
       default_entity_id: sensor.weather_forecast_day_3_condition
       state: '{{ forecast_data["weather.forecast_home"].forecast[3].condition | default("unknown") }}'
+- trigger:
+    - trigger: time_pattern
+      minutes: "/15"
+  action:
+    - action: calendar.get_events
+      target:
+        entity_id:
+          - calendar.shared
+      data:
+        duration:
+          days: 14
+      response_variable: calendar_events
+    - action: python_script.esp_calendar_data_conversion
+      data:
+        calendar: "{{ calendar_events }}"
+        now: "{{ now().isoformat().split('T')[0] }}"
+        nr_entries: 8
+        prefix_length: 3
+        prefix_separator: ": "
+      response_variable: output
+  sensor:
+    - name: ESP Calendar Data
+      unique_id: esp_calendar_data
+      state: "OK"
+      attributes:
+        entries: "{{ output.entries }}"
+        closest_end_time: "{{ output.closest_end_time }}"

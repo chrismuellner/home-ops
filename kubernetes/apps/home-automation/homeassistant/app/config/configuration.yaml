@@ -16,6 +16,8 @@ binary_sensor: !include binary_sensor.yaml
 sensor: !include sensor.yaml
 template: !include template.yaml
 
+python_script:
+
 homeassistant:
   name: Home
   internal_url: https://home.muellner.dev
