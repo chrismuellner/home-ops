@@ -13,3 +13,8 @@ spec:
       kind: ReplicationSource
       expr: |-
         status.conditions.filter(c, c.type == "Synchronizing").all(c, c.status == "False")
+  maintenance:
+    windows:
+      - start: "0 2 * * 0" # Sunday 02:00
+        duration: "4h"
+        timezone: "UTC"
