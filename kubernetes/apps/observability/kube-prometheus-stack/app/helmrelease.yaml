@@ -72,10 +72,33 @@ spec:
               resources:
                 requests:
                   storage: 50Gi
+    prometheusOperator:
+      resources:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+        limits:
+          memory: 128Mi
+      livenessProbe:
+        timeoutSeconds: 5
     prometheus-node-exporter:
       fullnameOverride: node-exporter
+      resources:
+        requests:
+          cpu: 25m
+          memory: 32Mi
+        limits:
+          memory: 64Mi
+      livenessProbe:
+        timeoutSeconds: 5
     kube-state-metrics:
       fullnameOverride: kube-state-metrics
+      resources:
+        requests:
+          cpu: 10m
+          memory: 96Mi
+        limits:
+          memory: 256Mi
     grafana:
       enabled: false
       forceDeployDashboards: true
