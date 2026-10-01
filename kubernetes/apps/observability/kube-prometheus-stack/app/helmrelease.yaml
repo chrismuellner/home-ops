@@ -25,8 +25,6 @@ spec:
             - name: envoy-internal
               namespace: network
       alertmanagerSpec:
-        alertmanagerConfiguration:
-          name: alertmanager
         externalUrl: https://alertmanager.muellner.dev
         storage:
           volumeClaimTemplate:
