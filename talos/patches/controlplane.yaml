@@ -27,6 +27,16 @@ cluster:
     extraArgs:
       feature-gates: MutatingAdmissionPolicy=true
       runtime-config: admissionregistration.k8s.io/v1beta1=true
+  # Expose control plane metrics for kube-prometheus-stack (Talos binds them to localhost by default)
+  controllerManager:
+    extraArgs:
+      bind-address: 0.0.0.0
+  scheduler:
+    extraArgs:
+      bind-address: 0.0.0.0
+  etcd:
+    extraArgs:
+      listen-metrics-urls: http://0.0.0.0:2381
   allowSchedulingOnControlPlanes: true
 ---
 apiVersion: v1alpha1
