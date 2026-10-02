@@ -85,6 +85,8 @@ spec:
           # Services come from HTTPRoute annotations (gethomepage.dev/*)
           kubernetes.yaml: |
             mode: cluster
+            ingress: false
+            traefik: false
             gateway: true
           settings.yaml: |
             title: Home
@@ -115,6 +117,7 @@ spec:
           services.yaml: ""
           bookmarks.yaml: ""
           docker.yaml: ""
+          proxmox.yaml: ""
           custom.css: ""
           custom.js: ""
 
