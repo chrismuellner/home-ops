@@ -22,6 +22,13 @@ spec:
               - flux-admin
       httpRoute:
         enabled: true
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: "Flux"
+          gethomepage.dev/group: "System"
+          gethomepage.dev/icon: "flux-cd"
+          gethomepage.dev/href: "https://flux-operator.muellner.dev"
+          gethomepage.dev/app: "flux-operator"
         hostnames:
           - flux-operator.muellner.dev
         parentRefs:

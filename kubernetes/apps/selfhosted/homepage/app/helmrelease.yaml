@@ -1,0 +1,126 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &release homepage
+spec:
+  releaseName: *release
+  chartRef:
+    kind: OCIRepository
+    name: homepage
+  interval: 30m
+  values:
+    controllers:
+      homepage:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        serviceAccount:
+          identifier: homepage
+        pod:
+          automountServiceAccountToken: true
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
+        containers:
+          app:
+            image:
+              repository: ghcr.io/gethomepage/homepage
+              tag: v2.4.0
+            env:
+              TZ: Europe/Vienna
+              LOG_TARGETS: stdout
+              HOMEPAGE_ALLOWED_HOSTS: homepage.muellner.dev
+            envFrom:
+              - secretRef:
+                  name: homepage-secret
+            probes:
+              liveness: &probe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/healthcheck
+                    port: &port 3000
+                    httpHeaders:
+                      - name: Host
+                        value: homepage.muellner.dev
+                  initialDelaySeconds: 5
+                  periodSeconds: 15
+              readiness: *probe
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+
+    serviceAccount:
+      homepage: {}
+
+    service:
+      app:
+        controller: homepage
+        ports:
+          http:
+            port: *port
+
+    route:
+      app:
+        hostnames:
+          - homepage.muellner.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
+
+    configMaps:
+      config:
+        data:
+          # Services come from HTTPRoute annotations (gethomepage.dev/*)
+          kubernetes.yaml: |
+            mode: cluster
+            gateway: true
+          settings.yaml: |
+            title: Home
+            headerStyle: clean
+            statusStyle: dot
+            hideVersion: true
+            layout:
+              Media:
+                style: row
+                columns: 4
+              Downloads:
+                style: row
+                columns: 3
+          widgets.yaml: |
+            - kubernetes:
+                cluster:
+                  show: true
+                  cpu: true
+                  memory: true
+                  showLabel: true
+                  label: cluster
+                nodes:
+                  show: false
+            - resources:
+                backend: resources
+                cpu: true
+                memory: true
+          services.yaml: ""
+          bookmarks.yaml: ""
+          docker.yaml: ""
+          custom.css: ""
+          custom.js: ""
+
+    persistence:
+      config:
+        type: configMap
+        identifier: config
+        globalMounts:
+          - path: /app/config

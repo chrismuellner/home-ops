@@ -30,9 +30,21 @@ spec:
         ports:
           http:
             port: 8096
-    
+
     route:
       app:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: "Jellyfin"
+          gethomepage.dev/group: "Media"
+          gethomepage.dev/icon: "jellyfin"
+          gethomepage.dev/href: "https://jellyfin.muellner.dev"
+          gethomepage.dev/app: "jellyfin"
+          gethomepage.dev/widget.type: "jellyfin"
+          gethomepage.dev/widget.url: "http://jellyfin.media.svc.cluster.local:8096"
+          gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_JELLYFIN_KEY}}" }}'
+          gethomepage.dev/widget.enableBlocks: "true"
+          gethomepage.dev/widget.enableNowPlaying: "true"
         hostnames:
           - "jellyfin.muellner.dev"
         parentRefs:
@@ -43,12 +55,12 @@ spec:
       config:
         existingClaim: jellyfin-config
         globalMounts:
-        - path: /config
+          - path: /config
       shows:
         existingClaim: pvc-shows
         globalMounts:
-        - path: /data/media/shows
+          - path: /data/media/shows
       movies:
         existingClaim: pvc-movies
         globalMounts:
-        - path: /data/media/movies
+          - path: /data/media/movies

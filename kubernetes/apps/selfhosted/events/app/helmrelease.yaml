@@ -30,6 +30,13 @@ spec:
 
     route:
       web:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: "Events"
+          gethomepage.dev/group: "Self-Hosted"
+          gethomepage.dev/icon: "mdi-calendar"
+          gethomepage.dev/href: "https://events.muellner.dev"
+          gethomepage.dev/app: "events"
         hostnames:
           - events.muellner.dev
         parentRefs:

@@ -46,6 +46,16 @@ spec:
 
     route:
       app:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: "SABnzbd"
+          gethomepage.dev/group: "Downloads"
+          gethomepage.dev/icon: "sabnzbd"
+          gethomepage.dev/href: "https://sabnzbd.muellner.dev"
+          gethomepage.dev/app: "sabnzbd"
+          gethomepage.dev/widget.type: "sabnzbd"
+          gethomepage.dev/widget.url: "http://sabnzbd.media.svc.cluster.local:8080"
+          gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_SABNZBD_KEY}}" }}'
         hostnames:
           - "sabnzbd.muellner.dev"
         parentRefs:

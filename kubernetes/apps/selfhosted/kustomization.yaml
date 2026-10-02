@@ -9,3 +9,4 @@ resources:
   - ./immich/ks.yaml
   - ./events/ks.yaml
   - ./kavita/ks.yaml
+  - ./homepage/ks.yaml

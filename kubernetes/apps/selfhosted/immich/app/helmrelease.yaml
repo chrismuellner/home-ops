@@ -177,6 +177,17 @@ spec:
 
     route:
       main:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: "Immich"
+          gethomepage.dev/group: "Self-Hosted"
+          gethomepage.dev/icon: "immich"
+          gethomepage.dev/href: "https://photos.muellner.dev"
+          gethomepage.dev/app: "immich"
+          gethomepage.dev/widget.type: "immich"
+          gethomepage.dev/widget.url: "http://immich-server.selfhosted.svc.cluster.local:2283"
+          gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_IMMICH_KEY}}" }}'
+          gethomepage.dev/widget.version: "2"
         hostnames:
           - "photos.muellner.dev"
         parentRefs:

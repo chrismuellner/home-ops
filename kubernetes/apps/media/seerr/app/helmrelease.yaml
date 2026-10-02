@@ -23,14 +23,14 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
-            
+
             resources:
               requests:
                 cpu: 10m
                 memory: 100Mi
               limits:
                 memory: 2Gi
-    
+
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -47,6 +47,16 @@ spec:
 
     route:
       main:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: "Seerr"
+          gethomepage.dev/group: "Media"
+          gethomepage.dev/icon: "jellyseerr"
+          gethomepage.dev/href: "https://seerr.muellner.dev"
+          gethomepage.dev/app: "seerr"
+          gethomepage.dev/widget.type: "seerr"
+          gethomepage.dev/widget.url: "http://seerr.media.svc.cluster.local:5055"
+          gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_SEERR_KEY}}" }}'
         hostnames:
           - "seerr.muellner.dev"
           - "jellyseerr.muellner.dev"
@@ -58,4 +68,4 @@ spec:
       config:
         existingClaim: seerr
         globalMounts:
-        - path: /app/config
+          - path: /app/config

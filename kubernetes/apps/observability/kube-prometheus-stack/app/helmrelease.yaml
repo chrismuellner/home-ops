@@ -19,6 +19,13 @@ spec:
       route:
         main:
           enabled: true
+          annotations:
+            gethomepage.dev/enabled: "true"
+            gethomepage.dev/name: "Alertmanager"
+            gethomepage.dev/group: "Observability"
+            gethomepage.dev/icon: "alertmanager"
+            gethomepage.dev/href: "https://alertmanager.muellner.dev"
+            gethomepage.dev/app: "alertmanager"
           hostnames:
             - alertmanager.muellner.dev
           parentRefs:
@@ -43,6 +50,15 @@ spec:
       route:
         main:
           enabled: true
+          annotations:
+            gethomepage.dev/enabled: "true"
+            gethomepage.dev/name: "Prometheus"
+            gethomepage.dev/group: "Observability"
+            gethomepage.dev/icon: "prometheus"
+            gethomepage.dev/href: "https://prometheus.muellner.dev"
+            gethomepage.dev/app: "prometheus"
+            gethomepage.dev/widget.type: "prometheus"
+            gethomepage.dev/widget.url: "http://kube-prometheus-stack-prometheus.observability.svc.cluster.local:9090"
           hostnames:
             - prometheus.muellner.dev
           parentRefs:

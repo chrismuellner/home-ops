@@ -29,6 +29,16 @@ spec:
 
     route:
       main:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: "Home Assistant"
+          gethomepage.dev/group: "Home Automation"
+          gethomepage.dev/icon: "home-assistant"
+          gethomepage.dev/href: "https://home.muellner.dev"
+          gethomepage.dev/app: "homeassistant"
+          gethomepage.dev/widget.type: "homeassistant"
+          gethomepage.dev/widget.url: "http://homeassistant.home-automation.svc.cluster.local:8123"
+          gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_HOMEASSISTANT_KEY}}" }}'
         hostnames:
           - "home.muellner.dev"
         parentRefs:

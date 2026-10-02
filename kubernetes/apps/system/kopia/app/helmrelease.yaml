@@ -101,6 +101,15 @@ spec:
                 subPath: tmp
     route:
       app:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: "Kopia"
+          gethomepage.dev/group: "System"
+          gethomepage.dev/icon: "kopia"
+          gethomepage.dev/href: "https://kopia.muellner.dev"
+          gethomepage.dev/app: "kopia"
+          gethomepage.dev/widget.type: "kopia"
+          gethomepage.dev/widget.url: "http://kopia.system.svc.cluster.local:8080"
         hostnames:
           - kopia.muellner.dev
         parentRefs:

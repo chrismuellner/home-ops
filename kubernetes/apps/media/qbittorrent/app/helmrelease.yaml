@@ -65,6 +65,15 @@ spec:
 
     route:
       main:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: "qBittorrent"
+          gethomepage.dev/group: "Downloads"
+          gethomepage.dev/icon: "qbittorrent"
+          gethomepage.dev/href: "https://qbittorrent.muellner.dev"
+          gethomepage.dev/app: "qbittorrent"
+          gethomepage.dev/widget.type: "qbittorrent"
+          gethomepage.dev/widget.url: "http://qbittorrent.media.svc.cluster.local"
         hostnames:
           - "qbittorrent.muellner.dev"
         parentRefs:

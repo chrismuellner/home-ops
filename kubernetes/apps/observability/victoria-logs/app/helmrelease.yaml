@@ -26,6 +26,14 @@ spec:
       retentionPeriod: 90d
       route:
         enabled: true
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: "VictoriaLogs"
+          gethomepage.dev/group: "Observability"
+          gethomepage.dev/icon: "victoriametrics"
+          gethomepage.dev/href: "https://vlogs.muellner.dev"
+          gethomepage.dev/app: "victoria-logs"
+          gethomepage.dev/pod-selector: "app.kubernetes.io/instance=victoria-logs,app.kubernetes.io/component=server"
         hostnames:
           - vlogs.muellner.dev
         parentRefs:
