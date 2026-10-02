@@ -58,7 +58,7 @@ spec:
             gethomepage.dev/href: "https://prometheus.muellner.dev"
             gethomepage.dev/app: "prometheus"
             gethomepage.dev/widget.type: "prometheus"
-            gethomepage.dev/widget.url: "http://kube-prometheus-stack-prometheus.observability.svc.cluster.local:9090"
+            gethomepage.dev/widget.url: "http://kube-prometheus-stack-prometheus.observability:9090"
           hostnames:
             - prometheus.muellner.dev
           parentRefs:

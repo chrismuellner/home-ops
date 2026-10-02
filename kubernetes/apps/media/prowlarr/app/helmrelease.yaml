@@ -63,7 +63,7 @@ spec:
           gethomepage.dev/href: "https://prowlarr.muellner.dev"
           gethomepage.dev/app: "prowlarr"
           gethomepage.dev/widget.type: "prowlarr"
-          gethomepage.dev/widget.url: "http://prowlarr.media.svc.cluster.local"
+          gethomepage.dev/widget.url: "http://prowlarr.media"
           gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_PROWLARR_KEY}}" }}'
         hostnames:
           - "prowlarr.muellner.dev"

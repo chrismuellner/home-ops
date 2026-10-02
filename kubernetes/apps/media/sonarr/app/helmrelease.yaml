@@ -65,7 +65,7 @@ spec:
           gethomepage.dev/href: "https://sonarr.muellner.dev"
           gethomepage.dev/app: "sonarr"
           gethomepage.dev/widget.type: "sonarr"
-          gethomepage.dev/widget.url: "http://sonarr.media.svc.cluster.local"
+          gethomepage.dev/widget.url: "http://sonarr.media"
           gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_SONARR_KEY}}" }}'
         hostnames:
           - sonarr.muellner.dev

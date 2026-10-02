@@ -126,7 +126,7 @@ spec:
           gethomepage.dev/href: "https://paperless.muellner.dev"
           gethomepage.dev/app: "paperless"
           gethomepage.dev/widget.type: "paperlessngx"
-          gethomepage.dev/widget.url: "http://paperless.selfhosted.svc.cluster.local:8000"
+          gethomepage.dev/widget.url: "http://paperless.selfhosted:8000"
           gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_PAPERLESS_KEY}}" }}'
         hostnames:
           - paperless.muellner.dev

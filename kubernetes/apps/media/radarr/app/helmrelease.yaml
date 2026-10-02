@@ -64,7 +64,7 @@ spec:
           gethomepage.dev/href: "https://radarr.muellner.dev"
           gethomepage.dev/app: "radarr"
           gethomepage.dev/widget.type: "radarr"
-          gethomepage.dev/widget.url: "http://radarr.media.svc.cluster.local"
+          gethomepage.dev/widget.url: "http://radarr.media"
           gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_RADARR_KEY}}" }}'
         hostnames:
           - radarr.muellner.dev

@@ -73,7 +73,7 @@ spec:
           gethomepage.dev/href: "https://qbittorrent.muellner.dev"
           gethomepage.dev/app: "qbittorrent"
           gethomepage.dev/widget.type: "qbittorrent"
-          gethomepage.dev/widget.url: "http://qbittorrent.media.svc.cluster.local"
+          gethomepage.dev/widget.url: "http://qbittorrent.media"
         hostnames:
           - "qbittorrent.muellner.dev"
         parentRefs:

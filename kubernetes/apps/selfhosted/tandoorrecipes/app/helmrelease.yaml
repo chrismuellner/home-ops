@@ -20,7 +20,7 @@ spec:
               tag: 2.6.15
             env:
               DATABASE_URL: sqlite://localhost//opt/recipes/database/db.sqlite3 # db string compliant with custom parser used by tandoorrecipes
-              ALLOWED_HOSTS: &hostname recipes.muellner.dev
+              ALLOWED_HOSTS: recipes.muellner.dev,tandoorrecipes.selfhosted
             envFrom:
               - secretRef:
                   name: tandoorrecipes-secret
@@ -41,10 +41,10 @@ spec:
           gethomepage.dev/href: "https://recipes.muellner.dev"
           gethomepage.dev/app: "tandoorrecipes"
           gethomepage.dev/widget.type: "tandoor"
-          gethomepage.dev/widget.url: "http://tandoorrecipes.selfhosted.svc.cluster.local"
+          gethomepage.dev/widget.url: "http://tandoorrecipes.selfhosted"
           gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_TANDOOR_KEY}}" }}'
         hostnames:
-          - *hostname
+          - recipes.muellner.dev
         parentRefs:
           - name: envoy-internal
             namespace: network

@@ -55,7 +55,7 @@ spec:
           gethomepage.dev/href: "https://seerr.muellner.dev"
           gethomepage.dev/app: "seerr"
           gethomepage.dev/widget.type: "seerr"
-          gethomepage.dev/widget.url: "http://seerr.media.svc.cluster.local:5055"
+          gethomepage.dev/widget.url: "http://seerr.media:5055"
           gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_SEERR_KEY}}" }}'
         hostnames:
           - "seerr.muellner.dev"
