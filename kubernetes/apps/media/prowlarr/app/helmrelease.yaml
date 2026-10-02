@@ -26,6 +26,7 @@ spec:
               PROWLARR__LOG__DBENABLED: "False"
               PROWLARR__LOG__LEVEL: info
               PROWLARR__SERVER__PORT: &port 80
+              PROWLARR__SERVER__ALLOWEDHOSTS: prowlarr.muellner.dev,prowlarr,prowlarr.media
               TZ: Europe/Vienna
 
             securityContext:

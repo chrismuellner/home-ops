@@ -26,6 +26,7 @@ spec:
               RADARR__LOG__DBENABLED: "False"
               RADARR__LOG__LEVEL: info
               RADARR__SERVER__PORT: &port 80
+              RADARR__SERVER__ALLOWEDHOSTS: radarr.muellner.dev,radarr,radarr.media
               TZ: Europe/Vienna
 
             securityContext:
