@@ -5,3 +5,4 @@ kind: Kustomization
 resources:
   - cilium/ks.yaml
   - metrics-server/ks.yaml
+  - intel-gpu-resource-driver/ks.yaml

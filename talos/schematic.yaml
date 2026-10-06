@@ -1,0 +1,10 @@
+---
+# Talos Image Factory schematic; the installer image in patches/controlplane.yaml uses its ID.
+# After changing it, get the new ID with:
+#   curl -sX POST --data-binary @talos/schematic.yaml https://factory.talos.dev/schematics
+customization:
+  systemExtensions:
+    officialExtensions:
+      - siderolabs/i915 # Intel iGPU for Jellyfin hardware transcoding
+      - siderolabs/intel-ucode
+      - siderolabs/zfs

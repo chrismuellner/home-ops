@@ -13,12 +13,18 @@ spec:
   values:
     controllers:
       main:
+        pod:
+          resourceClaims:
+            - name: gpu
+              resourceClaimTemplateName: jellyfin
         containers:
           app:
             image:
               repository: docker.io/jellyfin/jellyfin
               tag: 10.11.11
             resources:
+              claims:
+                - name: gpu
               requests:
                 cpu: 300m
                 memory: 2Gi

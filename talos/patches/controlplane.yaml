@@ -8,7 +8,8 @@ cluster:
 apiVersion: v1alpha1
 kind: UnattendedInstallConfig
 installer:
-  image: factory.talos.dev/metal-installer/4dd8e3a8b6203d3c14f049da8db4d3bb0d6d3e70c5e89dfcc1e709e81914f63c:v1.14.2
+  # Schematic: talos/schematic.yaml
+  image: factory.talos.dev/metal-installer/7046abc7c40b0e28d7c1ec1ec73768b16ceb9a8e3d23b1f6c5c6bd4825273dc6:v1.14.2
 provisioning:
   diskSelector:
     match: disk.dev_path == "/dev/sda"
@@ -88,6 +89,14 @@ config:
   # Single node: give databases time to stop cleanly when tuppr reboots for upgrades
   shutdownGracePeriod: 90s
   shutdownGracePeriodCriticalPods: 60s
+---
+# Let non-root pods open devices (e.g. the iGPU) as their runAsUser/runAsGroup
+apiVersion: v1alpha1
+kind: CRICustomizationConfig
+name: device-ownership
+content: |
+  [plugins."io.containerd.cri.v1.runtime"]
+    device_ownership_from_security_context = true
 ---
 apiVersion: v1alpha1
 kind: SysctlConfig
