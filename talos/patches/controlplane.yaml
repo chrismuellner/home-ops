@@ -1,43 +1,66 @@
 ---
-machine:
-  features:
-    kubernetesTalosAPIAccess:
-      allowedKubernetesNamespaces:
-        - system-upgrade
-      allowedRoles:
-        - os:admin
-      enabled: true
-  install:
-    image: factory.talos.dev/metal-installer/4dd8e3a8b6203d3c14f049da8db4d3bb0d6d3e70c5e89dfcc1e709e81914f63c:v1.14.2
-    wipe: false
-  kernel:
-    modules:
-      - name: zfs
-  nodeLabels:
-    $patch: delete
+# etcd has no dedicated document yet, it stays in the v1alpha1 config
 cluster:
-  network:
-    cni:
-      name: none
-  proxy:
-    disabled: true
-  apiServer:
-    certSANs:
-      - cluster.local
-    extraArgs:
-      feature-gates: MutatingAdmissionPolicy=true
-      runtime-config: admissionregistration.k8s.io/v1beta1=true
-  # Expose control plane metrics for kube-prometheus-stack (Talos binds them to localhost by default)
-  controllerManager:
-    extraArgs:
-      bind-address: 0.0.0.0
-  scheduler:
-    extraArgs:
-      bind-address: 0.0.0.0
   etcd:
     extraArgs:
-      listen-metrics-urls: http://0.0.0.0:2381
-  allowSchedulingOnControlPlanes: true
+      listen-metrics-urls: http://0.0.0.0:2381 # expose metrics for kube-prometheus-stack
+---
+apiVersion: v1alpha1
+kind: UnattendedInstallConfig
+installer:
+  image: factory.talos.dev/metal-installer/4dd8e3a8b6203d3c14f049da8db4d3bb0d6d3e70c5e89dfcc1e709e81914f63c:v1.14.2
+provisioning:
+  diskSelector:
+    match: disk.dev_path == "/dev/sda"
+  wipe: false
+---
+apiVersion: v1alpha1
+kind: KernelModuleConfig
+name: zfs
+---
+apiVersion: v1alpha1
+kind: KubeTalosAPIAccessConfig
+allowedRoles:
+  - os:admin
+allowedKubernetesNamespaces:
+  - system-upgrade
+---
+# Single node: allow workloads on the control plane and keep it as a load balancer target
+apiVersion: v1alpha1
+kind: KubeNodeConfig
+labels:
+  node.kubernetes.io/exclude-from-external-load-balancers:
+    $patch: delete
+taints:
+  node-role.kubernetes.io/control-plane:
+    $patch: delete
+---
+apiVersion: v1alpha1
+kind: KubeAPIServerConfig
+certExtraSANs:
+  - cluster.local
+extraArgs:
+  feature-gates: MutatingAdmissionPolicy=true
+  runtime-config: admissionregistration.k8s.io/v1beta1=true
+---
+apiVersion: v1alpha1
+kind: KubeControllerManagerConfig
+extraArgs:
+  bind-address: 0.0.0.0 # expose metrics for kube-prometheus-stack
+---
+apiVersion: v1alpha1
+kind: KubeSchedulerConfig
+extraArgs:
+  bind-address: 0.0.0.0 # expose metrics for kube-prometheus-stack
+---
+# Cilium replaces kube-proxy and Flannel
+apiVersion: v1alpha1
+kind: KubeProxyConfig
+enabled: false
+---
+apiVersion: v1alpha1
+kind: KubeFlannelCNIConfig
+$patch: delete
 ---
 apiVersion: v1alpha1
 kind: VolumeConfig
@@ -57,3 +80,35 @@ provisioning:
     match: system_disk
   minSize: 500GB
   maxSize: 800GB
+---
+apiVersion: v1alpha1
+kind: KubeletConfig
+config:
+  imageMaximumGCAge: 168h # drop unused images after a week, Renovate bumps them often
+  # Single node: give databases time to stop cleanly when tuppr reboots for upgrades
+  shutdownGracePeriod: 90s
+  shutdownGracePeriodCriticalPods: 60s
+---
+apiVersion: v1alpha1
+kind: SysctlConfig
+params:
+  fs.inotify.max_user_watches: "1048576"
+---
+# Single node: reset automatically if it hangs
+apiVersion: v1alpha1
+kind: WatchdogTimerConfig
+device: /dev/watchdog0
+timeout: 5m
+---
+apiVersion: v1alpha1
+kind: FilesystemTrimConfig
+interval: 168h0m0s
+---
+apiVersion: v1alpha1
+kind: FilesystemScrubConfig
+interval: 168h0m0s
+---
+# Keep pre-1.14 behaviour: clusters upgraded from older versions run without it
+apiVersion: v1alpha1
+kind: SecurityProfileConfig
+$patch: delete
