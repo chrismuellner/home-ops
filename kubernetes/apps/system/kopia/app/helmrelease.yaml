@@ -29,9 +29,9 @@ spec:
     controllers:
       kopia:
         pod:
+          # No fsGroup: the only persistent volume is NFS, where the server squashes ownership,
+          # so kubelet's recursive chown never sticks and just slows down every pod start
           securityContext:
-            fsGroup: 2000
-            fsGroupChangePolicy: "OnRootMismatch"
             runAsGroup: 2000
             runAsNonRoot: true
             runAsUser: 2000
