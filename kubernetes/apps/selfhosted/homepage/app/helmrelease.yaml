@@ -100,12 +100,18 @@ spec:
               Self-Hosted:
                 style: row
                 columns: 3
-              Home Automation: {}
+              Home Automation:
+                style: row
+                columns: 3
               Downloads:
                 style: row
                 columns: 3
-              Observability: {}
-              System: {}
+              Observability:
+                style: row
+                columns: 4
+              System:
+                style: row
+                columns: 2
           widgets.yaml: |
             - kubernetes:
                 cluster:
