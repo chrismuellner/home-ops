@@ -33,6 +33,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: "Home Assistant"
           gethomepage.dev/group: "Home Automation"
+          gethomepage.dev/weight: "10"
           gethomepage.dev/icon: "home-assistant"
           gethomepage.dev/href: "https://home.muellner.dev"
           gethomepage.dev/app: "homeassistant"

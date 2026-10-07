@@ -69,6 +69,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: "qBittorrent"
           gethomepage.dev/group: "Downloads"
+          gethomepage.dev/weight: "10"
           gethomepage.dev/icon: "qbittorrent"
           gethomepage.dev/href: "https://qbittorrent.muellner.dev"
           gethomepage.dev/app: "qbittorrent"

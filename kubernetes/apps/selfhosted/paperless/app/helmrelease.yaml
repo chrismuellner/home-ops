@@ -122,6 +122,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: "Paperless-ngx"
           gethomepage.dev/group: "Self-Hosted"
+          gethomepage.dev/weight: "20"
           gethomepage.dev/icon: "paperless-ngx"
           gethomepage.dev/href: "https://paperless.muellner.dev"
           gethomepage.dev/app: "paperless"

@@ -37,6 +37,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: "Tandoor"
           gethomepage.dev/group: "Self-Hosted"
+          gethomepage.dev/weight: "40"
           gethomepage.dev/icon: "tandoor-recipes"
           gethomepage.dev/href: "https://recipes.muellner.dev"
           gethomepage.dev/app: "tandoorrecipes"

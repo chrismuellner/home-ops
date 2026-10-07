@@ -60,6 +60,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: "Prowlarr"
           gethomepage.dev/group: "Downloads"
+          gethomepage.dev/weight: "30"
           gethomepage.dev/icon: "prowlarr"
           gethomepage.dev/href: "https://prowlarr.muellner.dev"
           gethomepage.dev/app: "prowlarr"

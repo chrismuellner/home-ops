@@ -61,6 +61,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: "Radarr"
           gethomepage.dev/group: "Media"
+          gethomepage.dev/weight: "30"
           gethomepage.dev/icon: "radarr"
           gethomepage.dev/href: "https://radarr.muellner.dev"
           gethomepage.dev/app: "radarr"

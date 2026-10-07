@@ -34,6 +34,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: "Events"
           gethomepage.dev/group: "Self-Hosted"
+          gethomepage.dev/weight: "50"
           gethomepage.dev/icon: "mdi-calendar"
           gethomepage.dev/href: "https://events.muellner.dev"
           gethomepage.dev/app: "events"

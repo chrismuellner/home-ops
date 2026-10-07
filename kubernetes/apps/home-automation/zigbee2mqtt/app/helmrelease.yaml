@@ -58,6 +58,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: "Zigbee2MQTT"
           gethomepage.dev/group: "Home Automation"
+          gethomepage.dev/weight: "20"
           gethomepage.dev/icon: "zigbee2mqtt"
           gethomepage.dev/href: "https://zigbee2mqtt.muellner.dev"
           gethomepage.dev/app: "zigbee2mqtt"

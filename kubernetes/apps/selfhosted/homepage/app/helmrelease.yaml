@@ -97,9 +97,15 @@ spec:
               Media:
                 style: row
                 columns: 4
+              Self-Hosted:
+                style: row
+                columns: 3
+              Home Automation: {}
               Downloads:
                 style: row
                 columns: 3
+              Observability: {}
+              System: {}
           widgets.yaml: |
             - kubernetes:
                 cluster:

@@ -181,6 +181,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: "Immich"
           gethomepage.dev/group: "Self-Hosted"
+          gethomepage.dev/weight: "10"
           gethomepage.dev/icon: "immich"
           gethomepage.dev/href: "https://photos.muellner.dev"
           gethomepage.dev/app: "immich"

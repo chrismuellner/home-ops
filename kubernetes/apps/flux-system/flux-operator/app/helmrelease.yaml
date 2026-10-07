@@ -26,6 +26,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: "Flux"
           gethomepage.dev/group: "System"
+          gethomepage.dev/weight: "10"
           gethomepage.dev/icon: "flux-cd"
           gethomepage.dev/href: "https://flux-operator.muellner.dev"
           gethomepage.dev/app: "flux-operator"

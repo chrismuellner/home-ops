@@ -51,6 +51,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: "Seerr"
           gethomepage.dev/group: "Media"
+          gethomepage.dev/weight: "20"
           gethomepage.dev/icon: "jellyseerr"
           gethomepage.dev/href: "https://seerr.muellner.dev"
           gethomepage.dev/app: "seerr"

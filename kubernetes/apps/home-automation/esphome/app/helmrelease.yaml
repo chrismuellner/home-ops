@@ -35,6 +35,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: "ESPHome"
           gethomepage.dev/group: "Home Automation"
+          gethomepage.dev/weight: "30"
           gethomepage.dev/icon: "esphome"
           gethomepage.dev/href: "https://esphome.muellner.dev"
           gethomepage.dev/app: "esphome"
