@@ -1,0 +1,15 @@
+---
+# Maintenance for the dedicated Hetzner SFTP repo — the shared-repo
+# KopiaMaintenance in system/volsync does not cover it.
+apiVersion: volsync.backube/v1alpha1
+kind: KopiaMaintenance
+metadata:
+  name: immich-photos
+spec:
+  enabled: true
+  trigger:
+    schedule: 0 4 * * 0
+  cacheCapacity: 10Gi
+  cacheStorageClassName: host-zfs
+  repository:
+    repository: immich-photos-volsync-secret

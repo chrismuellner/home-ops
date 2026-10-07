@@ -9,3 +9,8 @@ resources:
   - ./configmap.yaml
   - ./pvc-photos.yaml
   - ./pvc-ml.yaml
+  - ./pvc-photos-backup.yaml
+  - ./volsync-photos-secret.sops.yaml
+  - ./configmap-kopia-policy.yaml
+  - ./replicationsource-photos.yaml
+  - ./kopiamaintenance-photos.yaml

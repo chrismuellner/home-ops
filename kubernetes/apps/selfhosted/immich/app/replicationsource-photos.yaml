@@ -1,0 +1,43 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/volsync.backube/replicationsource_v1alpha1.json
+# Off-site backup of the Immich photos NFS share to a dedicated Kopia
+# repository on the Hetzner Storage Box (SFTP). Separate from the shared
+# Kopia repo used by the volsync component.
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: immich-photos
+spec:
+  sourcePVC: pvc-photos-backup
+  trigger:
+    # Initial ~1TB seed runs on a manual trigger so no schedule can kill or
+    # overlap it. After the first snapshot completes, replace with:
+    #   schedule: 0 5 * * *
+    manual: first-backup
+  kopia:
+    copyMethod: Direct
+    compression: zstd-fastest
+    cacheCapacity: 20Gi
+    cacheStorageClassName: host-zfs
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
+    moverResources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        memory: 4Gi
+    parallelism: 2
+    additionalArgs:
+      - --progress-update-interval=1m
+    policyConfig:
+      configMapName: immich-photos-kopia-policy
+    repository: immich-photos-volsync-secret
+    retain:
+      daily: 7
+      weekly: 4
+      monthly: 12
+      yearly: 1
