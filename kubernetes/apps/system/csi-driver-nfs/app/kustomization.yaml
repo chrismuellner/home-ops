@@ -12,3 +12,4 @@ resources:
   - ./config/pv-shows.yaml
   - ./config/pv-movies.yaml
   - ./config/pv-photos.yaml
+  - ./config/pv-photos-backup.yaml

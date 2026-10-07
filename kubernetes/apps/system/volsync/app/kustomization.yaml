@@ -7,3 +7,5 @@ resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
   - ./mutatingadmissionpolicy.yaml
+  - ./mutatingadmissionpolicy-photos-bandwidth.yaml
+  - ./prometheusrule.yaml

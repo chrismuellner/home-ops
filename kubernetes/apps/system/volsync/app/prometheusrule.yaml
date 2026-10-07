@@ -1,0 +1,30 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: volsync
+spec:
+  groups:
+    - name: volsync.rules
+      rules:
+        - alert: VolSyncVolumeOutOfSync
+          expr: volsync_volume_out_of_sync{role="source"} == 1
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: VolSync backup is out of sync
+            description: >-
+              ReplicationSource {{ $labels.obj_namespace }}/{{ $labels.obj_name }}
+              has not completed a sync within its schedule.
+        - alert: VolSyncMoverJobFailed
+          expr: kube_job_status_failed{job_name=~"volsync-.*"} > 0
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: VolSync mover job failed
+            description: >-
+              Job {{ $labels.namespace }}/{{ $labels.job_name }} has failed pods.
+              Check the mover logs.

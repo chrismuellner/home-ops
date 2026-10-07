@@ -1,0 +1,51 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.37.0/mutatingadmissionpolicybinding-admissionregistration-v1.json
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingAdmissionPolicyBinding
+metadata:
+  name: immich-photos-backup-bandwidth
+spec:
+  policyName: immich-photos-backup-bandwidth
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.37.0/mutatingadmissionpolicy-admissionregistration-v1.json
+# VolSync has no moverPodAnnotations, so the Cilium Bandwidth Manager
+# egress limit is injected into the photo-backup mover pods here.
+# Kubernetes bandwidth units are bits/s: "60M" = 60 Mbit/s (~7.5 MB/s) of the 100 Mbit/s uplink.
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingAdmissionPolicy
+metadata:
+  name: immich-photos-backup-bandwidth
+spec:
+  matchConstraints:
+    resourceRules:
+      - apiGroups:
+          - batch
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+        resources:
+          - jobs
+  matchConditions:
+    - name: is-immich-photos-mover
+      expression: >-
+        object.metadata.namespace == "selfhosted" &&
+        object.metadata.name == "volsync-src-immich-photos"
+    - name: has-volsync-created-by-label
+      expression: >-
+        object.metadata.?labels["app.kubernetes.io/created-by"].orValue("") == "volsync"
+  failurePolicy: Fail
+  reinvocationPolicy: IfNeeded
+  mutations:
+    - patchType: ApplyConfiguration
+      applyConfiguration:
+        expression: >-
+          Object{
+            spec: Object.spec{
+              template: Object.spec.template{
+                metadata: Object.spec.template.metadata{
+                  annotations: {"kubernetes.io/egress-bandwidth": "60M"}
+                }
+              }
+            }
+          }
