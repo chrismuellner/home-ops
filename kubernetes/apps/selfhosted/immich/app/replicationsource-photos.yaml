@@ -19,6 +19,8 @@ spec:
     compression: zstd-fastest
     cacheCapacity: 20Gi
     cacheStorageClassName: host-zfs
+    cacheAccessModes:
+      - ReadWriteOnce
     moverSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000
