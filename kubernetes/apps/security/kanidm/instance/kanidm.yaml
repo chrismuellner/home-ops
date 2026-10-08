@@ -19,8 +19,9 @@ spec:
           memory: 100Mi
         limits:
           memory: 512Mi
-  # Allow KanidmOAuth2Client resources in other namespaces (e.g. media)
+  # Allow KanidmOAuth2Client and KanidmGroup resources in other namespaces (e.g. media)
   oauth2ClientNamespaceSelector: {}
+  groupNamespaceSelector: {}
   storage:
     volumeClaimTemplate:
       spec:
