@@ -5,5 +5,6 @@ kind: Kustomization
 namespace: media
 resources:
   - ./helmrelease.yaml
+  - ./kanidm.yaml
   - ./ocirepository.yaml
   - ./resourceclaimtemplate.yaml

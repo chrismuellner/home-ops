@@ -1,0 +1,55 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kaniop.rs/kanidmgroup_v1beta1.json
+apiVersion: kaniop.rs/v1beta1
+kind: KanidmGroup
+metadata:
+  name: jellyfin-admins
+spec:
+  kanidmRef:
+    name: kanidm
+    namespace: security
+  kanidmName: jellyfin_admins
+  members:
+    - admins
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kaniop.rs/kanidmgroup_v1beta1.json
+apiVersion: kaniop.rs/v1beta1
+kind: KanidmGroup
+metadata:
+  name: jellyfin-users
+spec:
+  kanidmRef:
+    name: kanidm
+    namespace: security
+  kanidmName: jellyfin_users
+  members:
+    - household
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kaniop.rs/kanidmoauth2client_v1beta1.json
+apiVersion: kaniop.rs/v1beta1
+kind: KanidmOAuth2Client
+metadata:
+  name: jellyfin
+spec:
+  kanidmRef:
+    name: kanidm
+    namespace: security
+  displayname: Jellyfin
+  origin: https://jellyfin.muellner.dev/
+  redirectUrl:
+    - https://jellyfin.muellner.dev/sso/OID/redirect/kanidm
+    - https://jellyfin.muellner.dev/sso/OID/r/kanidm
+  scopeMap:
+    - group: jellyfin_admins@idm.muellner.dev
+      scopes:
+        - openid
+        - profile
+        - groups
+    - group: jellyfin_users@idm.muellner.dev
+      scopes:
+        - openid
+        - profile
+        - groups
+  strictRedirectUrl: true
+  preferShortUsername: true
+  disableConsentPrompt: true
