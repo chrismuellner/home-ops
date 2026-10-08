@@ -1,0 +1,62 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: kaniop
+  namespace: flux-system
+spec:
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: kaniop
+      namespace: security
+  interval: 10m
+  path: ./kubernetes/apps/security/kanidm/operator
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: home-ops
+  wait: true
+  targetNamespace: security
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: kanidm
+  namespace: flux-system
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: kanidm
+  components:
+    - ../../../../components/volsync
+  dependsOn:
+    - name: cert-manager-issuers
+    - name: kaniop
+    - name: openebs
+  healthCheckExprs:
+    - apiVersion: kaniop.rs/v1beta1
+      kind: Kanidm
+      failed: status.conditions.exists(c, c.type == 'Available' && c.status == 'False')
+      current: status.conditions.exists(c, c.type == 'Available' && c.status == 'True')
+  healthChecks:
+    - apiVersion: kaniop.rs/v1beta1
+      kind: Kanidm
+      name: kanidm
+      namespace: security
+  interval: 10m
+  path: ./kubernetes/apps/security/kanidm/instance
+  postBuild:
+    substitute:
+      APP: kanidm
+      # PVC created by the operator's StatefulSet (volumeClaimTemplate "kanidm-data")
+      VOLSYNC_CLAIM: kanidm-data-kanidm-default-0
+      VOLSYNC_CAPACITY: 1Gi
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: home-ops
+  wait: true
+  targetNamespace: security

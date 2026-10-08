@@ -1,0 +1,58 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kaniop.rs/kanidm_v1beta1.json
+apiVersion: kaniop.rs/v1beta1
+kind: Kanidm
+metadata:
+  name: kanidm
+spec:
+  domain: idm.muellner.dev
+  origin: https://idm.muellner.dev
+  image: kanidm/server:1.11.2
+  logLevel: info
+  replicaGroups:
+    - name: default
+      replicas: 1
+      primaryNode: true
+      resources:
+        requests:
+          cpu: 20m
+          memory: 100Mi
+        limits:
+          memory: 512Mi
+  # Allow KanidmOAuth2Client resources in other namespaces (e.g. media)
+  oauth2ClientNamespaceSelector: {}
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: host-zfs
+  tlsSecretName: kanidm-tls
+  securityContext:
+    fsGroup: 389
+    fsGroupChangePolicy: OnRootMismatch
+    runAsGroup: 389
+    runAsNonRoot: true
+    runAsUser: 389
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+    - name: kanidm
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+  gateway:
+    parentRefs:
+      - name: envoy-internal
+        namespace: network
+    hostnames:
+      - idm.muellner.dev
+    backendTlsPolicy:
+      validation:
+        hostname: idm.muellner.dev
+        wellKnownCaCertificates: System
