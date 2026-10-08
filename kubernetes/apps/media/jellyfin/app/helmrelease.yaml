@@ -21,7 +21,7 @@ spec:
           app:
             image:
               repository: docker.io/jellyfin/jellyfin
-              tag: 10.11.11
+              tag: 12.2@sha256:357724bf0ae27a672c7cbaa899db2d9abeb13dbd8657ccce750258a4c059d037
             resources:
               claims:
                 - name: gpu
@@ -50,6 +50,7 @@ spec:
           gethomepage.dev/widget.type: "jellyfin"
           gethomepage.dev/widget.url: "http://jellyfin.media:8096"
           gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_JELLYFIN_KEY}}" }}'
+          gethomepage.dev/widget.version: "2"
           gethomepage.dev/widget.enableBlocks: "true"
           gethomepage.dev/widget.enableNowPlaying: "true"
         hostnames:
