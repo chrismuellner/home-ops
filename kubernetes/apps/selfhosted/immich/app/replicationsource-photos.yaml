@@ -10,10 +10,7 @@ metadata:
 spec:
   sourcePVC: pvc-photos-backup
   trigger:
-    # Initial ~1TB seed runs on a manual trigger so no schedule can kill or
-    # overlap it. After the first snapshot completes, replace with:
-    #   schedule: 0 5 * * *
-    manual: first-backup
+    schedule: 0 5 * * *
   kopia:
     copyMethod: Direct
     compression: zstd-fastest
