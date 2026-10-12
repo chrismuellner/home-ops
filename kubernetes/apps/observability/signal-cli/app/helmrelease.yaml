@@ -1,0 +1,75 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &release signal-cli
+spec:
+  releaseName: *release
+  chartRef:
+    kind: OCIRepository
+    name: signal-cli
+  interval: 30m
+  values:
+    controllers:
+      main:
+        containers:
+          app:
+            image:
+              repository: docker.io/bbernhard/signal-cli-rest-api
+              tag: "0.101"
+            env:
+              MODE: json-rpc
+              PORT: &port 8080
+              TZ: Europe/Vienna
+
+            probes:
+              liveness: &probe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /v1/health
+                    port: *port
+                  initialDelaySeconds: 30
+                  periodSeconds: 20
+                  timeoutSeconds: 10
+                  failureThreshold: 3
+              readiness: *probe
+
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: {drop: ["ALL"]}
+
+            resources:
+              requests:
+                cpu: 20m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+
+    service:
+      app:
+        ports:
+          http:
+            port: *port
+    route:
+      app:
+        hostnames:
+          - "signal.muellner.dev"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+    persistence:
+      config:
+        existingClaim: signal-cli-config
+        globalMounts:
+          - path: /home/.local/share/signal-cli
