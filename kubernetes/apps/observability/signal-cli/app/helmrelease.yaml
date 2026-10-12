@@ -22,6 +22,8 @@ spec:
               MODE: json-rpc
               PORT: &port 8080
               TZ: Europe/Vienna
+              # s6-overlay rejects the root-owned emptyDir on /run without this
+              S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: "1"
 
             probes:
               liveness: &probe
@@ -73,3 +75,7 @@ spec:
         existingClaim: signal-cli-config
         globalMounts:
           - path: /home/.local/share/signal-cli
+      run:
+        type: emptyDir
+        globalMounts:
+          - path: /run
