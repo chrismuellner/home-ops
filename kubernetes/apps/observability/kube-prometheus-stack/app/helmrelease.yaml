@@ -16,6 +16,26 @@ spec:
   values:
     cleanPrometheusOperatorObjectNames: true
     alertmanager:
+      config:
+        receivers:
+          - name: "null"
+          - name: signal
+            webhook_configs:
+              # handled by the alertmanager plugin in signal-cli; the url holds
+              # the sender number and group id and lives in a sops secret
+              # TODO: switch to a templated `payload` against /v2/send once on
+              # Alertmanager >= v0.35 (alertmanager#5098) and drop the plugin
+              - url_file: /etc/alertmanager/secrets/alertmanager-signal/url
+                send_resolved: true
+        route:
+          receiver: signal
+          routes:
+            - receiver: "null"
+              matchers:
+                - alertname = "Watchdog"
+            - receiver: "null"
+              matchers:
+                - alertname = "InfoInhibitor"
       route:
         main:
           enabled: true
@@ -34,6 +54,8 @@ spec:
               namespace: network
       alertmanagerSpec:
         externalUrl: https://alertmanager.muellner.dev
+        secrets:
+          - alertmanager-signal
         storage:
           volumeClaimTemplate:
             spec:

@@ -1,0 +1,3 @@
+endpoint: alertmanager/:number/:group
+method: POST
+version: 2

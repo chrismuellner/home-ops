@@ -6,3 +6,12 @@ namespace: observability
 resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+configMapGenerator:
+  - name: signal-cli-plugins
+    files:
+      - ./plugins/alertmanager.def
+      - ./plugins/alertmanager.lua
+generatorOptions:
+  disableNameSuffixHash: true
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled

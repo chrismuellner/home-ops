@@ -13,6 +13,8 @@ spec:
   values:
     controllers:
       main:
+        annotations:
+          reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
@@ -24,6 +26,7 @@ spec:
               TZ: Europe/Vienna
               # s6-overlay rejects the root-owned emptyDir on /run without this
               S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: "1"
+              ENABLE_PLUGINS: "true"
 
             probes:
               liveness: &probe
@@ -79,3 +82,13 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /run
+      plugins:
+        type: configMap
+        name: signal-cli-plugins
+        # mounted per file: the plugin loader walks /plugins recursively and
+        # would register the copies in the configMap's ..timestamp dir twice
+        globalMounts:
+          - path: /plugins/alertmanager.def
+            subPath: alertmanager.def
+          - path: /plugins/alertmanager.lua
+            subPath: alertmanager.lua
