@@ -30,4 +30,5 @@ spec:
     access: proxy
     jsonData:
       implementation: prometheus
+      handleGrafanaManagedAlerts: true
     url: http://alertmanager-operated.observability.svc.cluster.local:9093
