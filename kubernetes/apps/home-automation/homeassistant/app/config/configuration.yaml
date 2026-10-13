@@ -26,3 +26,19 @@ homeassistant:
     - type: trusted_networks
       trusted_networks:
         - 192.168.0.0/16
+
+# Kanidm SSO via hass-oidc-auth (HACS). Password and trusted-network login stay as fallbacks;
+# the password form is also reachable at /?skip_oidc_redirect=true.
+auth_oidc:
+  client_id: homeassistant
+  discovery_url: https://idm.muellner.dev/oauth2/openid/homeassistant/.well-known/openid-configuration
+  id_token_signing_alg: ES256
+  features:
+    force_https: true
+    automatic_person_creation: true
+    # TEMPORARY: link first OIDC logins to existing HA users with the same username. Remove after
+    # linking; it bypasses MFA for an exact username match.
+    automatic_user_linking: true
+  roles:
+    admin: homeassistant_admins@idm.muellner.dev
+    user: homeassistant_users@idm.muellner.dev
