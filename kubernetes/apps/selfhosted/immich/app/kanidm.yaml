@@ -1,0 +1,71 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kaniop.rs/kanidmgroup_v1beta1.json
+apiVersion: kaniop.rs/v1beta1
+kind: KanidmGroup
+metadata:
+  name: immich-admins
+spec:
+  kanidmRef:
+    name: kanidm
+    namespace: security
+  kanidmName: immich_admins
+  members:
+    - admins
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kaniop.rs/kanidmgroup_v1beta1.json
+apiVersion: kaniop.rs/v1beta1
+kind: KanidmGroup
+metadata:
+  name: immich-users
+spec:
+  kanidmRef:
+    name: kanidm
+    namespace: security
+  kanidmName: immich_users
+  members:
+    - household
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kaniop.rs/kanidmoauth2client_v1beta1.json
+apiVersion: kaniop.rs/v1beta1
+kind: KanidmOAuth2Client
+metadata:
+  name: immich
+spec:
+  kanidmRef:
+    name: kanidm
+    namespace: security
+  displayname: Immich
+  origin: https://photos.muellner.dev/
+  redirectUrl:
+    - https://photos.muellner.dev/auth/login
+    - https://photos.muellner.dev/user-settings
+    # Immich "Mobile Redirect URI Override": forwards to app.immich:///oauth-callback
+    - https://photos.muellner.dev/api/oauth/mobile-redirect
+  scopeMap:
+    - group: immich_admins@idm.muellner.dev
+      scopes:
+        - openid
+        - profile
+        - email
+    - group: immich_users@idm.muellner.dev
+      scopes:
+        - openid
+        - profile
+        - email
+  # Immich reads the "immich_role" claim; "admin" wins over "user"
+  claimMap:
+    - name: immich_role
+      valuesMap:
+        - group: immich_admins@idm.muellner.dev
+          values:
+            - admin
+        - group: immich_users@idm.muellner.dev
+          values:
+            - user
+      joinStrategy: array
+  strictRedirectUrl: true
+  preferShortUsername: true
+  disableConsentPrompt: true
+  # Official Immich logo (AGPL-3.0), https://github.com/immich-app/immich
+  image:
+    url: https://raw.githubusercontent.com/immich-app/immich/main/design/immich-logo.svg
