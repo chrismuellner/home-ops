@@ -12,6 +12,7 @@ spec:
   components:
     - ../../../../components/volsync
   dependsOn:
+    - name: kanidm
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/selfhosted/paperless/app

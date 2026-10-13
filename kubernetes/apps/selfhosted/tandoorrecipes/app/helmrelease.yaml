@@ -19,8 +19,21 @@ spec:
               repository: ghcr.io/tandoorrecipes/recipes
               tag: 2.6.15
             env:
+              # Kanidm OIDC. Env vars render alphabetically, so OIDC_CLIENT_SECRET is defined before
+              # SOCIALACCOUNT_PROVIDERS, which references it as $(OIDC_CLIENT_SECRET).
               DATABASE_URL: sqlite://localhost//opt/recipes/database/db.sqlite3 # db string compliant with custom parser used by tandoorrecipes
               ALLOWED_HOSTS: recipes.muellner.dev,tandoorrecipes.selfhosted
+              ENABLE_SIGNUP: "0"
+              OIDC_CLIENT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: tandoor-kanidm-oauth2-credentials
+                    key: CLIENT_SECRET
+              SOCIAL_DEFAULT_ACCESS: "1"
+              SOCIAL_DEFAULT_GROUP: user
+              SOCIAL_PROVIDERS: allauth.socialaccount.providers.openid_connect
+              SOCIALACCOUNT_LOGIN_ON_GET: "1"
+              SOCIALACCOUNT_PROVIDERS: '{"openid_connect":{"OAUTH_PKCE_ENABLED":true,"APPS":[{"provider_id":"kanidm","name":"Kanidm","client_id":"tandoor","secret":"$(OIDC_CLIENT_SECRET)","settings":{"server_url":"https://idm.muellner.dev/oauth2/openid/tandoor/.well-known/openid-configuration"}}]}}'
             envFrom:
               - secretRef:
                   name: tandoorrecipes-secret
