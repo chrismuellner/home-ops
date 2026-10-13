@@ -84,7 +84,9 @@ spec:
         globalMounts:
           - path: /data/media/downloads
       movies:
-        existingClaim: pvc-movies
+        type: nfs
+        server: nas.local
+        path: /var/nfs/shared/movies
         globalMounts:
           - path: /data/media/movies
       tmp:

@@ -110,7 +110,9 @@ spec:
             app:
               - path: /data/local
       nas:
-        existingClaim: pvc-documents
+        type: nfs
+        server: nas.local
+        path: /var/nfs/shared/documents
         advancedMounts:
           paperless:
             app:

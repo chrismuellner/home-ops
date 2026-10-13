@@ -208,8 +208,9 @@ spec:
               - path: /config/matplotlib
 
       library:
-        type: persistentVolumeClaim
-        existingClaim: pvc-photos
+        type: nfs
+        server: nas.local
+        path: /var/nfs/shared/photos
         advancedMounts:
           server:
             main:

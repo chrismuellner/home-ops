@@ -6,7 +6,6 @@ resources:
   - ./namespace.yaml
   - ./reloader/ks.yaml
   - ./openebs/ks.yaml
-  - ./csi-driver-nfs/ks.yaml
   - ./kopia/ks.yaml
   - ./volsync/ks.yaml
   - ./zfs-scrub/ks.yaml

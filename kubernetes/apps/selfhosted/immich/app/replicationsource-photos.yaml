@@ -8,7 +8,7 @@ kind: ReplicationSource
 metadata:
   name: immich-photos
 spec:
-  sourcePVC: pvc-photos-backup
+  sourcePVC: photos-backup
   trigger:
     schedule: 0 5 * * *
   kopia:

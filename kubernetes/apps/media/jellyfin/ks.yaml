@@ -13,7 +13,6 @@ spec:
   components:
     - ../../../../components/volsync
   dependsOn:
-    - name: csi-driver-nfs
     - name: intel-gpu-resource-driver
     - name: kanidm
     - name: openebs

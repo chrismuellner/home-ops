@@ -92,7 +92,7 @@ All apps use the [bjw-s/app-template](https://bjw-s-labs.github.io/helm-charts/d
 | `network` | Envoy Gateway, certificates |
 | `observability` | Grafana, kube-prometheus-stack |
 | `selfhosted` | Paperless-ngx, Tandoor Recipes |
-| `system` | OpenEBS, Volsync/Kopia backups, CSI NFS driver, Reloader |
+| `system` | OpenEBS, Volsync/Kopia backups, Reloader |
 | `system-upgrade` | Talos/Kubernetes upgrade controller (TUPR) |
 
 ## Conventions

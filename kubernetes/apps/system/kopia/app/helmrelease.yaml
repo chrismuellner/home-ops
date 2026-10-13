@@ -85,7 +85,9 @@ spec:
           - path: /config/repository.config
             subPath: repository.config
       repository:
-        existingClaim: pvc-backups
+        type: nfs
+        server: nas.local
+        path: /var/nfs/shared/backups
         globalMounts:
           - path: /repository
       tmpfs:

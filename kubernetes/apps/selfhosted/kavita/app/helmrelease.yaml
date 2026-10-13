@@ -46,7 +46,9 @@ spec:
             app:
               - path: /kavita/config
       books:
-        existingClaim: pvc-books
+        type: nfs
+        server: nas.local
+        path: /var/nfs/shared/books
         advancedMounts:
           kavita:
             app:

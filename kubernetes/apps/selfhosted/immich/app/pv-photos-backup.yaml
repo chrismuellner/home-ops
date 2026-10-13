@@ -1,0 +1,20 @@
+---
+# Read-only view of the photos share, used only as the VolSync source for off-site backups
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: photos-backup
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadOnlyMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  claimRef:
+    name: photos-backup
+    namespace: selfhosted
+  nfs:
+    server: nas.local
+    path: /var/nfs/shared/photos
+    readOnly: true

@@ -65,10 +65,14 @@ spec:
         globalMounts:
           - path: /config
       shows:
-        existingClaim: pvc-shows
+        type: nfs
+        server: nas.local
+        path: /var/nfs/shared/shows
         globalMounts:
           - path: /data/media/shows
       movies:
-        existingClaim: pvc-movies
+        type: nfs
+        server: nas.local
+        path: /var/nfs/shared/movies
         globalMounts:
           - path: /data/media/movies

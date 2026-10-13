@@ -7,8 +7,8 @@ resources:
   - ./ocirepository.yaml
   - ./secret.sops.yaml
   - ./configmap.yaml
-  - ./pvc-photos.yaml
   - ./pvc-ml.yaml
+  - ./pv-photos-backup.yaml
   - ./pvc-photos-backup.yaml
   - ./volsync-photos-secret.sops.yaml
   - ./volsync-photos-maintenance-secret.sops.yaml
