@@ -31,6 +31,11 @@ spec:
     - name: has-volsync-created-by-labels
       expression: >-
         object.metadata.?labels["app.kubernetes.io/created-by"].orValue("") == "volsync"
+    # The photos backup runs alone at 05:00, so there's nothing to spread out
+    - name: not-immich-photos-mover
+      expression: >-
+        !(object.metadata.namespace == "selfhosted" &&
+        object.metadata.name == "volsync-src-immich-photos")
   failurePolicy: Fail
   reinvocationPolicy: IfNeeded
   mutations:
