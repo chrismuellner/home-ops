@@ -55,7 +55,6 @@ spec:
         - groups
   strictRedirectUrl: true
   preferShortUsername: true
-  disableConsentPrompt: true
   # Official Home Assistant brand icon, https://brands.home-assistant.io
   image:
     url: https://brands.home-assistant.io/homeassistant/icon.png
