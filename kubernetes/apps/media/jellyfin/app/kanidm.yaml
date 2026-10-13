@@ -53,3 +53,6 @@ spec:
   strictRedirectUrl: true
   preferShortUsername: true
   disableConsentPrompt: true
+  # Official Jellyfin icon (CC BY-SA 4.0), https://github.com/jellyfin/jellyfin-ux
+  image:
+    url: https://raw.githubusercontent.com/jellyfin/jellyfin-ux/master/branding/SVG/icon-transparent.svg
