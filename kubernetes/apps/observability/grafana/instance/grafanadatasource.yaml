@@ -32,3 +32,21 @@ spec:
       implementation: prometheus
       handleGrafanaManagedAlerts: true
     url: http://alertmanager-operated.observability.svc.cluster.local:9093
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/grafana.integreatly.org/grafanadatasource_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: victoria-logs
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  plugins:
+    - name: victoriametrics-logs-datasource
+      version: 0.32.0
+  datasource:
+    type: victoriametrics-logs-datasource
+    name: victoria-logs
+    access: proxy
+    url: http://victoria-logs.observability.svc.cluster.local:9428
