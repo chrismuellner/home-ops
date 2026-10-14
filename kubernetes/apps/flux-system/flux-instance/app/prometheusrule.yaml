@@ -1,0 +1,44 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: flux
+spec:
+  groups:
+    - name: flux.rules
+      rules:
+        - alert: FluxInstanceAbsent
+          expr: absent(flux_instance_info{exported_namespace="flux-system", name="flux"})
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: Flux instance metrics are missing, the flux-operator may be down.
+        - alert: FluxInstanceNotReady
+          expr: flux_instance_info{exported_namespace="flux-system", name="flux", ready="False"}
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Flux instance {{ $labels.name }} is not ready: {{ $labels.reason }}"
+        # Ready is Unknown while a long reconcile (e.g. a CRD upgrade) is in progress,
+        # so only False counts as failed and Unknown needs to persist for an hour
+        - alert: FluxResourceFailed
+          expr: flux_resource_info{ready="False", suspended="False"}
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: >-
+              {{ $labels.kind }} {{ $labels.exported_namespace }}/{{ $labels.name }}
+              is not ready: {{ $labels.reason }}
+        - alert: FluxResourceStuck
+          expr: flux_resource_info{ready="Unknown", suspended="False"}
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: >-
+              {{ $labels.kind }} {{ $labels.exported_namespace }}/{{ $labels.name }}
+              has been reconciling for over an hour: {{ $labels.reason }}

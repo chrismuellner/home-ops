@@ -8,3 +8,4 @@ resources:
   - grafana/ks.yaml
   - victoria-logs/ks.yaml
   - signal-cli/ks.yaml
+  - smartctl-exporter/ks.yaml

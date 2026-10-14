@@ -1,0 +1,89 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: smartctl-exporter
+spec:
+  groups:
+    - name: smartctl.rules
+      rules:
+        - alert: SmartDeviceMissing
+          expr: smartctl_devices < 1
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: smartctl-exporter does not see any drive.
+        - alert: SmartDeviceFailed
+          expr: smartctl_device_smart_status != 1
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Drive {{ $labels.device }} failed its SMART health check.
+        - alert: SmartDeviceAttributeFailing
+          # normalized value at or below the vendor failure threshold
+          expr: |-
+            smartctl_device_attribute{attribute_value_type="value"}
+              <= ignoring (attribute_value_type)
+            (smartctl_device_attribute{attribute_value_type="thresh"} > 0)
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: >-
+              SMART attribute {{ $labels.attribute_name }} of drive {{ $labels.device }}
+              is at or below its failure threshold.
+        - alert: SmartDeviceErrorsIncreasing
+          expr: |-
+            delta(smartctl_device_attribute{
+              attribute_value_type="raw",
+              attribute_name=~"Reallocated_Sector_Ct|Used_Rsvd_Blk_Cnt_Tot|Runtime_Bad_Block|Uncorrectable_Error_Cnt|Reported_Uncorrect|Program_Fail_Cnt_Total|Erase_Fail_Count_Total|Current_Pending_Sector|Offline_Uncorrectable"
+            }[1d]) > 0
+          labels:
+            severity: warning
+          annotations:
+            summary: >-
+              SMART attribute {{ $labels.attribute_name }} of drive {{ $labels.device }}
+              increased by {{ $value }} in the last day.
+        - alert: SmartDeviceErrorLogIncreasing
+          expr: delta(smartctl_device_error_log_count[1d]) > 0
+          labels:
+            severity: warning
+          annotations:
+            summary: Drive {{ $labels.device }} logged {{ $value }} new errors in the last day.
+        - alert: SmartDeviceCrcErrorsIncreasing
+          expr: delta(smartctl_device_attribute{attribute_value_type="raw", attribute_name=~"CRC_Error_Count|UDMA_CRC_Error_Count"}[1d]) > 0
+          labels:
+            severity: warning
+          annotations:
+            summary: >-
+              Drive {{ $labels.device }} has new CRC errors, check the SATA cable and port.
+        - alert: SmartDeviceWearHigh
+          # Samsung reports the remaining endurance in percent
+          expr: smartctl_device_attribute{attribute_value_type="value", attribute_name="Wear_Leveling_Count"} < 20
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: Drive {{ $labels.device }} has {{ $value }}% of its rated endurance left.
+        - alert: SmartDeviceHighTemperature
+          expr: smartctl_device_temperature{temperature_type="current"} > 65
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: Drive {{ $labels.device }} is at {{ $value }}°C.
+        - alert: SmartDeviceInterfaceSlow
+          expr: |-
+            smartctl_device_interface_speed{speed_type="current"}
+              < ignoring (speed_type)
+            smartctl_device_interface_speed{speed_type="max"}
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: >-
+              Drive {{ $labels.device }} negotiated a slower link than it supports, check
+              the SATA cable and port.

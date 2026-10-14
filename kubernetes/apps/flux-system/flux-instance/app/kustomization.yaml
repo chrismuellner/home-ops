@@ -7,3 +7,4 @@ resources:
   - ./helmrelease.yaml
   - ./grafanadashboard.yaml
   - ./podmonitor.yaml
+  - ./prometheusrule.yaml
