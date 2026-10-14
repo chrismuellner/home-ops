@@ -19,7 +19,8 @@ spec:
               ReplicationSource {{ $labels.obj_namespace }}/{{ $labels.obj_name }}
               has not completed a sync within its schedule.
         - alert: VolSyncMoverJobFailed
-          expr: kube_job_status_failed{job_name=~"volsync-.*|kopia-maint-.*"} > 0
+          # kopia-maint-* cronjobs are covered by CronJobLastRunFailed
+          expr: kube_job_failed{job_name=~"volsync-.*"} > 0
           for: 15m
           labels:
             severity: warning

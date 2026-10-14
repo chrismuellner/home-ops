@@ -29,6 +29,9 @@ spec:
                 send_resolved: true
         route:
           receiver: signal
+          group_by:
+            - namespace
+            - alertname
           routes:
             - receiver: "null"
               matchers:
@@ -145,6 +148,11 @@ spec:
         folder: observability
         matchLabels:
           dashboards: grafana
+    defaultRules:
+      disabled:
+        # replaced by the job-rules below
+        KubeJobFailed: true
+        KubeJobNotCompleted: true
     additionalPrometheusRulesMap:
       dockerhub-rules:
         groups:
@@ -156,6 +164,52 @@ spec:
                 expr: count(time() - container_last_seen{image=~"(docker.io).*",container!=""} < 30) > 100
                 labels:
                   severity: critical
+      job-rules:
+        groups:
+          - name: jobs
+            rules:
+              # a failed job keeps firing until it is garbage collected, even after
+              # later runs succeed, so cronjobs are judged by their last run instead
+              # and volsync movers are covered by the volsync rules
+              - alert: KubeJobFailed
+                annotations:
+                  summary: Job {{ $labels.namespace }}/{{ $labels.job_name }} failed to complete.
+                expr: |-
+                  kube_job_failed{job="kube-state-metrics", job_name!~"volsync-.*"} > 0
+                    unless on (namespace, job_name)
+                  kube_job_owner{job="kube-state-metrics", owner_kind="CronJob"}
+                for: 15m
+                labels:
+                  severity: warning
+              - alert: KubeJobNotCompleted
+                annotations:
+                  summary: Job {{ $labels.namespace }}/{{ $labels.job_name }} is taking more than 12 hours to complete.
+                expr: |-
+                  time() - max by (namespace, job_name) (
+                    kube_job_status_start_time{job="kube-state-metrics", job_name!~"volsync-.*"}
+                      and
+                    kube_job_status_active{job="kube-state-metrics"} > 0
+                  ) > 43200
+                labels:
+                  severity: warning
+              - alert: CronJobLastRunFailed
+                annotations:
+                  summary: The last run of CronJob {{ $labels.namespace }}/{{ $labels.cronjob }} did not succeed.
+                expr: |-
+                  (
+                    max by (namespace, cronjob) (kube_cronjob_status_last_schedule_time{job="kube-state-metrics"})
+                      > on (namespace, cronjob)
+                    max by (namespace, cronjob) (kube_cronjob_status_last_successful_time{job="kube-state-metrics"})
+                    or
+                    max by (namespace, cronjob) (kube_cronjob_status_last_schedule_time{job="kube-state-metrics"})
+                      unless on (namespace, cronjob)
+                    kube_cronjob_status_last_successful_time{job="kube-state-metrics"}
+                  )
+                    and on (namespace, cronjob)
+                  max by (namespace, cronjob) (kube_cronjob_status_active{job="kube-state-metrics"}) == 0
+                for: 15m
+                labels:
+                  severity: warning
       oom-rules:
         groups:
           - name: oom

@@ -32,11 +32,15 @@ done
 final_status=$(zpool status "$ZPOOL")
 echo "$(date '+%Y-%m-%d %H:%M:%S') - Scrub completed."
 
-if echo "$final_status" | grep -q "errors" && ! echo "$final_status" | grep -q "0 errors"; then
-  echo "ALERT: zpool scrub on '$ZPOOL' completed with errors."
+# expect "scrub repaired 0B in ... with 0 errors" and "errors: No known data errors";
+# anything else (repaired data, scrub errors, data errors) fails the job
+scan_line=$(echo "$final_status" | grep "^ *scan:")
+if ! echo "$scan_line" | grep -Eq "scrub repaired 0B .* with 0 errors" ||
+  ! echo "$final_status" | grep -q "errors: No known data errors"; then
+  echo "ALERT: zpool scrub on '$ZPOOL' found problems."
   echo "$final_status"
   exit 1
 else
-  scrub_info=$(echo "$final_status" | grep "^ *scan:" | sed 's/.*scrub/scrub/')
+  scrub_info=$(echo "$scan_line" | sed 's/.*scrub/scrub/')
   echo "OK: zpool scrub on '$ZPOOL' completed successfully. $scrub_info"
 fi
