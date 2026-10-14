@@ -8,4 +8,5 @@ resources:
   - ./openebs/ks.yaml
   - ./kopia/ks.yaml
   - ./volsync/ks.yaml
+  - ./zfs-exporter/ks.yaml
   - ./zfs-scrub/ks.yaml

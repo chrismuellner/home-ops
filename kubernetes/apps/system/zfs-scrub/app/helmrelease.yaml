@@ -18,9 +18,11 @@ spec:
           concurrencyPolicy: Forbid
         containers:
           app:
+            # same image as zfs-exporter: pinned and its zfs userland matches the
+            # talos zfs extension; command replaces the exporter entrypoint
             image:
-              repository: docker.io/tugboat/zfs-utils
-              tag: latest
+              repository: ghcr.io/mirceanton/zfs-exporter
+              tag: 2.4.2@sha256:9254caf30c72a7e20da4775f2a7991fb913622c898416b0e5b7d33ac0eb9c7c7
             command:
               - "/scripts/zfs_scrub_task.sh"
             env:

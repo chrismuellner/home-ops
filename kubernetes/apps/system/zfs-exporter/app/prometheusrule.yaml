@@ -1,0 +1,68 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: zfs-exporter
+spec:
+  groups:
+    # pool health is covered by ZfsUnexpectedPoolState (node-exporter) and
+    # scrub results by the zfs-scrub cronjob
+    - name: zfs.rules
+      rules:
+        - alert: ZfsExporterAbsent
+          expr: absent(zfs_pool_size_bytes{pool="zfspv-pool"})
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: No metrics for zpool zfspv-pool, the zfs-exporter may be down.
+        - alert: ZfsExporterCollectorFailed
+          expr: zfs_scrape_collector_success == 0
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: The zfs-exporter {{ $labels.collector }} collector is failing.
+        - alert: ZfsPoolReadOnly
+          expr: zfs_pool_readonly == 1
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Zpool {{ $labels.pool }} is read-only.
+        - alert: ZfsPoolCapacityHigh
+          expr: zfs_pool_allocated_bytes / zfs_pool_size_bytes > 0.8
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: Zpool {{ $labels.pool }} is {{ $value | humanizePercentage }} full.
+        - alert: ZfsPoolCapacityCritical
+          expr: zfs_pool_allocated_bytes / zfs_pool_size_bytes > 0.9
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: Zpool {{ $labels.pool }} is {{ $value | humanizePercentage }} full.
+        - alert: ZfsPoolFillingUp
+          expr: |-
+            predict_linear(zfs_pool_free_bytes[1d], 7 * 86400) < 0
+              and on (pool)
+            zfs_pool_allocated_bytes / zfs_pool_size_bytes > 0.5
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: Zpool {{ $labels.pool }} will run out of space within a week at the current rate.
+        # PVCs are thin provisioned, so quotas can promise more than the pool holds
+        - alert: ZfsPoolOvercommitted
+          expr: |-
+            sum by (pool) (zfs_dataset_quota_bytes)
+              > on (pool)
+            max by (pool) (zfs_pool_size_bytes)
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: Dataset quotas on zpool {{ $labels.pool }} add up to more than the pool size.
