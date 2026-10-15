@@ -1,0 +1,35 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: cilium-policy
+spec:
+  groups:
+    - name: cilium-policy.rules
+      rules:
+        # While policyAuditMode is on, AUDIT verdicts are the flows a policy would have dropped
+        - alert: CiliumPolicyAuditVerdict
+          expr: |-
+            sum by (direction, source, source_namespace, source_workload, destination, destination_namespace, destination_workload) (
+              increase(hubble_policy_verdicts_total{action=~"(?i)audit"}[30m])
+            ) > 0
+          labels:
+            severity: warning
+          annotations:
+            summary: >-
+              {{ $labels.direction }} flow {{ $labels.source_namespace }}/{{ $labels.source_workload }} ({{ $labels.source }}) ->
+              {{ $labels.destination_namespace }}/{{ $labels.destination_workload }} ({{ $labels.destination }}) would be dropped by policy.
+            description: Inspect with `kubectl -n kube-system exec ds/cilium -c cilium-agent -- hubble observe --verdict AUDIT`.
+        # Once enforcing, egress drops from an exposed pod are the strongest sign of compromise
+        - alert: CiliumPolicyDenied
+          expr: |-
+            sum by (source, source_namespace, source_workload, destination, destination_namespace, destination_workload) (
+              increase(hubble_drop_total{reason="POLICY_DENIED"}[15m])
+            ) > 0
+          labels:
+            severity: warning
+          annotations:
+            summary: >-
+              Policy dropped traffic {{ $labels.source_namespace }}/{{ $labels.source_workload }} ({{ $labels.source }}) ->
+              {{ $labels.destination_namespace }}/{{ $labels.destination_workload }} ({{ $labels.destination }}).

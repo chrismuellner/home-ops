@@ -7,3 +7,4 @@ resources:
   - ./helmrelease.yaml
   - ./networking.yaml
   - ./grafanadashboard.yaml
+  - ./prometheusrule.yaml

@@ -8,4 +8,6 @@ resources:
   - ./helmrelease.yaml
   - ./envoy.yaml
   - ./observability.yaml
+  - ./ciliumnetworkpolicy.yaml
+  - ./prometheusrule.yaml
   - ./grafanadashboard.yaml

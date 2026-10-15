@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: security
 resources:
   - ./certificate.yaml
+  - ./ciliumnetworkpolicy.yaml
   - ./groups.yaml
   - ./kanidm.yaml
   - ./persons.yaml

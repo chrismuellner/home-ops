@@ -1,0 +1,28 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.envoyproxy.io/backendtrafficpolicy_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: homeassistant
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: homeassistant
+  # Keep the Gateway-wide defaults (compression, buffer limit, timeouts) from network/envoy
+  mergeType: StrategicMerge
+  # Throttle password login attempts. Local rate limits can't bucket per client IP, so this is one
+  # shared bucket: brute force is slowed, existing sessions and token refreshes are unaffected.
+  rateLimit:
+    type: Local
+    local:
+      rules:
+        - clientSelectors:
+            - path:
+                type: PathPrefix
+                value: /auth/login_flow
+              methods:
+                - value: POST
+          limit:
+            requests: 30
+            unit: Minute

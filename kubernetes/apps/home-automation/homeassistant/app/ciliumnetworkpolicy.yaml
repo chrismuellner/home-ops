@@ -1,0 +1,50 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: homeassistant
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: homeassistant
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: network
+            gateway.envoyproxy.io/owning-gateway-name: envoy-external
+        - matchLabels:
+            io.kubernetes.pod.namespace: selfhosted
+            app.kubernetes.io/name: homepage
+      toPorts:
+        - ports:
+            - port: "8123"
+              protocol: TCP
+    # Kubelet probes
+    - fromEntities:
+        - host
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: ANY
+    # Mosquitto, ESPHome, Zigbee2MQTT
+    - toEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: home-automation
+    # Kanidm OIDC via idm.muellner.dev, which resolves to the envoy-internal load balancer
+    - toEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: network
+            gateway.envoyproxy.io/owning-gateway-name: envoy-internal
+      toPorts:
+        - ports:
+            - port: "10443"
+              protocol: TCP
+    # Cloud integrations and LAN devices (ESPHome API, etc.); blocks lateral movement into the cluster
+    - toEntities:
+        - world

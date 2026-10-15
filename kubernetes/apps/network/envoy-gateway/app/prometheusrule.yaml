@@ -1,0 +1,44 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: envoy-external
+spec:
+  groups:
+    - name: envoy-external.rules
+      rules:
+        # Baseline is a handful of 4xx per day; bursts point at scanning or credential guessing
+        - alert: EnvoyExternalClientErrorSpike
+          expr: |-
+            sum(increase(envoy_http_downstream_rq_xx{pod=~"envoy-external-.*", envoy_http_conn_manager_prefix=~"https?-.*", envoy_response_code_class="4"}[15m])) > 50
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: envoy-external returned {{ $value | humanize }} 4xx responses in 15m.
+            description: Check the envoy-external access logs in VictoriaLogs for the client IPs and paths.
+        - alert: EnvoyExternalServerErrors
+          expr: |-
+            sum(increase(envoy_http_downstream_rq_xx{pod=~"envoy-external-.*", envoy_http_conn_manager_prefix=~"https?-.*", envoy_response_code_class="5"}[15m])) > 20
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: envoy-external returned {{ $value | humanize }} 5xx responses in 15m.
+        - alert: EnvoyExternalRequestSpike
+          expr: |-
+            sum(rate(envoy_http_downstream_rq_xx{pod=~"envoy-external-.*", envoy_http_conn_manager_prefix=~"https?-.*"}[5m])) > 5
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: envoy-external is serving {{ $value | humanize }} requests/s, far above its usual load.
+        - alert: EnvoyExternalRateLimited
+          expr: |-
+            sum(increase({__name__=~"envoy_.*local_rate_limit.*rate_limited", pod=~"envoy-external-.*"}[15m])) > 0
+          labels:
+            severity: warning
+          annotations:
+            summary: envoy-external rate limited {{ $value | humanize }} login requests in 15m.
+            description: Someone is hammering a login endpoint. Check the access logs for status 429.
