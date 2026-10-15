@@ -7,3 +7,12 @@ resources:
   - ./helmrelease.yaml
   - ./grafanadashboard.yaml
   - ./grafana-admin-password.sops.yaml
+configMapGenerator:
+  - name: home-ops-overview-dashboard
+    files:
+      - home-ops-overview.json=./resources/home-ops-overview.json
+generatorOptions:
+  disableNameSuffixHash: true
+  # the dashboard uses grafana ${...} variables
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled

@@ -1,0 +1,2271 @@
+{
+  "uid": "home-ops-overview",
+  "title": "Home-ops overview",
+  "description": "Cluster health at a glance, with the logs behind it.",
+  "tags": [
+    "overview"
+  ],
+  "timezone": "browser",
+  "editable": true,
+  "graphTooltip": 1,
+  "refresh": "1m",
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "schemaVersion": 41,
+  "links": [
+    {
+      "title": "Alertmanager",
+      "type": "link",
+      "url": "https://alertmanager.muellner.dev",
+      "targetBlank": true
+    },
+    {
+      "title": "Prometheus",
+      "type": "link",
+      "url": "https://prometheus.muellner.dev",
+      "targetBlank": true
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "datasource",
+        "label": "Prometheus",
+        "type": "datasource",
+        "query": "prometheus",
+        "regex": "",
+        "hide": 2,
+        "current": {
+          "text": "prometheus",
+          "value": "prometheus"
+        }
+      },
+      {
+        "name": "logs",
+        "label": "Logs",
+        "type": "datasource",
+        "query": "victoriametrics-logs-datasource",
+        "regex": "",
+        "hide": 2,
+        "current": {
+          "text": "victoria-logs",
+          "value": "victoria-logs"
+        }
+      },
+      {
+        "name": "namespace",
+        "label": "Namespace",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "query": {
+          "query": "label_values(kube_namespace_status_phase, namespace)",
+          "refId": "ns"
+        },
+        "definition": "label_values(kube_namespace_status_phase, namespace)",
+        "refresh": 1,
+        "includeAll": true,
+        "allValue": ".*",
+        "multi": false,
+        "sort": 1,
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        }
+      },
+      {
+        "name": "pod",
+        "label": "Pod",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "query": {
+          "query": "label_values(kube_pod_info{namespace=~\"$namespace\"}, pod)",
+          "refId": "pod"
+        },
+        "definition": "label_values(kube_pod_info{namespace=~\"$namespace\"}, pod)",
+        "refresh": 2,
+        "includeAll": true,
+        "allValue": ".*",
+        "multi": false,
+        "sort": 1,
+        "allowCustomValue": true,
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        }
+      }
+    ]
+  },
+  "annotations": {
+    "list": []
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "row",
+      "title": "Status",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 1
+      },
+      "panels": []
+    },
+    {
+      "id": 2,
+      "type": "table",
+      "title": "Firing alerts",
+      "description": "Alerts firing in Prometheus: critical as FAILING, everything else as WARNING. Silences in Alertmanager are not taken into account.",
+      "gridPos": {
+        "x": 0,
+        "y": 1,
+        "w": 8,
+        "h": 10
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "max by (alertname, namespace, pod, job_name, cronjob, persistentvolumeclaim, obj_name) (\n  ((ALERTS{alertstate=\"firing\", alertname!~\"Watchdog|InfoInhibitor\", severity=\"critical\"}) * 0 + 3)\n  or ((ALERTS{alertstate=\"firing\", alertname!~\"Watchdog|InfoInhibitor\"}) * 0 + 1)\n)\n# keep the table from being empty\nor (label_replace(vector(0), \"alertname\", \"No alerts firing\", \"\", \"\") unless on () count(ALERTS{alertstate=\"firing\", alertname!~\"Watchdog|InfoInhibitor\"}) > 0)",
+          "legendFormat": "",
+          "range": false,
+          "instant": true,
+          "format": "table"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": {
+              "Value": "State",
+              "alertname": "Alert",
+              "namespace": "Namespace",
+              "pod": "Pod",
+              "job_name": "Job",
+              "cronjob": "CronJob",
+              "persistentvolumeclaim": "PVC",
+              "obj_name": "Object"
+            },
+            "includeByName": {
+              "Value": true,
+              "alertname": true,
+              "namespace": true,
+              "pod": true,
+              "job_name": true,
+              "cronjob": true,
+              "persistentvolumeclaim": true,
+              "obj_name": true
+            },
+            "excludeByName": {},
+            "indexByName": {
+              "Value": 0,
+              "alertname": 1,
+              "namespace": 2,
+              "pod": 3,
+              "job_name": 4,
+              "cronjob": 5,
+              "persistentvolumeclaim": 6,
+              "obj_name": 7
+            }
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "filterable": false
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "State"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "3": {
+                        "text": "FAILING",
+                        "color": "red",
+                        "index": 0
+                      },
+                      "2": {
+                        "text": "UNKNOWN",
+                        "color": "purple",
+                        "index": 1
+                      },
+                      "1": {
+                        "text": "WARNING",
+                        "color": "orange",
+                        "index": 2
+                      },
+                      "0": {
+                        "text": "OK",
+                        "color": "green",
+                        "index": 3
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background",
+                  "mode": "basic"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 95
+              },
+              {
+                "id": "custom.align",
+                "value": "center"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Namespace"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Show error logs of this namespace",
+                    "url": "/d/home-ops-overview/home-ops-overview?var-namespace=${__data.fields.namespace}&var-pod=All&${__url_time_range}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Pod"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Show error logs of this pod",
+                    "url": "/d/home-ops-overview/home-ops-overview?var-namespace=${__data.fields.namespace}&var-pod=${__data.fields.pod}&${__url_time_range}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "sortBy": [
+          {
+            "displayName": "State",
+            "desc": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "type": "table",
+      "title": "Backups & maintenance",
+      "description": "VolSync backups and CronJobs (kopia maintenance, zfs scrub). FAILING: last run failed, out of sync, repository unreachable or overdue by an hour. UNKNOWN: never succeeded. Click a name to filter the error logs to its job.",
+      "gridPos": {
+        "x": 8,
+        "y": 1,
+        "w": 8,
+        "h": 10
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "label_join(label_replace(max by (ns, name) (((max by (ns, name) (label_replace(volsync_replicationsource_info{result!~\"Successful|\"}, \"ns\", \"$1\", \"exported_namespace\", \"(.*)\"))) * 0 + 3)\n  or ((max by (ns, name) (label_replace(label_replace(volsync_volume_out_of_sync{role=\"source\"}, \"ns\", \"$1\", \"obj_namespace\", \"(.*)\"), \"name\", \"$1\", \"obj_name\", \"(.*)\")) == 1) * 0 + 3)\n  or ((max by (ns, name) (label_replace(label_replace(volsync_kopia_repository_connectivity{role=\"source\"}, \"ns\", \"$1\", \"obj_namespace\", \"(.*)\"), \"name\", \"$1\", \"obj_name\", \"(.*)\")) == 0) * 0 + 3)\n  or ((time() - max by (ns, name) (label_replace(volsync_replicationsource_next_sync_timestamp_seconds, \"ns\", \"$1\", \"exported_namespace\", \"(.*)\")) > 3600) * 0 + 3)\n  or ((max by (ns, name) (label_replace(volsync_replicationsource_info, \"ns\", \"$1\", \"exported_namespace\", \"(.*)\")) unless max by (ns, name) (label_replace(volsync_replicationsource_last_sync_timestamp_seconds, \"ns\", \"$1\", \"exported_namespace\", \"(.*)\"))) * 0 + 2)\n  or ((max by (ns, name) (label_replace(volsync_replicationsource_info, \"ns\", \"$1\", \"exported_namespace\", \"(.*)\"))) * 0 + 0)), \"type\", \"VolSync\", \"\", \"\")\nor label_replace(max by (ns, name) ((((max by (ns, name) (label_replace(label_replace(kube_cronjob_status_last_schedule_time, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"cronjob\", \"(.*)\")) > max by (ns, name) (label_replace(label_replace(kube_cronjob_status_last_successful_time, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"cronjob\", \"(.*)\"))) and max by (ns, name) (label_replace(label_replace(kube_cronjob_status_active, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"cronjob\", \"(.*)\")) == 0) * 0 + 3)\n  or (((max by (ns, name) (label_replace(label_replace(kube_cronjob_status_last_schedule_time, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"cronjob\", \"(.*)\")) unless max by (ns, name) (label_replace(label_replace(kube_cronjob_status_last_successful_time, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"cronjob\", \"(.*)\"))) and max by (ns, name) (label_replace(label_replace(kube_cronjob_status_active, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"cronjob\", \"(.*)\")) == 0) * 0 + 3)\n  or ((max by (ns, name) (label_replace(label_replace(kube_cronjob_info, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"cronjob\", \"(.*)\")) unless max by (ns, name) (label_replace(label_replace(kube_cronjob_status_last_successful_time, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"cronjob\", \"(.*)\"))) * 0 + 2)\n  or ((max by (ns, name) (label_replace(label_replace(kube_cronjob_info, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"cronjob\", \"(.*)\"))) * 0 + 0)), \"type\", \"CronJob\", \"\", \"\"), \"target\", \"/\", \"ns\", \"name\")",
+          "legendFormat": "",
+          "range": false,
+          "instant": true,
+          "format": "table"
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "label_join(label_replace(max by (ns, name) (time() - max by (ns, name) (label_replace(volsync_replicationsource_last_sync_timestamp_seconds, \"ns\", \"$1\", \"exported_namespace\", \"(.*)\"))), \"type\", \"VolSync\", \"\", \"\")\nor label_replace(max by (ns, name) (time() - max by (ns, name) (label_replace(label_replace(kube_cronjob_status_last_successful_time, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"cronjob\", \"(.*)\"))), \"type\", \"CronJob\", \"\", \"\"), \"target\", \"/\", \"ns\", \"name\")",
+          "legendFormat": "",
+          "range": false,
+          "instant": true,
+          "format": "table"
+        },
+        {
+          "refId": "C",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "label_join(label_replace(max by (ns, name) (max by (ns, name) (label_replace(volsync_replicationsource_next_sync_timestamp_seconds, \"ns\", \"$1\", \"exported_namespace\", \"(.*)\")) - time()), \"type\", \"VolSync\", \"\", \"\")\nor label_replace(max by (ns, name) (max by (ns, name) (label_replace(label_replace(kube_cronjob_next_schedule_time, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"cronjob\", \"(.*)\")) - time()), \"type\", \"CronJob\", \"\", \"\"), \"target\", \"/\", \"ns\", \"name\")",
+          "legendFormat": "",
+          "range": false,
+          "instant": true,
+          "format": "table"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": {
+              "Value #A": "State",
+              "type": "Type",
+              "target": "Name",
+              "Value #B": "Last success",
+              "Value #C": "Next run"
+            },
+            "includeByName": {
+              "Value #A": true,
+              "type": true,
+              "target": true,
+              "Value #B": true,
+              "Value #C": true,
+              "ns": true,
+              "name": true
+            },
+            "excludeByName": {},
+            "indexByName": {
+              "Value #A": 0,
+              "type": 1,
+              "target": 2,
+              "Value #B": 3,
+              "Value #C": 4,
+              "ns": 5,
+              "name": 6
+            }
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "filterable": false
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "State"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "3": {
+                        "text": "FAILING",
+                        "color": "red",
+                        "index": 0
+                      },
+                      "2": {
+                        "text": "UNKNOWN",
+                        "color": "purple",
+                        "index": 1
+                      },
+                      "1": {
+                        "text": "WARNING",
+                        "color": "orange",
+                        "index": 2
+                      },
+                      "0": {
+                        "text": "OK",
+                        "color": "green",
+                        "index": 3
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background",
+                  "mode": "basic"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 95
+              },
+              {
+                "id": "custom.align",
+                "value": "center"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ns"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "name"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Last success|Next run"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Name"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Show error logs of this backup / job",
+                    "url": "/d/home-ops-overview/home-ops-overview?var-namespace=${__data.fields.ns}&var-pod=(volsync-src-${__data.fields.name}|${__data.fields.name}-[0-9][0-9]*)-.*&${__url_time_range}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Type"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 85
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "sortBy": [
+          {
+            "displayName": "State",
+            "desc": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "type": "table",
+      "title": "Platform",
+      "description": "Node conditions, zpool health/capacity/read-only, SMART, certificates, the Flux instance and every Prometheus scrape target.",
+      "gridPos": {
+        "x": 16,
+        "y": 1,
+        "w": 8,
+        "h": 10
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "label_replace(max by (name) (((max by (name) (label_replace(kube_node_status_condition{condition=\"Ready\", status=\"true\"}, \"name\", \"$1\", \"node\", \"(.*)\")) == 0) * 0 + 3)\n  or ((max by (name) (label_replace(kube_node_status_condition{condition=~\".+Pressure\", status=\"true\"}, \"name\", \"$1\", \"node\", \"(.*)\")) == 1) * 0 + 1)\n  or ((max by (name) (label_replace(kube_node_status_condition{condition=\"Ready\", status=\"true\"}, \"name\", \"$1\", \"node\", \"(.*)\"))) * 0 + 0)), \"type\", \"Node\", \"\", \"\")\nor label_replace(max by (name) (((label_replace(max(rate(node_pressure_cpu_waiting_seconds_total[15m])), \"name\", \"CPU pressure\", \"\", \"\") > 0.5) * 0 + 3)\n  or ((label_replace(max(rate(node_pressure_cpu_waiting_seconds_total[15m])), \"name\", \"CPU pressure\", \"\", \"\") > 0.2) * 0 + 1)\n  or ((label_replace(vector(0), \"name\", \"CPU pressure\", \"\", \"\") unless on () max(rate(node_pressure_cpu_waiting_seconds_total[15m]))) * 0 + 2)\n  or ((label_replace(max(rate(node_pressure_cpu_waiting_seconds_total[15m])), \"name\", \"CPU pressure\", \"\", \"\")) * 0 + 0)\n  or ((label_replace(max(rate(node_pressure_memory_stalled_seconds_total[15m])), \"name\", \"Memory pressure\", \"\", \"\") > 0.5) * 0 + 3)\n  or ((label_replace(max(rate(node_pressure_memory_stalled_seconds_total[15m])), \"name\", \"Memory pressure\", \"\", \"\") > 0.2) * 0 + 1)\n  or ((label_replace(vector(0), \"name\", \"Memory pressure\", \"\", \"\") unless on () max(rate(node_pressure_memory_stalled_seconds_total[15m]))) * 0 + 2)\n  or ((label_replace(max(rate(node_pressure_memory_stalled_seconds_total[15m])), \"name\", \"Memory pressure\", \"\", \"\")) * 0 + 0)\n  or ((label_replace(max(rate(node_pressure_io_stalled_seconds_total[15m])), \"name\", \"IO pressure\", \"\", \"\") > 0.5) * 0 + 3)\n  or ((label_replace(max(rate(node_pressure_io_stalled_seconds_total[15m])), \"name\", \"IO pressure\", \"\", \"\") > 0.2) * 0 + 1)\n  or ((label_replace(vector(0), \"name\", \"IO pressure\", \"\", \"\") unless on () max(rate(node_pressure_io_stalled_seconds_total[15m]))) * 0 + 2)\n  or ((label_replace(max(rate(node_pressure_io_stalled_seconds_total[15m])), \"name\", \"IO pressure\", \"\", \"\")) * 0 + 0)\n  or ((label_replace(max(increase(node_vmstat_oom_kill[24h])), \"name\", \"Kernel OOM kills (24h)\", \"\", \"\") > 0.5) * 0 + 1)\n  or ((label_replace(vector(0), \"name\", \"Kernel OOM kills (24h)\", \"\", \"\") unless on () max(increase(node_vmstat_oom_kill[24h]))) * 0 + 2)\n  or ((label_replace(max(increase(node_vmstat_oom_kill[24h])), \"name\", \"Kernel OOM kills (24h)\", \"\", \"\")) * 0 + 0)\n  or ((label_replace(max(node_timex_sync_status), \"name\", \"Clock sync\", \"\", \"\") == 0) * 0 + 3)\n  or ((label_replace(vector(0), \"name\", \"Clock sync\", \"\", \"\") unless on () max(node_timex_sync_status)) * 0 + 2)\n  or ((label_replace(max(node_timex_sync_status), \"name\", \"Clock sync\", \"\", \"\")) * 0 + 0)\n  or ((label_replace(max(abs(node_timex_offset_seconds)), \"name\", \"Clock offset\", \"\", \"\") > 0.05) * 0 + 1)\n  or ((label_replace(vector(0), \"name\", \"Clock offset\", \"\", \"\") unless on () max(abs(node_timex_offset_seconds))) * 0 + 2)\n  or ((label_replace(max(abs(node_timex_offset_seconds)), \"name\", \"Clock offset\", \"\", \"\")) * 0 + 0)), \"type\", \"Node\", \"\", \"\")\nor label_replace(max by (name) (((label_replace(max(histogram_quantile(0.99, sum by (le) (rate(etcd_disk_wal_fsync_duration_seconds_bucket[15m])))), \"name\", \"WAL fsync p99\", \"\", \"\") > 0.1) * 0 + 3)\n  or ((label_replace(max(histogram_quantile(0.99, sum by (le) (rate(etcd_disk_wal_fsync_duration_seconds_bucket[15m])))), \"name\", \"WAL fsync p99\", \"\", \"\") > 0.025) * 0 + 1)\n  or ((label_replace(vector(0), \"name\", \"WAL fsync p99\", \"\", \"\") unless on () max(histogram_quantile(0.99, sum by (le) (rate(etcd_disk_wal_fsync_duration_seconds_bucket[15m]))))) * 0 + 2)\n  or ((label_replace(max(histogram_quantile(0.99, sum by (le) (rate(etcd_disk_wal_fsync_duration_seconds_bucket[15m])))), \"name\", \"WAL fsync p99\", \"\", \"\")) * 0 + 0)), \"type\", \"etcd\", \"\", \"\")\nor label_replace(max by (name) (((label_replace(max(sum(increase(alertmanager_notifications_failed_total[1h]))), \"name\", \"Notifications failed (1h)\", \"\", \"\") > 2) * 0 + 3)\n  or ((label_replace(max(sum(increase(alertmanager_notifications_failed_total[1h]))), \"name\", \"Notifications failed (1h)\", \"\", \"\") > 0.5) * 0 + 1)\n  or ((label_replace(vector(0), \"name\", \"Notifications failed (1h)\", \"\", \"\") unless on () max(sum(increase(alertmanager_notifications_failed_total[1h])))) * 0 + 2)\n  or ((label_replace(max(sum(increase(alertmanager_notifications_failed_total[1h]))), \"name\", \"Notifications failed (1h)\", \"\", \"\")) * 0 + 0)\n  or ((label_replace(max(sum(increase(prometheus_rule_evaluation_failures_total[1h]))), \"name\", \"Rule evaluation failures (1h)\", \"\", \"\") > 0.5) * 0 + 1)\n  or ((label_replace(vector(0), \"name\", \"Rule evaluation failures (1h)\", \"\", \"\") unless on () max(sum(increase(prometheus_rule_evaluation_failures_total[1h])))) * 0 + 2)\n  or ((label_replace(max(sum(increase(prometheus_rule_evaluation_failures_total[1h]))), \"name\", \"Rule evaluation failures (1h)\", \"\", \"\")) * 0 + 0)), \"type\", \"Alerting\", \"\", \"\")\nor label_replace(max by (name) (((max by (name) (label_replace(zfs_pool_health, \"name\", \"$1\", \"pool\", \"(.*)\")) != 0) * 0 + 3)\n  or ((max by (name) (label_replace(zfs_pool_readonly, \"name\", \"$1\", \"pool\", \"(.*)\")) == 1) * 0 + 3)\n  or ((max by (name) (label_replace(zfs_pool_allocated_bytes, \"name\", \"$1\", \"pool\", \"(.*)\")) / max by (name) (label_replace(zfs_pool_size_bytes, \"name\", \"$1\", \"pool\", \"(.*)\")) > 0.9) * 0 + 3)\n  or ((max by (name) (label_replace(zfs_pool_allocated_bytes, \"name\", \"$1\", \"pool\", \"(.*)\")) / max by (name) (label_replace(zfs_pool_size_bytes, \"name\", \"$1\", \"pool\", \"(.*)\")) > 0.8) * 0 + 1)\n  or ((max by (name) (label_replace(node_zfs_zpool_state, \"name\", \"$1\", \"zpool\", \"(.*)\")) unless max by (name) (label_replace(zfs_pool_size_bytes, \"name\", \"$1\", \"pool\", \"(.*)\"))) * 0 + 2)\n  or ((max by (name) (label_replace(node_zfs_zpool_state, \"name\", \"$1\", \"zpool\", \"(.*)\"))) * 0 + 0)), \"type\", \"ZFS pool\", \"\", \"\")\nor label_replace(max by (name) (((max by (name) (label_replace(smartctl_device_smart_status, \"name\", \"$1\", \"device\", \"(.*)\")) != 1) * 0 + 3)\n  or ((max by (name) (label_replace(smartctl_device_attribute{attribute_name=\"Wear_Leveling_Count\", attribute_value_type=\"value\"}, \"name\", \"$1\", \"device\", \"(.*)\")) < 20) * 0 + 1)\n  or ((max by (name) (label_replace(smartctl_device_temperature{temperature_type=\"current\"}, \"name\", \"$1\", \"device\", \"(.*)\")) > 65) * 0 + 1)\n  or ((max by (name) (label_replace(node_disk_info{device=~\"sd.+|nvme.+n[0-9]+\", path!~\".*-usb-.*\"}, \"name\", \"$1\", \"device\", \"(.*)\")) unless max by (name) (label_replace(smartctl_device_smart_status, \"name\", \"$1\", \"device\", \"(.*)\"))) * 0 + 2)\n  or ((max by (name) (label_replace(node_disk_info{device=~\"sd.+|nvme.+n[0-9]+\", path!~\".*-usb-.*\"}, \"name\", \"$1\", \"device\", \"(.*)\"))) * 0 + 0)), \"type\", \"Disk\", \"\", \"\")\nor label_replace(max by (name) (((max by (name) (label_join(certmanager_certificate_ready_status{condition=\"False\"}, \"name\", \"/\", \"exported_namespace\", \"name\")) == 1) * 0 + 3)\n  or ((max by (name) (label_join(certmanager_certificate_expiration_timestamp_seconds, \"name\", \"/\", \"exported_namespace\", \"name\")) - time() < 7 * 86400) * 0 + 3)\n  or ((max by (name) (label_join(certmanager_certificate_ready_status{condition=\"Unknown\"}, \"name\", \"/\", \"exported_namespace\", \"name\")) == 1) * 0 + 2)\n  or ((max by (name) (label_join(certmanager_certificate_expiration_timestamp_seconds, \"name\", \"/\", \"exported_namespace\", \"name\")) - time() < 14 * 86400) * 0 + 1)\n  or ((max by (name) (label_join(certmanager_certificate_expiration_timestamp_seconds, \"name\", \"/\", \"exported_namespace\", \"name\"))) * 0 + 0)), \"type\", \"Certificate\", \"\", \"\")\nor label_replace(max by (name) (((max by (name) (flux_instance_info{ready=\"False\"})) * 0 + 3)\n  or ((max by (name) (flux_instance_info{ready!=\"True\"})) * 0 + 2)\n  or ((max by (name) (flux_instance_info)) * 0 + 0)), \"type\", \"Flux\", \"\", \"\")\nor label_replace(max by (name) (((min by (name) (label_replace(up, \"name\", \"$1\", \"job\", \"(.*)\")) == 0) * 0 + 3)\n  or ((min by (name) (label_replace(up, \"name\", \"$1\", \"job\", \"(.*)\"))) * 0 + 0)), \"type\", \"Scrape target\", \"\", \"\")",
+          "legendFormat": "",
+          "range": false,
+          "instant": true,
+          "format": "table"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": {
+              "Value": "State",
+              "type": "Type",
+              "name": "Name"
+            },
+            "includeByName": {
+              "Value": true,
+              "type": true,
+              "name": true
+            },
+            "excludeByName": {},
+            "indexByName": {
+              "Value": 0,
+              "type": 1,
+              "name": 2
+            }
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "filterable": false
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "State"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "3": {
+                        "text": "FAILING",
+                        "color": "red",
+                        "index": 0
+                      },
+                      "2": {
+                        "text": "UNKNOWN",
+                        "color": "purple",
+                        "index": 1
+                      },
+                      "1": {
+                        "text": "WARNING",
+                        "color": "orange",
+                        "index": 2
+                      },
+                      "0": {
+                        "text": "OK",
+                        "color": "green",
+                        "index": 3
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background",
+                  "mode": "basic"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 95
+              },
+              {
+                "id": "custom.align",
+                "value": "center"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Type"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 110
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "sortBy": [
+          {
+            "displayName": "State",
+            "desc": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "type": "table",
+      "title": "Workloads",
+      "description": "FAILING: no replica ready. WARNING: not all replicas ready, or containers restarted in the last 24h. Click a workload to filter the error logs to it.",
+      "gridPos": {
+        "x": 0,
+        "y": 11,
+        "w": 12,
+        "h": 11
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "label_join(max by (type, ns, name) ((((max by (type, ns, name) (label_replace(label_replace(label_replace(kube_deployment_spec_replicas, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"deployment\", \"(.*)\"), \"type\", \"Deployment\", \"\", \"\")) or max by (type, ns, name) (label_replace(label_replace(label_replace(kube_statefulset_replicas, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"statefulset\", \"(.*)\"), \"type\", \"StatefulSet\", \"\", \"\")) or max by (type, ns, name) (label_replace(label_replace(label_replace(kube_daemonset_status_desired_number_scheduled, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"daemonset\", \"(.*)\"), \"type\", \"DaemonSet\", \"\", \"\"))) > 0 and (max by (type, ns, name) (label_replace(label_replace(label_replace(kube_deployment_status_replicas_available, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"deployment\", \"(.*)\"), \"type\", \"Deployment\", \"\", \"\")) or max by (type, ns, name) (label_replace(label_replace(label_replace(kube_statefulset_status_replicas_ready, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"statefulset\", \"(.*)\"), \"type\", \"StatefulSet\", \"\", \"\")) or max by (type, ns, name) (label_replace(label_replace(label_replace(kube_daemonset_status_number_ready, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"daemonset\", \"(.*)\"), \"type\", \"DaemonSet\", \"\", \"\"))) == 0) * 0 + 3)\n  or (((max by (type, ns, name) (label_replace(label_replace(label_replace(kube_deployment_status_replicas_available, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"deployment\", \"(.*)\"), \"type\", \"Deployment\", \"\", \"\")) or max by (type, ns, name) (label_replace(label_replace(label_replace(kube_statefulset_status_replicas_ready, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"statefulset\", \"(.*)\"), \"type\", \"StatefulSet\", \"\", \"\")) or max by (type, ns, name) (label_replace(label_replace(label_replace(kube_daemonset_status_number_ready, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"daemonset\", \"(.*)\"), \"type\", \"DaemonSet\", \"\", \"\"))) < (max by (type, ns, name) (label_replace(label_replace(label_replace(kube_deployment_spec_replicas, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"deployment\", \"(.*)\"), \"type\", \"Deployment\", \"\", \"\")) or max by (type, ns, name) (label_replace(label_replace(label_replace(kube_statefulset_replicas, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"statefulset\", \"(.*)\"), \"type\", \"StatefulSet\", \"\", \"\")) or max by (type, ns, name) (label_replace(label_replace(label_replace(kube_daemonset_status_desired_number_scheduled, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"daemonset\", \"(.*)\"), \"type\", \"DaemonSet\", \"\", \"\")))) * 0 + 1)\n  or (((max by (type, ns, name) (label_replace(label_replace(label_replace(kube_deployment_spec_replicas, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"deployment\", \"(.*)\"), \"type\", \"Deployment\", \"\", \"\")) or max by (type, ns, name) (label_replace(label_replace(label_replace(kube_statefulset_replicas, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"statefulset\", \"(.*)\"), \"type\", \"StatefulSet\", \"\", \"\")) or max by (type, ns, name) (label_replace(label_replace(label_replace(kube_daemonset_status_desired_number_scheduled, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"daemonset\", \"(.*)\"), \"type\", \"DaemonSet\", \"\", \"\"))) and sum by (type, ns, name) (label_replace(sum by (namespace, pod) (increase(kube_pod_container_status_restarts_total[24h])) * on (namespace, pod) group_left (type, name) max by (namespace, pod, type, name) (label_replace(label_replace(kube_pod_owner{owner_kind=~\"StatefulSet|DaemonSet\"}, \"name\", \"$1\", \"owner_name\", \"(.*)\"), \"type\", \"$1\", \"owner_kind\", \"(.*)\") or max by (namespace, pod, replicaset) (label_replace(kube_pod_owner{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.*)\")) * on (namespace, replicaset) group_left (type, name) max by (namespace, replicaset, type, name) (label_replace(label_replace(kube_replicaset_owner{owner_kind=\"Deployment\"}, \"name\", \"$1\", \"owner_name\", \"(.*)\"), \"type\", \"Deployment\", \"\", \"\"))), \"ns\", \"$1\", \"namespace\", \"(.*)\")) > 0) * 0 + 1)\n  or (((max by (type, ns, name) (label_replace(label_replace(label_replace(kube_deployment_spec_replicas, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"deployment\", \"(.*)\"), \"type\", \"Deployment\", \"\", \"\")) or max by (type, ns, name) (label_replace(label_replace(label_replace(kube_statefulset_replicas, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"statefulset\", \"(.*)\"), \"type\", \"StatefulSet\", \"\", \"\")) or max by (type, ns, name) (label_replace(label_replace(label_replace(kube_daemonset_status_desired_number_scheduled, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"daemonset\", \"(.*)\"), \"type\", \"DaemonSet\", \"\", \"\")))) * 0 + 0)), \"target\", \"/\", \"ns\", \"name\")",
+          "legendFormat": "",
+          "range": false,
+          "instant": true,
+          "format": "table"
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "label_join((max by (type, ns, name) (label_replace(label_replace(label_replace(kube_deployment_status_replicas_available, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"deployment\", \"(.*)\"), \"type\", \"Deployment\", \"\", \"\")) or max by (type, ns, name) (label_replace(label_replace(label_replace(kube_statefulset_status_replicas_ready, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"statefulset\", \"(.*)\"), \"type\", \"StatefulSet\", \"\", \"\")) or max by (type, ns, name) (label_replace(label_replace(label_replace(kube_daemonset_status_number_ready, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"daemonset\", \"(.*)\"), \"type\", \"DaemonSet\", \"\", \"\"))), \"target\", \"/\", \"ns\", \"name\")",
+          "legendFormat": "",
+          "range": false,
+          "instant": true,
+          "format": "table"
+        },
+        {
+          "refId": "C",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "label_join((max by (type, ns, name) (label_replace(label_replace(label_replace(kube_deployment_spec_replicas, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"deployment\", \"(.*)\"), \"type\", \"Deployment\", \"\", \"\")) or max by (type, ns, name) (label_replace(label_replace(label_replace(kube_statefulset_replicas, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"statefulset\", \"(.*)\"), \"type\", \"StatefulSet\", \"\", \"\")) or max by (type, ns, name) (label_replace(label_replace(label_replace(kube_daemonset_status_desired_number_scheduled, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"daemonset\", \"(.*)\"), \"type\", \"DaemonSet\", \"\", \"\"))), \"target\", \"/\", \"ns\", \"name\")",
+          "legendFormat": "",
+          "range": false,
+          "instant": true,
+          "format": "table"
+        },
+        {
+          "refId": "D",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "label_join(sum by (type, ns, name) (label_replace(sum by (namespace, pod) (increase(kube_pod_container_status_restarts_total[24h])) * on (namespace, pod) group_left (type, name) max by (namespace, pod, type, name) (label_replace(label_replace(kube_pod_owner{owner_kind=~\"StatefulSet|DaemonSet\"}, \"name\", \"$1\", \"owner_name\", \"(.*)\"), \"type\", \"$1\", \"owner_kind\", \"(.*)\") or max by (namespace, pod, replicaset) (label_replace(kube_pod_owner{owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.*)\")) * on (namespace, replicaset) group_left (type, name) max by (namespace, replicaset, type, name) (label_replace(label_replace(kube_replicaset_owner{owner_kind=\"Deployment\"}, \"name\", \"$1\", \"owner_name\", \"(.*)\"), \"type\", \"Deployment\", \"\", \"\"))), \"ns\", \"$1\", \"namespace\", \"(.*)\")) or (max by (type, ns, name) (label_replace(label_replace(label_replace(kube_deployment_spec_replicas, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"deployment\", \"(.*)\"), \"type\", \"Deployment\", \"\", \"\")) or max by (type, ns, name) (label_replace(label_replace(label_replace(kube_statefulset_replicas, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"statefulset\", \"(.*)\"), \"type\", \"StatefulSet\", \"\", \"\")) or max by (type, ns, name) (label_replace(label_replace(label_replace(kube_daemonset_status_desired_number_scheduled, \"ns\", \"$1\", \"namespace\", \"(.*)\"), \"name\", \"$1\", \"daemonset\", \"(.*)\"), \"type\", \"DaemonSet\", \"\", \"\"))) * 0, \"target\", \"/\", \"ns\", \"name\")",
+          "legendFormat": "",
+          "range": false,
+          "instant": true,
+          "format": "table"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": {
+              "Value #A": "State",
+              "type": "Kind",
+              "target": "Workload",
+              "Value #B": "Ready",
+              "Value #C": "Desired",
+              "Value #D": "Restarts (24h)"
+            },
+            "includeByName": {
+              "Value #A": true,
+              "type": true,
+              "target": true,
+              "Value #B": true,
+              "Value #C": true,
+              "Value #D": true,
+              "ns": true,
+              "name": true
+            },
+            "excludeByName": {},
+            "indexByName": {
+              "Value #A": 0,
+              "type": 1,
+              "target": 2,
+              "Value #B": 3,
+              "Value #C": 4,
+              "Value #D": 5,
+              "ns": 6,
+              "name": 7
+            }
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "filterable": true
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "State"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "3": {
+                        "text": "FAILING",
+                        "color": "red",
+                        "index": 0
+                      },
+                      "2": {
+                        "text": "UNKNOWN",
+                        "color": "purple",
+                        "index": 1
+                      },
+                      "1": {
+                        "text": "WARNING",
+                        "color": "orange",
+                        "index": 2
+                      },
+                      "0": {
+                        "text": "OK",
+                        "color": "green",
+                        "index": 3
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background",
+                  "mode": "basic"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 95
+              },
+              {
+                "id": "custom.align",
+                "value": "center"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ns"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "name"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Workload"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Show error logs of this workload",
+                    "url": "/d/home-ops-overview/home-ops-overview?var-namespace=${__data.fields.ns}&var-pod=${__data.fields.name}-.*&${__url_time_range}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Restarts (24h)"
+            },
+            "properties": [
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "value": null,
+                      "color": "text"
+                    },
+                    {
+                      "value": 0.5,
+                      "color": "orange"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Kind"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 110
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Ready"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Desired"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 75
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Restarts (24h)"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 115
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "sortBy": [
+          {
+            "displayName": "State",
+            "desc": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 6,
+      "type": "table",
+      "title": "Apps (via Envoy)",
+      "description": "Every HTTPRoute behind Envoy. FAILING: no healthy endpoint, or over 20% 5xx in the last hour. WARNING: over 2% 5xx or failed upstream connections in the last hour. Click an app for its error logs.",
+      "gridPos": {
+        "x": 12,
+        "y": 11,
+        "w": 12,
+        "h": 11
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "label_join(max by (ns, name) (((sum by (ns, name) (label_replace(label_replace(envoy_cluster_membership_healthy{envoy_cluster_name=~\"httproute/.*\"}, \"ns\", \"$1\", \"envoy_cluster_name\", \"httproute/([^/]+)/.*\"), \"name\", \"$1\", \"envoy_cluster_name\", \"httproute/[^/]+/([^/]+)/.*\")) == 0) * 0 + 3)\n  or ((sum by (ns, name) (label_replace(label_replace(increase(envoy_cluster_upstream_rq_xx{envoy_cluster_name=~\"httproute/.*\", envoy_response_code_class=\"5\"}[1h]), \"ns\", \"$1\", \"envoy_cluster_name\", \"httproute/([^/]+)/.*\"), \"name\", \"$1\", \"envoy_cluster_name\", \"httproute/[^/]+/([^/]+)/.*\")) / sum by (ns, name) (label_replace(label_replace(increase(envoy_cluster_upstream_rq_xx{envoy_cluster_name=~\"httproute/.*\"}[1h]), \"ns\", \"$1\", \"envoy_cluster_name\", \"httproute/([^/]+)/.*\"), \"name\", \"$1\", \"envoy_cluster_name\", \"httproute/[^/]+/([^/]+)/.*\")) > 0.2 and sum by (ns, name) (label_replace(label_replace(increase(envoy_cluster_upstream_rq_xx{envoy_cluster_name=~\"httproute/.*\", envoy_response_code_class=\"5\"}[1h]), \"ns\", \"$1\", \"envoy_cluster_name\", \"httproute/([^/]+)/.*\"), \"name\", \"$1\", \"envoy_cluster_name\", \"httproute/[^/]+/([^/]+)/.*\")) >= 5) * 0 + 3)\n  or ((sum by (ns, name) (label_replace(label_replace(increase(envoy_cluster_upstream_rq_xx{envoy_cluster_name=~\"httproute/.*\", envoy_response_code_class=\"5\"}[1h]), \"ns\", \"$1\", \"envoy_cluster_name\", \"httproute/([^/]+)/.*\"), \"name\", \"$1\", \"envoy_cluster_name\", \"httproute/[^/]+/([^/]+)/.*\")) / sum by (ns, name) (label_replace(label_replace(increase(envoy_cluster_upstream_rq_xx{envoy_cluster_name=~\"httproute/.*\"}[1h]), \"ns\", \"$1\", \"envoy_cluster_name\", \"httproute/([^/]+)/.*\"), \"name\", \"$1\", \"envoy_cluster_name\", \"httproute/[^/]+/([^/]+)/.*\")) > 0.02 and sum by (ns, name) (label_replace(label_replace(increase(envoy_cluster_upstream_rq_xx{envoy_cluster_name=~\"httproute/.*\", envoy_response_code_class=\"5\"}[1h]), \"ns\", \"$1\", \"envoy_cluster_name\", \"httproute/([^/]+)/.*\"), \"name\", \"$1\", \"envoy_cluster_name\", \"httproute/[^/]+/([^/]+)/.*\")) >= 3) * 0 + 1)\n  or ((sum by (ns, name) (label_replace(label_replace(increase(envoy_cluster_upstream_cx_connect_fail{envoy_cluster_name=~\"httproute/.*\"}[1h]), \"ns\", \"$1\", \"envoy_cluster_name\", \"httproute/([^/]+)/.*\"), \"name\", \"$1\", \"envoy_cluster_name\", \"httproute/[^/]+/([^/]+)/.*\")) >= 1) * 0 + 1)\n  or ((sum by (ns, name) (label_replace(label_replace(envoy_cluster_membership_total{envoy_cluster_name=~\"httproute/.*\"}, \"ns\", \"$1\", \"envoy_cluster_name\", \"httproute/([^/]+)/.*\"), \"name\", \"$1\", \"envoy_cluster_name\", \"httproute/[^/]+/([^/]+)/.*\"))) * 0 + 0)), \"target\", \"/\", \"ns\", \"name\")",
+          "legendFormat": "",
+          "range": false,
+          "instant": true,
+          "format": "table"
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "label_join(sum by (ns, name) (label_replace(label_replace(increase(envoy_cluster_upstream_rq_xx{envoy_cluster_name=~\"httproute/.*\"}[24h]), \"ns\", \"$1\", \"envoy_cluster_name\", \"httproute/([^/]+)/.*\"), \"name\", \"$1\", \"envoy_cluster_name\", \"httproute/[^/]+/([^/]+)/.*\")) or sum by (ns, name) (label_replace(label_replace(envoy_cluster_membership_total{envoy_cluster_name=~\"httproute/.*\"}, \"ns\", \"$1\", \"envoy_cluster_name\", \"httproute/([^/]+)/.*\"), \"name\", \"$1\", \"envoy_cluster_name\", \"httproute/[^/]+/([^/]+)/.*\")) * 0, \"target\", \"/\", \"ns\", \"name\")",
+          "legendFormat": "",
+          "range": false,
+          "instant": true,
+          "format": "table"
+        },
+        {
+          "refId": "C",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "label_join(sum by (ns, name) (label_replace(label_replace(increase(envoy_cluster_upstream_rq_xx{envoy_cluster_name=~\"httproute/.*\", envoy_response_code_class=\"5\"}[24h]), \"ns\", \"$1\", \"envoy_cluster_name\", \"httproute/([^/]+)/.*\"), \"name\", \"$1\", \"envoy_cluster_name\", \"httproute/[^/]+/([^/]+)/.*\")) or sum by (ns, name) (label_replace(label_replace(envoy_cluster_membership_total{envoy_cluster_name=~\"httproute/.*\"}, \"ns\", \"$1\", \"envoy_cluster_name\", \"httproute/([^/]+)/.*\"), \"name\", \"$1\", \"envoy_cluster_name\", \"httproute/[^/]+/([^/]+)/.*\")) * 0, \"target\", \"/\", \"ns\", \"name\")",
+          "legendFormat": "",
+          "range": false,
+          "instant": true,
+          "format": "table"
+        },
+        {
+          "refId": "D",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "label_join(sum by (ns, name) (label_replace(label_replace(envoy_cluster_membership_healthy{envoy_cluster_name=~\"httproute/.*\"}, \"ns\", \"$1\", \"envoy_cluster_name\", \"httproute/([^/]+)/.*\"), \"name\", \"$1\", \"envoy_cluster_name\", \"httproute/[^/]+/([^/]+)/.*\")) or sum by (ns, name) (label_replace(label_replace(envoy_cluster_membership_total{envoy_cluster_name=~\"httproute/.*\"}, \"ns\", \"$1\", \"envoy_cluster_name\", \"httproute/([^/]+)/.*\"), \"name\", \"$1\", \"envoy_cluster_name\", \"httproute/[^/]+/([^/]+)/.*\")) * 0, \"target\", \"/\", \"ns\", \"name\")",
+          "legendFormat": "",
+          "range": false,
+          "instant": true,
+          "format": "table"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": {
+              "Value #A": "State",
+              "target": "App",
+              "Value #B": "Requests (24h)",
+              "Value #C": "5xx (24h)",
+              "Value #D": "Healthy endpoints"
+            },
+            "includeByName": {
+              "Value #A": true,
+              "target": true,
+              "Value #B": true,
+              "Value #C": true,
+              "Value #D": true,
+              "ns": true,
+              "name": true
+            },
+            "excludeByName": {},
+            "indexByName": {
+              "Value #A": 0,
+              "target": 1,
+              "Value #B": 2,
+              "Value #C": 3,
+              "Value #D": 4,
+              "ns": 5,
+              "name": 6
+            }
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "filterable": true
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "State"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "3": {
+                        "text": "FAILING",
+                        "color": "red",
+                        "index": 0
+                      },
+                      "2": {
+                        "text": "UNKNOWN",
+                        "color": "purple",
+                        "index": 1
+                      },
+                      "1": {
+                        "text": "WARNING",
+                        "color": "orange",
+                        "index": 2
+                      },
+                      "0": {
+                        "text": "OK",
+                        "color": "green",
+                        "index": 3
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background",
+                  "mode": "basic"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 95
+              },
+              {
+                "id": "custom.align",
+                "value": "center"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ns"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "name"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "App"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Show error logs of this app",
+                    "url": "/d/home-ops-overview/home-ops-overview?var-namespace=${__data.fields.ns}&var-pod=${__data.fields.name}-.*&${__url_time_range}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Requests \\(24h\\)|5xx \\(24h\\)"
+            },
+            "properties": [
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "5xx (24h)"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "value": null,
+                      "color": "text"
+                    },
+                    {
+                      "value": 0.5,
+                      "color": "orange"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Healthy endpoints"
+            },
+            "properties": [
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "value": null,
+                      "color": "red"
+                    },
+                    {
+                      "value": 0.5,
+                      "color": "text"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Requests (24h)"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "5xx (24h)"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 85
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Healthy endpoints"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 135
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "sortBy": [
+          {
+            "displayName": "State",
+            "desc": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 7,
+      "type": "table",
+      "title": "Flux",
+      "description": "FAILING: Ready=False. UNKNOWN: reconciling for more than ~25 minutes. WARNING: suspended.",
+      "gridPos": {
+        "x": 0,
+        "y": 22,
+        "w": 24,
+        "h": 9
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "((max by (kind, ns, name, reason) (label_replace(flux_resource_info{ready=\"False\", suspended=\"False\"}, \"ns\", \"$1\", \"exported_namespace\", \"(.*)\"))) * 0 + 3)\n  or (((count_over_time((max by (kind, ns, name) (label_replace(flux_resource_info{ready=\"Unknown\", suspended=\"False\"}, \"ns\", \"$1\", \"exported_namespace\", \"(.*)\")))[30m:1m]) >= 25) * on (kind, ns, name) group_left (reason) max by (kind, ns, name, reason) (label_replace(flux_resource_info{}, \"ns\", \"$1\", \"exported_namespace\", \"(.*)\"))) * 0 + 2)\n  or ((max by (kind, ns, name, reason) (label_replace(flux_resource_info{suspended=\"True\"}, \"ns\", \"$1\", \"exported_namespace\", \"(.*)\"))) * 0 + 1)\n  or ((max by (kind, ns, name, reason) (label_replace(flux_resource_info{}, \"ns\", \"$1\", \"exported_namespace\", \"(.*)\"))) * 0 + 0)",
+          "legendFormat": "",
+          "range": false,
+          "instant": true,
+          "format": "table"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": {
+              "Value": "State",
+              "kind": "Kind",
+              "ns": "Namespace",
+              "name": "Name",
+              "reason": "Reason"
+            },
+            "includeByName": {
+              "Value": true,
+              "kind": true,
+              "ns": true,
+              "name": true,
+              "reason": true
+            },
+            "excludeByName": {},
+            "indexByName": {
+              "Value": 0,
+              "kind": 1,
+              "ns": 2,
+              "name": 3,
+              "reason": 4
+            }
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "filterable": true
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "State"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "3": {
+                        "text": "FAILING",
+                        "color": "red",
+                        "index": 0
+                      },
+                      "2": {
+                        "text": "UNKNOWN",
+                        "color": "purple",
+                        "index": 1
+                      },
+                      "1": {
+                        "text": "WARNING",
+                        "color": "orange",
+                        "index": 2
+                      },
+                      "0": {
+                        "text": "OK",
+                        "color": "green",
+                        "index": 3
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background",
+                  "mode": "basic"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 95
+              },
+              {
+                "id": "custom.align",
+                "value": "center"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Kind"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 130
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "sortBy": [
+          {
+            "displayName": "State",
+            "desc": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 10,
+      "type": "row",
+      "title": "Error logs",
+      "collapsed": true,
+      "gridPos": {
+        "x": 0,
+        "y": 31,
+        "w": 24,
+        "h": 1
+      },
+      "panels": [
+        {
+          "id": 8,
+          "type": "timeseries",
+          "title": "Error log lines by pod",
+          "gridPos": {
+            "x": 0,
+            "y": 32,
+            "w": 24,
+            "h": 7
+          },
+          "datasource": {
+            "type": "victoriametrics-logs-datasource",
+            "uid": "${logs}"
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "victoriametrics-logs-datasource",
+                "uid": "${logs}"
+              },
+              "queryType": "statsRange",
+              "editorMode": "code",
+              "expr": "(level:~\"(?i)^(err|error|fatal|crit|critical|panic|emerg|alert)$\" or (level:\"\" and _msg:~\"(?i)(\\\\b(error|fatal|panic|exception|traceback)\\\\b|level=(error|fatal)|\\\\[(error|err|fatal)\\\\])\")) kubernetes.pod_namespace:~\"^$namespace$\" kubernetes.pod_name:~\"^$pod$\" | stats by (kubernetes.pod_name) count() errors",
+              "legendFormat": "{{kubernetes.pod_name}}"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "drawStyle": "bars",
+                "fillOpacity": 80,
+                "stacking": {
+                  "mode": "normal"
+                },
+                "lineWidth": 1
+              },
+              "unit": "short",
+              "color": {
+                "mode": "palette-classic"
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "calcs": [
+                "sum"
+              ],
+              "sortBy": "Total",
+              "sortDesc": true
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "id": 9,
+          "type": "logs",
+          "title": "Error logs ($namespace / $pod)",
+          "description": "Lines with an error level, or plain-text lines mentioning error/fatal/panic/exception/traceback. Each line starts with [pod/container].",
+          "gridPos": {
+            "x": 0,
+            "y": 39,
+            "w": 24,
+            "h": 12
+          },
+          "datasource": {
+            "type": "victoriametrics-logs-datasource",
+            "uid": "${logs}"
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "victoriametrics-logs-datasource",
+                "uid": "${logs}"
+              },
+              "queryType": "instant",
+              "editorMode": "code",
+              "maxLines": 500,
+              "expr": "(level:~\"(?i)^(err|error|fatal|crit|critical|panic|emerg|alert)$\" or (level:\"\" and _msg:~\"(?i)(\\\\b(error|fatal|panic|exception|traceback)\\\\b|level=(error|fatal)|\\\\[(error|err|fatal)\\\\])\")) kubernetes.pod_namespace:~\"^$namespace$\" kubernetes.pod_name:~\"^$pod$\" | format \"[<kubernetes.pod_name>/<kubernetes.container_name>] <_msg>\" as _msg"
+            }
+          ],
+          "options": {
+            "showTime": true,
+            "wrapLogMessage": true,
+            "sortOrder": "Descending",
+            "enableLogDetails": true,
+            "dedupStrategy": "none",
+            "prettifyLogMessage": false,
+            "showCommonLabels": false,
+            "showLabels": false
+          }
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "type": "row",
+      "title": "Storage & hardware",
+      "collapsed": true,
+      "gridPos": {
+        "x": 0,
+        "y": 32,
+        "w": 24,
+        "h": 1
+      },
+      "panels": [
+        {
+          "id": 11,
+          "type": "stat",
+          "title": "Pool used",
+          "description": "",
+          "gridPos": {
+            "x": 0,
+            "y": 33,
+            "w": 4,
+            "h": 4
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "max(zfs_pool_allocated_bytes / zfs_pool_size_bytes)",
+              "legendFormat": "",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "decimals": 1,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "value": null,
+                    "color": "green"
+                  },
+                  {
+                    "value": 0.8,
+                    "color": "orange"
+                  },
+                  {
+                    "value": 0.9,
+                    "color": "red"
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "center",
+            "textMode": "value"
+          }
+        },
+        {
+          "id": 12,
+          "type": "stat",
+          "title": "Fullest PVC",
+          "description": "",
+          "gridPos": {
+            "x": 4,
+            "y": 33,
+            "w": 4,
+            "h": 4
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "max(kubelet_volume_stats_used_bytes / kubelet_volume_stats_capacity_bytes)",
+              "legendFormat": "",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "decimals": 1,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "value": null,
+                    "color": "green"
+                  },
+                  {
+                    "value": 0.8,
+                    "color": "orange"
+                  },
+                  {
+                    "value": 0.9,
+                    "color": "red"
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "center",
+            "textMode": "value"
+          }
+        },
+        {
+          "id": 13,
+          "type": "stat",
+          "title": "Disk wear left",
+          "description": "",
+          "gridPos": {
+            "x": 8,
+            "y": 33,
+            "w": 4,
+            "h": 4
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "min(smartctl_device_attribute{attribute_name=\"Wear_Leveling_Count\", attribute_value_type=\"value\"})",
+              "legendFormat": "",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "decimals": 1,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "value": null,
+                    "color": "red"
+                  },
+                  {
+                    "value": 10,
+                    "color": "orange"
+                  },
+                  {
+                    "value": 20,
+                    "color": "green"
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "center",
+            "textMode": "value"
+          }
+        },
+        {
+          "id": 14,
+          "type": "stat",
+          "title": "Disk temp",
+          "description": "",
+          "gridPos": {
+            "x": 12,
+            "y": 33,
+            "w": 4,
+            "h": 4
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "max(smartctl_device_temperature{temperature_type=\"current\"})",
+              "legendFormat": "",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "celsius",
+              "decimals": 1,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "value": null,
+                    "color": "green"
+                  },
+                  {
+                    "value": 55,
+                    "color": "orange"
+                  },
+                  {
+                    "value": 65,
+                    "color": "red"
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "center",
+            "textMode": "value"
+          }
+        },
+        {
+          "id": 15,
+          "type": "stat",
+          "title": "CPU temp",
+          "description": "Critical limit is 100°C.",
+          "gridPos": {
+            "x": 16,
+            "y": 33,
+            "w": 4,
+            "h": 4
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "max(node_hwmon_temp_celsius{chip=~\"platform_coretemp.*\"})",
+              "legendFormat": "",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "celsius",
+              "decimals": 1,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "value": null,
+                    "color": "green"
+                  },
+                  {
+                    "value": 90,
+                    "color": "orange"
+                  },
+                  {
+                    "value": 95,
+                    "color": "red"
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "center",
+            "textMode": "value"
+          }
+        },
+        {
+          "id": 16,
+          "type": "stat",
+          "title": "Memory used",
+          "description": "",
+          "gridPos": {
+            "x": 20,
+            "y": 33,
+            "w": 4,
+            "h": 4
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "1 - sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes)",
+              "legendFormat": "",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "decimals": 1,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "value": null,
+                    "color": "green"
+                  },
+                  {
+                    "value": 0.85,
+                    "color": "orange"
+                  },
+                  {
+                    "value": 0.95,
+                    "color": "red"
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "center",
+            "textMode": "value"
+          }
+        },
+        {
+          "id": 17,
+          "type": "timeseries",
+          "title": "Pool space",
+          "description": "PVCs are thin provisioned: quotas can exceed the pool size.",
+          "gridPos": {
+            "x": 0,
+            "y": 37,
+            "w": 12,
+            "h": 8
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "zfs_pool_allocated_bytes",
+              "legendFormat": "allocated",
+              "range": true,
+              "instant": false
+            },
+            {
+              "refId": "B",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "zfs_pool_size_bytes",
+              "legendFormat": "size",
+              "range": true,
+              "instant": false
+            },
+            {
+              "refId": "C",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "sum(zfs_dataset_quota_bytes)",
+              "legendFormat": "PVC quotas",
+              "range": true,
+              "instant": false
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "bytes",
+              "custom": {
+                "fillOpacity": 10,
+                "lineWidth": 1
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "id": 18,
+          "type": "bargauge",
+          "title": "PVC usage",
+          "gridPos": {
+            "x": 12,
+            "y": 37,
+            "w": 12,
+            "h": 8
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "topk(10, kubelet_volume_stats_used_bytes / kubelet_volume_stats_capacity_bytes)",
+              "legendFormat": "{{namespace}}/{{persistentvolumeclaim}}",
+              "range": false,
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "min": 0,
+              "max": 1,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "value": null,
+                    "color": "green"
+                  },
+                  {
+                    "value": 0.8,
+                    "color": "orange"
+                  },
+                  {
+                    "value": 0.9,
+                    "color": "red"
+                  }
+                ]
+              },
+              "color": {
+                "mode": "thresholds"
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "orientation": "horizontal",
+            "displayMode": "basic",
+            "showUnfilled": true,
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            }
+          }
+        },
+        {
+          "id": 19,
+          "type": "timeseries",
+          "title": "Temperatures",
+          "description": "",
+          "gridPos": {
+            "x": 0,
+            "y": 45,
+            "w": 12,
+            "h": 8
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "max(node_hwmon_temp_celsius{chip=~\"platform_coretemp.*\"})",
+              "legendFormat": "CPU",
+              "range": true,
+              "instant": false
+            },
+            {
+              "refId": "B",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "smartctl_device_temperature{temperature_type=\"current\"}",
+              "legendFormat": "disk {{device}}",
+              "range": true,
+              "instant": false
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "celsius",
+              "custom": {
+                "fillOpacity": 10,
+                "lineWidth": 1
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "id": 20,
+          "type": "timeseries",
+          "title": "CPU & memory",
+          "description": "",
+          "gridPos": {
+            "x": 12,
+            "y": 45,
+            "w": 12,
+            "h": 8
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "1 - avg(rate(node_cpu_seconds_total{mode=\"idle\"}[$__rate_interval]))",
+              "legendFormat": "CPU",
+              "range": true,
+              "instant": false
+            },
+            {
+              "refId": "B",
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "1 - sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes)",
+              "legendFormat": "memory",
+              "range": true,
+              "instant": false
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "custom": {
+                "fillOpacity": 10,
+                "lineWidth": 1
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

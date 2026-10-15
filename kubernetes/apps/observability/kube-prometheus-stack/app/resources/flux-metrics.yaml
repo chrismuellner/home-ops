@@ -21,6 +21,13 @@ kube-state-metrics:
         verbs:
           - list
           - watch
+      - apiGroups:
+          - volsync.backube
+        resources:
+          - replicationsources
+        verbs:
+          - list
+          - watch
   customResourceState:
     enabled: true
     config:
@@ -362,3 +369,49 @@ kube-state-metrics:
                   webhook_path:
                     - status
                     - webhookPath
+          # volsync only exports an out-of-sync flag; the dashboard also needs
+          # when the last backup ran and whether the mover succeeded
+          - groupVersionKind:
+              group: volsync.backube
+              version: v1alpha1
+              kind: ReplicationSource
+            metricNamePrefix: volsync_replicationsource
+            labelsFromPath:
+              exported_namespace:
+                - metadata
+                - namespace
+              name:
+                - metadata
+                - name
+            metrics:
+              - name: info
+                help: The state of a VolSync ReplicationSource.
+                each:
+                  type: Info
+                  info:
+                    labelsFromPath:
+                      result:
+                        - status
+                        - latestMoverStatus
+                        - result
+                      synchronizing:
+                        - status
+                        - conditions
+                        - "[type=Synchronizing]"
+                        - reason
+              - name: last_sync_timestamp_seconds
+                help: Time of the last successful sync of a VolSync ReplicationSource.
+                each:
+                  type: Gauge
+                  gauge:
+                    path:
+                      - status
+                      - lastSyncTime
+              - name: next_sync_timestamp_seconds
+                help: Time of the next scheduled sync of a VolSync ReplicationSource.
+                each:
+                  type: Gauge
+                  gauge:
+                    path:
+                      - status
+                      - nextSyncTime
