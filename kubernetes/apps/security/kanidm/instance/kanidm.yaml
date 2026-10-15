@@ -51,6 +51,8 @@ spec:
     parentRefs:
       - name: envoy-internal
         namespace: network
+      - name: envoy-external
+        namespace: network
     hostnames:
       - idm.muellner.dev
     backendTlsPolicy:

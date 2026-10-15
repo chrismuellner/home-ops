@@ -101,6 +101,7 @@ spec:
                 operator: In
                 values:
                   - home-automation
+                  - security
       tls:
         certificateRefs:
           - kind: Secret
