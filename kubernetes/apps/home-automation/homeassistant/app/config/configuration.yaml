@@ -21,14 +21,18 @@ python_script:
 homeassistant:
   name: Home
   internal_url: https://home.muellner.dev
-  auth_providers:
-    - type: homeassistant
-    - type: trusted_networks
-      trusted_networks:
-        - 192.168.0.0/16
+  # Kanidm SSO (auth_oidc below) is the only login method; an empty list disables HA's built-in
+  # password provider
+  auth_providers: []
 
-# Kanidm SSO via hass-oidc-auth (HACS). Password and trusted-network login stay as fallbacks;
-# the password form is also reachable at /?skip_oidc_redirect=true.
+# Requests arrive through envoy-external, which sets X-Forwarded-For to the real client IP and
+# discards any client-supplied value
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 10.244.0.0/16
+
+# Kanidm SSO via hass-oidc-auth (HACS)
 auth_oidc:
   client_id: homeassistant
   discovery_url: https://idm.muellner.dev/oauth2/openid/homeassistant/.well-known/openid-configuration
@@ -36,9 +40,6 @@ auth_oidc:
   features:
     force_https: true
     automatic_person_creation: true
-    # TEMPORARY: link first OIDC logins to existing HA users with the same username. Remove after
-    # linking; it bypasses MFA for an exact username match.
-    automatic_user_linking: true
   roles:
     admin: homeassistant_admins@idm.muellner.dev
     user: homeassistant_users@idm.muellner.dev
