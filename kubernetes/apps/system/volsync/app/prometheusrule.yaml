@@ -29,3 +29,19 @@ spec:
             description: >-
               Job {{ $labels.namespace }}/{{ $labels.job_name }} has failed pods.
               Check the mover logs.
+        # VolSyncVolumeOutOfSync only fires once the next scheduled sync is
+        # missed (~a day for daily backups); movers normally finish in minutes
+        - alert: VolSyncMoverJobStuck
+          expr: |-
+            time() - max by (namespace, job_name) (
+              kube_job_status_start_time{job_name=~"volsync-.*"}
+                and on (namespace, job_name)
+              kube_job_status_active > 0
+            ) > 7200
+          labels:
+            severity: warning
+          annotations:
+            summary: VolSync mover job is stuck
+            description: >-
+              Job {{ $labels.namespace }}/{{ $labels.job_name }} has been running
+              for more than 2 hours. Check whether its pod or PVC is pending.

@@ -210,6 +210,45 @@ spec:
                 for: 15m
                 labels:
                   severity: warning
+              # KubePodNotReady ignores job pods, so a job whose pod can't be
+              # scheduled would otherwise go unnoticed. Grouped by job since
+              # some controllers (e.g. volsync) recreate the pending pod.
+              - alert: KubeJobPodPending
+                annotations:
+                  summary: Job {{ $labels.namespace }}/{{ $labels.owner_name }} has had a pod stuck in Pending for more than 30 minutes.
+                expr: |-
+                  max by (namespace, owner_name) (
+                    kube_pod_owner{job="kube-state-metrics", owner_kind="Job"}
+                      * on (namespace, pod) group_left ()
+                    (kube_pod_status_phase{job="kube-state-metrics", phase="Pending"} == 1)
+                  ) > 0
+                for: 30m
+                labels:
+                  severity: warning
+      pod-rules:
+        groups:
+          - name: pods
+            rules:
+              # after a node reboot (e.g. a talos upgrade) the old pods of
+              # deployments/statefulsets are left behind as Completed/Error
+              - alert: KubePodTerminatedNotCleanedUp
+                annotations:
+                  summary: Pod {{ $labels.namespace }}/{{ $labels.pod }} has terminated and is not owned by a job. It needs to be cleaned up.
+                expr: |-
+                  max by (namespace, pod) (kube_pod_status_phase{job="kube-state-metrics", phase=~"Succeeded|Failed"} == 1)
+                    unless on (namespace, pod)
+                  kube_pod_owner{job="kube-state-metrics", owner_kind="Job"}
+                for: 30m
+                labels:
+                  severity: warning
+              # host-zfs binds immediately, so a pending claim means provisioning failed
+              - alert: KubePersistentVolumeClaimPending
+                annotations:
+                  summary: PVC {{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }} has been Pending for more than 15 minutes. Check its events for provisioning errors.
+                expr: kube_persistentvolumeclaim_status_phase{job="kube-state-metrics", phase="Pending"} == 1
+                for: 15m
+                labels:
+                  severity: warning
       oom-rules:
         groups:
           - name: oom

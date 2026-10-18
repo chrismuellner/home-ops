@@ -27,6 +27,10 @@ spec:
     zfs-localpv: # https://github.com/openebs/zfs-localpv/blob/develop/deploy/helm/charts/values.yaml
       zfsNode:
         encrKeysDir: /var/openebs/keys # https://github.com/openebs/zfs-localpv/issues/545
+        # by default every node label becomes a csi topology key, including
+        # transient ones like tuppr's upgrading label; once that label is
+        # removed no node matches and all new volumes fail to provision
+        allowedTopologyKeys: kubernetes.io/hostname,openebs.io/nodeid
     lvm-localpv:
       enabled: false
     mayastor:
