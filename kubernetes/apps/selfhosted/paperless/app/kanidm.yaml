@@ -55,7 +55,6 @@ spec:
         - groups
   strictRedirectUrl: true
   preferShortUsername: true
-  disableConsentPrompt: true
   # Official Paperless-ngx logo (GPL-3.0), https://github.com/paperless-ngx/paperless-ngx
   image:
     url: https://raw.githubusercontent.com/paperless-ngx/paperless-ngx/dev/docs/assets/logo_leaf.svg
