@@ -23,6 +23,7 @@ spec:
     namespace: security
   kanidmName: paperless_users
 ---
+# Public client (no secret): the Swift Paperless iOS app runs the PKCE flow itself and cannot hold a secret.
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kaniop.rs/kanidmoauth2client_v1beta1.json
 apiVersion: kaniop.rs/v1beta1
 kind: KanidmOAuth2Client
@@ -33,9 +34,12 @@ spec:
     name: kanidm
     namespace: security
   displayname: Paperless-ngx
+  public: true
   origin: https://paperless.muellner.dev/
   redirectUrl:
     - https://paperless.muellner.dev/accounts/oidc/kanidm/login/callback/
+    # Swift Paperless iOS app
+    - x-paperless://oidc-callback
   scopeMap:
     - group: paperless_admins@idm.muellner.dev
       scopes:

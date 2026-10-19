@@ -23,17 +23,11 @@ spec:
               repository: ghcr.io/paperless-ngx/paperless-ngx
               tag: 3.3.2
             env:
-              # Kanidm OIDC. Env vars render alphabetically, so OIDC_CLIENT_SECRET (defined first)
-              # can be referenced as $(OIDC_CLIENT_SECRET) in PAPERLESS_SOCIALACCOUNT_PROVIDERS.
-              OIDC_CLIENT_SECRET:
-                valueFrom:
-                  secretKeyRef:
-                    name: paperless-kanidm-oauth2-credentials
-                    key: CLIENT_SECRET
+              # Kanidm OIDC (public client, PKCE only)
               PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
               PAPERLESS_SOCIAL_AUTO_SIGNUP: "true"
               PAPERLESS_SOCIAL_ACCOUNT_SYNC_SUPERUSER_GROUP: paperless_admins@idm.muellner.dev
-              PAPERLESS_SOCIALACCOUNT_PROVIDERS: '{"openid_connect":{"OAUTH_PKCE_ENABLED":true,"SCOPE":["openid","profile","email","groups"],"APPS":[{"provider_id":"kanidm","name":"Kanidm","client_id":"paperless","secret":"$(OIDC_CLIENT_SECRET)","settings":{"server_url":"https://idm.muellner.dev/oauth2/openid/paperless/.well-known/openid-configuration"}}]}}'
+              PAPERLESS_SOCIALACCOUNT_PROVIDERS: '{"openid_connect":{"OAUTH_PKCE_ENABLED":true,"SCOPE":["openid","profile","email","groups"],"APPS":[{"provider_id":"kanidm","name":"Kanidm","client_id":"paperless","secret":"","settings":{"server_url":"https://idm.muellner.dev/oauth2/openid/paperless/.well-known/openid-configuration"}}]}}'
               # Configure application
               PAPERLESS_SECRET_KEY:
                 valueFrom:
