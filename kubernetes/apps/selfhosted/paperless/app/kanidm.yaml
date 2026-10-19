@@ -55,6 +55,8 @@ spec:
         - groups
   strictRedirectUrl: true
   preferShortUsername: true
+  # RS256 id_tokens: django-allauth only loads RSA JWKs when verifying the iOS app's id_token (ES256 fails as invalid_token)
+  jwtLegacyCryptoEnable: true
   # Official Paperless-ngx logo (GPL-3.0), https://github.com/paperless-ngx/paperless-ngx
   image:
     url: https://raw.githubusercontent.com/paperless-ngx/paperless-ngx/dev/docs/assets/logo_leaf.svg
