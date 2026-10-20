@@ -25,6 +25,10 @@ spec:
             env:
               # Kanidm OIDC (public client, PKCE only)
               PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
+              # SSO only: block the username/password form and send /accounts/login straight to Kanidm.
+              # API token auth keeps working; API Basic auth still accepts passwords unless they're unusable.
+              PAPERLESS_DISABLE_REGULAR_LOGIN: "true"
+              PAPERLESS_REDIRECT_LOGIN_TO_SSO: "true"
               PAPERLESS_SOCIAL_AUTO_SIGNUP: "true"
               PAPERLESS_SOCIAL_ACCOUNT_SYNC_SUPERUSER_GROUP: paperless_admins@idm.muellner.dev
               PAPERLESS_SOCIALACCOUNT_PROVIDERS: '{"openid_connect":{"OAUTH_PKCE_ENABLED":true,"SCOPE":["openid","profile","email","groups"],"APPS":[{"provider_id":"kanidm","name":"Kanidm","client_id":"paperless","secret":"","settings":{"server_url":"https://idm.muellner.dev/oauth2/openid/paperless/.well-known/openid-configuration"}}]}}'

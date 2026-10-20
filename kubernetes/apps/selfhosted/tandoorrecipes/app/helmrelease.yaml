@@ -33,6 +33,9 @@ spec:
               SOCIAL_DEFAULT_GROUP: user
               SOCIAL_PROVIDERS: allauth.socialaccount.providers.openid_connect
               SOCIALACCOUNT_LOGIN_ON_GET: "1"
+              # SSO only: allauth disables local login, signup and password reset; hide the form too
+              SOCIALACCOUNT_ONLY: "1"
+              HIDE_LOGIN_FORM: "1"
               SOCIALACCOUNT_PROVIDERS: '{"openid_connect":{"OAUTH_PKCE_ENABLED":true,"APPS":[{"provider_id":"kanidm","name":"Kanidm","client_id":"tandoor","secret":"$(OIDC_CLIENT_SECRET)","settings":{"server_url":"https://idm.muellner.dev/oauth2/openid/tandoor/.well-known/openid-configuration"}}]}}'
             envFrom:
               - secretRef:
