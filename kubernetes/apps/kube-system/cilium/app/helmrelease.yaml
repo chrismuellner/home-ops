@@ -74,6 +74,45 @@ spec:
       enabled: false
     hubble:
       enabled: true
+      # In-memory buffer for live `hubble observe` (~2min at this node's rate; must be 2^n-1).
+      # History lives in VictoriaLogs via the exporter below.
+      eventBufferCapacity: "16383"
+      # Write policy verdicts (incl. AUDIT) and real drops as JSON to the agent's stdout, where the
+      # VictoriaLogs collector picks them up. Query: kubernetes.container_name:cilium-agent flow.verdict:*
+      export:
+        static:
+          enabled: true
+          filePath: stdout
+          allowList:
+            # MessageTypePolicyVerdict: one event per new connection to a pod with a policy
+            - '{"event_type":[{"type":5}]}'
+            - '{"verdict":["DROPPED","ERROR"]}'
+          denyList:
+            # Constant datapath noise unrelated to policy
+            - '{"drop_reason_desc":["VLAN_FILTERED","UNSUPPORTED_L3_PROTOCOL","CT_UNKNOWN_L4_PROTOCOL"]}'
+          fieldMask:
+            - time
+            - verdict
+            - drop_reason_desc
+            - traffic_direction
+            - policy_match_type
+            - is_reply
+            - IP.source
+            - IP.destination
+            - l4
+            - source.identity
+            - source.namespace
+            - source.pod_name
+            - source.workloads
+            - destination.identity
+            - destination.namespace
+            - destination.pod_name
+            - destination.workloads
+            - destination_names
+            - ingress_allowed_by
+            - egress_allowed_by
+            - ingress_denied_by
+            - egress_denied_by
       metrics:
         enabled:
           - dns
