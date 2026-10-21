@@ -3,6 +3,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  - ./ciliumnetworkpolicy.yaml
+  - ./backendtrafficpolicy.yaml
   - ./helmrelease.yaml
   - ./kanidm.yaml
   - ./ocirepository.yaml

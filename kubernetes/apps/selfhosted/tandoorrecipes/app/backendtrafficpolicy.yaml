@@ -1,0 +1,38 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.envoyproxy.io/backendtrafficpolicy_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: tandoorrecipes
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: tandoorrecipes
+  # Keep the Gateway-wide defaults (compression, buffer limit, timeouts) from network/envoy
+  mergeType: StrategicMerge
+  # Shared buckets per Envoy instance
+  rateLimit:
+    type: Local
+    local:
+      rules:
+        # API token requests (passwords are unusable, the endpoint still answers)
+        - clientSelectors:
+            - path:
+                type: PathPrefix
+                value: /api-token-auth
+              methods:
+                - value: POST
+          limit:
+            requests: 10
+            unit: Minute
+        # Login form posts (disabled by SOCIALACCOUNT_ONLY, still answered)
+        - clientSelectors:
+            - path:
+                type: PathPrefix
+                value: /accounts/login
+              methods:
+                - value: POST
+          limit:
+            requests: 30
+            unit: Minute

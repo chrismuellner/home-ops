@@ -1,0 +1,43 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.envoyproxy.io/backendtrafficpolicy_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: immich
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: immich
+  # Keep the Gateway-wide defaults (compression, buffer limit, timeouts) from network/envoy
+  mergeType: StrategicMerge
+  # Shared buckets per Envoy instance. Immich routes are case-insensitive, hence (?i) regexes.
+  rateLimit:
+    type: Local
+    local:
+      rules:
+        # Password login is disabled, but the endpoint still answers
+        - clientSelectors:
+            - path:
+                type: RegularExpression
+                value: (?i)/api/auth/login(\?.*)?
+              methods:
+                - value: POST
+          limit:
+            requests: 30
+            unit: Minute
+        # Public share pages and their key/password checks
+        - clientSelectors:
+            - path:
+                type: RegularExpression
+                value: (?i)/share(/.*)?(\?.*)?
+          limit:
+            requests: 120
+            unit: Minute
+        - clientSelectors:
+            - path:
+                type: RegularExpression
+                value: (?i)/api/shared-links(/.*)?(\?.*)?
+          limit:
+            requests: 120
+            unit: Minute

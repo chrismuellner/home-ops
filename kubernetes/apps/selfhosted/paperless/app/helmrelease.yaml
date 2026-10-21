@@ -131,8 +131,11 @@ spec:
           gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_PAPERLESS_KEY}}" }}'
         hostnames:
           - paperless.muellner.dev
+        # LAN DNS resolves to envoy-internal, public DNS to envoy-external
         parentRefs:
           - name: envoy-internal
+            namespace: network
+          - name: envoy-external
             namespace: network
 
         rules:

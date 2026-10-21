@@ -1,0 +1,36 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.envoyproxy.io/backendtrafficpolicy_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: jellyfin
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: jellyfin
+  # Keep the Gateway-wide defaults (compression, buffer limit, timeouts) from network/envoy
+  mergeType: StrategicMerge
+  # Shared buckets per Envoy instance. Jellyfin routes are case-insensitive, hence (?i) regexes.
+  rateLimit:
+    type: Local
+    local:
+      rules:
+        # Password login (disabled for SSO users, still answered)
+        - clientSelectors:
+            - path:
+                type: RegularExpression
+                value: (?i)/users/authenticatebyname(\?.*)?
+              methods:
+                - value: POST
+          limit:
+            requests: 30
+            unit: Minute
+        # Quick Connect code requests (used by Seerr sign-in)
+        - clientSelectors:
+            - path:
+                type: RegularExpression
+                value: (?i)/quickconnect/(initiate|connect)(\?.*)?
+          limit:
+            requests: 60
+            unit: Minute

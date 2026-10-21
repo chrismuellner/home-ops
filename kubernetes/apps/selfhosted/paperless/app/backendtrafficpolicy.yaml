@@ -1,0 +1,36 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.envoyproxy.io/backendtrafficpolicy_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: paperless
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: paperless
+  # Keep the Gateway-wide defaults (compression, buffer limit, timeouts) from network/envoy
+  mergeType: StrategicMerge
+  # Shared buckets per Envoy instance
+  rateLimit:
+    type: Local
+    local:
+      rules:
+        # Token requests (password login is disabled, the endpoint still answers)
+        - clientSelectors:
+            - path:
+                type: PathPrefix
+                value: /api/token
+              methods:
+                - value: POST
+          limit:
+            requests: 30
+            unit: Minute
+        # Public share link downloads
+        - clientSelectors:
+            - path:
+                type: PathPrefix
+                value: /share/
+          limit:
+            requests: 60
+            unit: Minute

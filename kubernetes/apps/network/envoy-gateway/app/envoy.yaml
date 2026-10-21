@@ -101,7 +101,9 @@ spec:
                 operator: In
                 values:
                   - home-automation
+                  - media
                   - security
+                  - selfhosted
       tls:
         certificateRefs:
           - kind: Secret
@@ -179,6 +181,11 @@ spec:
     earlyRequestHeaders:
       remove:
         - x-forwarded-for
+    # Nothing behind the public gateway should end up in search engines (e.g. leaked share links)
+    lateResponseHeaders:
+      set:
+        - name: X-Robots-Tag
+          value: noindex, nofollow, noarchive
   http2:
     initialStreamWindowSize: 512Ki
     initialConnectionWindowSize: 8Mi

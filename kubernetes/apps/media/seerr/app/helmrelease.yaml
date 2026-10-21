@@ -61,8 +61,11 @@ spec:
         hostnames:
           - "seerr.muellner.dev"
           - "jellyseerr.muellner.dev"
+        # LAN DNS resolves to envoy-internal, public DNS to envoy-external
         parentRefs:
           - name: envoy-internal
+            namespace: network
+          - name: envoy-external
             namespace: network
 
     persistence:
