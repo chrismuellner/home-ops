@@ -132,11 +132,17 @@ kind: ClientTrafficPolicy
 metadata:
   name: envoy
 spec:
+  # LAN clients connect directly: trust no X-Forwarded-For hops and drop any client-supplied
+  # header, so the client IP is always the TCP source address
   clientIPDetection:
     xForwardedFor:
-      numTrustedHops: 1
+      numTrustedHops: 0
   connection:
     bufferLimit: 4Mi
+  headers:
+    earlyRequestHeaders:
+      remove:
+        - x-forwarded-for
   http2:
     initialStreamWindowSize: 512Ki
     initialConnectionWindowSize: 8Mi

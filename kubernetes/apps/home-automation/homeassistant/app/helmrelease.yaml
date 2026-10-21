@@ -42,7 +42,10 @@ spec:
           gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_HOMEASSISTANT_KEY}}" }}'
         hostnames:
           - "home.muellner.dev"
+        # LAN DNS resolves home.muellner.dev to envoy-internal, public DNS to envoy-external
         parentRefs:
+          - name: envoy-internal
+            namespace: network
           - name: envoy-external
             namespace: network
 

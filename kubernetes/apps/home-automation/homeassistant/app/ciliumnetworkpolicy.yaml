@@ -12,6 +12,9 @@ spec:
     - fromEndpoints:
         - matchLabels:
             io.kubernetes.pod.namespace: network
+            gateway.envoyproxy.io/owning-gateway-name: envoy-internal
+        - matchLabels:
+            io.kubernetes.pod.namespace: network
             gateway.envoyproxy.io/owning-gateway-name: envoy-external
         - matchLabels:
             io.kubernetes.pod.namespace: selfhosted
