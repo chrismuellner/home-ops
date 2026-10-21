@@ -22,7 +22,7 @@ spec:
             # talos zfs extension; command replaces the exporter entrypoint
             image:
               repository: ghcr.io/mirceanton/zfs-exporter
-              tag: 2.5.0@sha256:7045c77513328508e9ac6a5672ea6022d6776dd423ae592e826fdb50960377c2
+              tag: 2.5.1@sha256:233bbbe274b2259ef7960af6e09f90558b33876595eecec3415697356ae1c84b
             command:
               - "/scripts/zfs_scrub_task.sh"
             env:
