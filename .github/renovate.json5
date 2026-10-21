@@ -12,7 +12,7 @@
     'github>chrismuellner/home-ops//.renovate/customManagers.json5',
     'github>chrismuellner/home-ops//.renovate/grafanaDashboards.json5',
     'github>chrismuellner/home-ops//.renovate/autoMerge.json5',
-    'github>home-operations/renovate-presets//apps/talosFactory.json5#8.1.0',
+    'github>home-operations/renovate-presets//apps/talosFactory.json5#9.0.0',
   ],
   dependencyDashboardTitle: "Renovate Dashboard 🤖",
   suppressNotifications: [
