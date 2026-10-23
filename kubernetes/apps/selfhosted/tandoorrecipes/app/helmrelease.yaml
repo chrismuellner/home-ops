@@ -17,7 +17,7 @@ spec:
           main:
             image:
               repository: ghcr.io/tandoorrecipes/recipes
-              tag: 2.6.15
+              tag: 2.7.1
             env:
               # Kanidm OIDC. Env vars render alphabetically, so OIDC_CLIENT_SECRET is defined before
               # SOCIALACCOUNT_PROVIDERS, which references it as $(OIDC_CLIENT_SECRET).
