@@ -1,0 +1,12 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./pv-photos-backup.yaml
+  - ./pvc-photos-backup.yaml
+  - ./volsync-photos-secret.sops.yaml
+  - ./volsync-photos-maintenance-secret.sops.yaml
+  - ./configmap-kopia-policy.yaml
+  - ./replicationsource-photos.yaml
+  - ./kopiamaintenance-photos.yaml
