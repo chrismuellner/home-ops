@@ -7,8 +7,6 @@ apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
   name: immich-photos
-  annotations:
-    kustomize.toolkit.fluxcd.io/prune: disabled
 spec:
   sourcePVC: photos-backup
   trigger:
