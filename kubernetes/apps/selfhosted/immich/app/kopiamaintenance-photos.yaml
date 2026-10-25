@@ -9,6 +9,8 @@ apiVersion: volsync.backube/v1alpha1
 kind: KopiaMaintenance
 metadata:
   name: immich-photos
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
 spec:
   enabled: true
   trigger:

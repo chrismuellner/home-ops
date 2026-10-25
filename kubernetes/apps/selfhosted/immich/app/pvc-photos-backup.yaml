@@ -3,6 +3,8 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: photos-backup
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
 spec:
   volumeName: photos-backup
   storageClassName: ""
