@@ -9,7 +9,7 @@ apiVersion: v1alpha1
 kind: UnattendedInstallConfig
 installer:
   # Schematic: talos/schematic.yaml
-  image: factory.talos.dev/metal-installer/7046abc7c40b0e28d7c1ec1ec73768b16ceb9a8e3d23b1f6c5c6bd4825273dc6:v1.14.4
+  image: factory.talos.dev/metal-installer/7046abc7c40b0e28d7c1ec1ec73768b16ceb9a8e3d23b1f6c5c6bd4825273dc6:v1.14.5
 provisioning:
   diskSelector:
     match: disk.dev_path == "/dev/sda"
