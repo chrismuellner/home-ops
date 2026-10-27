@@ -114,15 +114,44 @@ spec:
             - ingress_denied_by
             - egress_denied_by
       metrics:
-        enabled:
-          - dns
-          - drop:sourceContext=workload-name|reserved-identity;destinationContext=workload-name|reserved-identity;labelsContext=source_namespace,source_workload,destination_namespace,destination_workload
-          - policy:sourceContext=workload-name|reserved-identity;destinationContext=workload-name|reserved-identity;labelsContext=source_namespace,source_workload,destination_namespace,destination_workload
-          - tcp
-          - flow
-          - port-distribution
-          - icmp
-          - httpV2
+        # Static and dynamic metrics are mutually exclusive; dynamic is needed for excludeFilters
+        enabled: ~
+        dynamic:
+          enabled: true
+          config:
+            content:
+              - name: dns
+              - name: drop
+                contextOptions: &policyContext
+                  - name: sourceContext
+                    values:
+                      - workload-name
+                      - reserved-identity
+                  - name: destinationContext
+                    values:
+                      - workload-name
+                      - reserved-identity
+                  - name: labelsContext
+                    values:
+                      - source_namespace
+                      - source_workload
+                      - destination_namespace
+                      - destination_workload
+                excludeFilters: &stalePodIP
+                  # A pod-CIDR address with the world identity is a deleted pod's released IP, e.g.
+                  # a client closing a pooled connection to a replaced Redis pod. Never real egress.
+                  - destination_ip:
+                      - 10.244.0.0/16
+                    destination_identity:
+                      - 2
+              - name: policy
+                contextOptions: *policyContext
+                excludeFilters: *stalePodIP
+              - name: tcp
+              - name: flow
+              - name: port-distribution
+              - name: icmp
+              - name: httpV2
         serviceMonitor:
           enabled: true
           trustCRDsExist: true
