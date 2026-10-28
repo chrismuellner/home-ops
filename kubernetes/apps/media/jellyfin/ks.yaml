@@ -12,6 +12,7 @@ spec:
       app.kubernetes.io/instance: jellyfin
   components:
     - ../../../../components/kopiur/backup
+    - ../../../../components/kopiur/root
   dependsOn:
     - name: intel-gpu-resource-driver
     - name: kanidm

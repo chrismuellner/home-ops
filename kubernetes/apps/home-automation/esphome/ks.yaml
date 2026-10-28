@@ -12,6 +12,7 @@ spec:
       app.kubernetes.io/instance: esphome
   components:
     - ../../../../components/kopiur/backup
+    - ../../../../components/kopiur/root
   dependsOn:
     - name: kopiur-repositories
     - name: openebs

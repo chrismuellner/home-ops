@@ -21,6 +21,8 @@ spec:
     substitute:
       APP: mosquitto
       VOLSYNC_CLAIM: mosquitto-config
+      VOLSYNC_PUID: "1883"
+      VOLSYNC_PGID: "1883"
   prune: true
   sourceRef:
     kind: GitRepository

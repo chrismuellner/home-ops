@@ -12,6 +12,7 @@ spec:
       app.kubernetes.io/instance: homeassistant
   components:
     - ../../../../components/kopiur/backup
+    - ../../../../components/kopiur/root
   dependsOn:
     - name: kanidm
     - name: kopiur-repositories
