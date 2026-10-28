@@ -1,0 +1,46 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: kopiur
+  namespace: flux-system
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: kopiur
+  dependsOn:
+    - name: openebs
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: kopiur
+      namespace: system
+  interval: 10m
+  path: ./kubernetes/apps/system/kopiur/app
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: home-ops
+  wait: true
+  targetNamespace: system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: kopiur-repositories
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: kopiur
+  healthChecks:
+    - apiVersion: kopiur.home-operations.com/v1alpha1
+      kind: ClusterRepository
+      name: nas
+  interval: 1h
+  path: ./kubernetes/apps/system/kopiur/repositories
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: home-ops
+  wait: false

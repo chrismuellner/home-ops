@@ -54,6 +54,22 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
+    - # A passive kopiur populator Restore stays Pending until a new PVC claims
+      # it, which kstatus reads as in-progress forever and would stall `wait`
+      patch: |-
+        apiVersion: kustomize.toolkit.fluxcd.io/v1
+        kind: Kustomization
+        metadata:
+          name: _
+        spec:
+          healthCheckExprs:
+            - apiVersion: kopiur.home-operations.com/v1alpha1
+              kind: Restore
+              failed: status.conditions.filter(c, c.type == 'Stalled').exists(c, c.status == 'True')
+              current: status.conditions.filter(c, c.type in ['Ready', 'AwaitingClaim']).exists(c, c.status == 'True')
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
   prune: true
   sourceRef:
     kind: GitRepository

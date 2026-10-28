@@ -1,0 +1,21 @@
+---
+# dataSourceRef is immutable, and every existing app PVC still points at its old
+# VolSync ReplicationDestination. IfNotPresent makes Flux create this PVC only
+# when it is missing (fresh install / DR) and never patch an existing one.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "${VOLSYNC_CLAIM:-${APP}}"
+  labels:
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+spec:
+  accessModes:
+    - ${VOLSYNC_ACCESSMODES:=ReadWriteOnce}
+  dataSourceRef:
+    kind: Restore
+    apiGroup: kopiur.home-operations.com
+    name: ${APP}
+  resources:
+    requests:
+      storage: ${VOLSYNC_CAPACITY:=5Gi}
+  storageClassName: ${VOLSYNC_STORAGECLASS:=host-zfs}

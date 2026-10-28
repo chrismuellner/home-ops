@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kopiur.home-operations.com/restore_v1alpha1.json
+# Passive deploy-or-restore source for pvc.yaml: a new PVC is populated from the
+# latest snapshot, or comes up empty when there is none. Unclaimed it stays
+# Pending/AwaitingClaim, which the root Kustomization's healthCheckExprs accept.
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: Restore
+metadata:
+  name: ${APP}
+spec:
+  source:
+    fromPolicy:
+      name: ${APP}
+  target:
+    populator: {}
+  policy:
+    onMissingSnapshot: Continue
+  credentialProjection:
+    enabled: true
+  options:
+    enableFileDeletion: true
+  mover:
+    securityContext:
+      runAsUser: ${VOLSYNC_PUID:=1000}
+      runAsGroup: ${VOLSYNC_PGID:=1000}
+    podSecurityContext:
+      fsGroup: ${VOLSYNC_PGID:=1000}

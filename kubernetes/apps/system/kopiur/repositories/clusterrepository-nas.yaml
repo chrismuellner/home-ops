@@ -1,0 +1,68 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kopiur.home-operations.com/clusterrepository_v1alpha1.json
+# Adopts the existing Kopia repository on the NAS that the VolSync fork wrote
+# (shared by every app using the kopiur component). Snapshots were recorded as
+# <app>@<namespace>:/data, which identityDefaults + the component's
+# sourcePathOverride reproduce, so history continues in place.
+# Movers read kopiur-nas-secret from their own namespace; consumers opt into
+# credential projection so kopiur copies it there for each run.
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: ClusterRepository
+metadata:
+  name: nas
+spec:
+  backend:
+    filesystem:
+      path: /repository
+      volume:
+        nfs:
+          server: nas.local
+          path: /var/nfs/shared/backups
+  encryption:
+    passwordSecretRef:
+      name: kopiur-nas-secret
+      namespace: system
+      key: KOPIA_PASSWORD
+  credentialProjection:
+    allowed: true
+  # Never initialize: a wrong mount must fail, not create an empty repository
+  create:
+    enabled: false
+  allowedNamespaces:
+    list:
+      - home-automation
+      - media
+      - observability
+      - security
+      - selfhosted
+  identityDefaults:
+    usernameExpr: policyName
+    hostnameExpr: namespace
+  # Disabled until the VolSync KopiaMaintenance is gone, then enabled with
+  # takeoverPolicy: Force (the lease is currently held by maintenance@volsync)
+  maintenance:
+    enabled: false
+    schedule:
+      quick:
+        cron: 0 * * * *
+        jitter: 10m
+      full:
+        cron: 0 3 * * *
+        jitter: 1h
+  # Set together with the maintenance takeover: it rewrites the repository's
+  # format blob, which VolSync's movers would still be caching until then
+  # parameters:
+  #   epoch:
+  #     minDuration: 1h
+  moverDefaults:
+    # Kopia's default cache budgets (~5000 MiB each) exceed the cache PVC, so
+    # the sweeper never runs and the cache fills the volume
+    cache:
+      contentCacheSizeMb: 512
+      metadataCacheSizeMb: 1024
+    # Bootstrap and maintenance Jobs write the NFS export as its owner
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+  scheduleDefaults:
+    jitter: 10m

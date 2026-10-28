@@ -7,6 +7,7 @@ resources:
   - ./reloader/ks.yaml
   - ./openebs/ks.yaml
   - ./kopia/ks.yaml
+  - ./kopiur/ks.yaml
   - ./volsync/ks.yaml
   - ./zfs-exporter/ks.yaml
   - ./zfs-scrub/ks.yaml

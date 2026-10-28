@@ -1,0 +1,37 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kopiur.home-operations.com/snapshotpolicy_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotPolicy
+metadata:
+  name: ${APP}
+spec:
+  repository:
+    kind: ClusterRepository
+    name: nas
+  sources:
+    - pvc:
+        name: "${VOLSYNC_CLAIM:=${APP}}"
+      # The VolSync fork recorded every snapshot under /data
+      sourcePathOverride: /data
+  credentialProjection:
+    enabled: true
+  copyMethod: Snapshot
+  volumeSnapshotClassName: ${VOLSYNC_SNAPSHOTCLASS:=host-zfs-snapshot}
+  compression:
+    compressor: zstd-fastest
+  upload:
+    maxParallelFileReads: 2
+  retention:
+    keepDaily: 7
+    keepWeekly: 4
+    keepMonthly: 6
+  mover:
+    cache:
+      capacity: ${VOLSYNC_CAPACITY:=5Gi}
+      mode: Ephemeral
+      storageClassName: ${VOLSYNC_STORAGECLASS:=host-zfs}
+    securityContext:
+      runAsUser: ${VOLSYNC_PUID:=1000}
+      runAsGroup: ${VOLSYNC_PGID:=1000}
+    podSecurityContext:
+      fsGroup: ${VOLSYNC_PGID:=1000}

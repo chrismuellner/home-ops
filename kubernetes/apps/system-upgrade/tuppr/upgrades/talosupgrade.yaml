@@ -15,6 +15,14 @@ spec:
       kind: ReplicationSource
       expr: |-
         status.conditions.filter(c, c.type == "Synchronizing").all(c, c.status == "False")
+    - apiVersion: kopiur.home-operations.com/v1alpha1
+      kind: Snapshot
+      expr: |-
+        status.phase != 'Running'
+    - apiVersion: kopiur.home-operations.com/v1alpha1
+      kind: Restore
+      expr: |-
+        !(status.phase in ['Resolving', 'Restoring'])
   maintenance:
     windows:
       - start: "0 2 * * 0" # Sunday 02:00
