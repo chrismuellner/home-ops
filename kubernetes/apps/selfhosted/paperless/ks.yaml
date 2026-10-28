@@ -10,9 +10,10 @@ spec:
     labels:
       app.kubernetes.io/name: paperless
   components:
-    - ../../../../components/volsync
+    - ../../../../components/kopiur/backup
   dependsOn:
     - name: kanidm
+    - name: kopiur-repositories
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/selfhosted/paperless/app

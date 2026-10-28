@@ -10,9 +10,9 @@ spec:
     labels:
       app.kubernetes.io/name: events
   components:
-    - ../../../../components/volsync
+    - ../../../../components/kopiur/backup
   dependsOn:
-    - name: volsync
+    - name: kopiur-repositories
   interval: 10m
   path: ./kubernetes/apps/selfhosted/events/app
   postBuild:

@@ -11,8 +11,9 @@ spec:
       app.kubernetes.io/name: esphome
       app.kubernetes.io/instance: esphome
   components:
-    - ../../../../components/volsync
+    - ../../../../components/kopiur/backup
   dependsOn:
+    - name: kopiur-repositories
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/home-automation/esphome/app

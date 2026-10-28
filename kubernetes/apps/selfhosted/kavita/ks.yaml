@@ -10,8 +10,9 @@ spec:
     labels:
       app.kubernetes.io/name: kavita
   components:
-    - ../../../../components/volsync
+    - ../../../../components/kopiur/backup
   dependsOn:
+    - name: kopiur-repositories
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/selfhosted/kavita/app

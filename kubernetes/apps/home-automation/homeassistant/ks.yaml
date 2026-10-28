@@ -11,9 +11,10 @@ spec:
       app.kubernetes.io/name: homeassistant
       app.kubernetes.io/instance: homeassistant
   components:
-    - ../../../../components/volsync
+    - ../../../../components/kopiur/backup
   dependsOn:
     - name: kanidm
+    - name: kopiur-repositories
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/home-automation/homeassistant/app

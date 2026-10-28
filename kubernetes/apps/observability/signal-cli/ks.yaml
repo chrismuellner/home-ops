@@ -11,8 +11,9 @@ spec:
       app.kubernetes.io/name: signal-cli
       app.kubernetes.io/instance: signal-cli
   components:
-    - ../../../../components/volsync
+    - ../../../../components/kopiur/backup
   dependsOn:
+    - name: kopiur-repositories
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/observability/signal-cli/app

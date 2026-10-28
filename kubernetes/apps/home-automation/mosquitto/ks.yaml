@@ -11,8 +11,9 @@ spec:
       app.kubernetes.io/name: mosquitto
       app.kubernetes.io/instance: mosquitto
   components:
-    - ../../../../components/volsync
+    - ../../../../components/kopiur/backup
   dependsOn:
+    - name: kopiur-repositories
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/home-automation/mosquitto/app

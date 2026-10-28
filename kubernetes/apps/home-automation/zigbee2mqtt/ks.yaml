@@ -11,8 +11,9 @@ spec:
       app.kubernetes.io/name: zigbee2mqtt
       app.kubernetes.io/instance: zigbee2mqtt
   components:
-    - ../../../../components/volsync
+    - ../../../../components/kopiur/backup
   dependsOn:
+    - name: kopiur-repositories
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/home-automation/zigbee2mqtt/app
