@@ -21,10 +21,15 @@ spec:
     compressor: zstd-fastest
   upload:
     maxParallelFileReads: 2
+  # VolSync's effective retention: latest and annual came from kopia's global
+  # policy, which kopiur does not inherit
   retention:
+    keepLatest: 10
+    keepHourly: 24
     keepDaily: 7
     keepWeekly: 4
     keepMonthly: 6
+    keepAnnual: 3
   mover:
     cache:
       capacity: ${VOLSYNC_CAPACITY:=5Gi}
