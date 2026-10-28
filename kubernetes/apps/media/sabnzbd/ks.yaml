@@ -11,8 +11,9 @@ spec:
       app.kubernetes.io/name: sabnzbd
       app.kubernetes.io/instance: sabnzbd
   components:
-    - ../../../../components/volsync
+    - ../../../../components/kopiur/backup
   dependsOn:
+    - name: kopiur-repositories
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/media/sabnzbd/app

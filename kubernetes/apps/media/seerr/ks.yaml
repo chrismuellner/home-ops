@@ -10,8 +10,9 @@ spec:
     labels:
       app.kubernetes.io/name: seerr
   components:
-    - ../../../../components/volsync
+    - ../../../../components/kopiur/backup
   dependsOn:
+    - name: kopiur-repositories
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/media/seerr/app

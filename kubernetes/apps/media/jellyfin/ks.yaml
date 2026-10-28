@@ -11,10 +11,11 @@ spec:
       app.kubernetes.io/name: jellyfin
       app.kubernetes.io/instance: jellyfin
   components:
-    - ../../../../components/volsync
+    - ../../../../components/kopiur/backup
   dependsOn:
     - name: intel-gpu-resource-driver
     - name: kanidm
+    - name: kopiur-repositories
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/media/jellyfin/app

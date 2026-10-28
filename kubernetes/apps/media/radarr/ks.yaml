@@ -11,8 +11,9 @@ spec:
       app.kubernetes.io/name: radarr
       app.kubernetes.io/instance: radarr
   components:
-    - ../../../../components/volsync
+    - ../../../../components/kopiur/backup
   dependsOn:
+    - name: kopiur-repositories
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/media/radarr/app

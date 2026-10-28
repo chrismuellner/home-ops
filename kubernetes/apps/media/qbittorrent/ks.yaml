@@ -11,8 +11,9 @@ spec:
       app.kubernetes.io/name: qbittorrent
       app.kubernetes.io/instance: qbittorrent
   components:
-    - ../../../../components/volsync
+    - ../../../../components/kopiur/backup
   dependsOn:
+    - name: kopiur-repositories
     - name: openebs
   interval: 10m
   path: ./kubernetes/apps/media/qbittorrent/app
