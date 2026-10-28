@@ -26,21 +26,29 @@ kind: Kustomization
 metadata:
   name: kanidm
   namespace: flux-system
+  labels:
+    # Keeps the cluster-wide Restore healthCheckExprs patch from replacing ours
+    home-ops/custom-health-check-exprs: "true"
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: kanidm
   components:
-    - ../../../../components/volsync
+    - ../../../../components/kopiur/backup
   dependsOn:
     - name: cert-manager-issuers
     - name: kaniop
+    - name: kopiur-repositories
     - name: openebs
   healthCheckExprs:
     - apiVersion: kaniop.rs/v1beta1
       kind: Kanidm
       failed: status.conditions.exists(c, c.type == 'Available' && c.status == 'False')
       current: status.conditions.exists(c, c.type == 'Available' && c.status == 'True')
+    - apiVersion: kopiur.home-operations.com/v1alpha1
+      kind: Restore
+      failed: status.conditions.filter(c, c.type == 'Stalled').exists(c, c.status == 'True')
+      current: status.conditions.filter(c, c.type in ['Ready', 'AwaitingClaim']).exists(c, c.status == 'True')
   healthChecks:
     - apiVersion: kaniop.rs/v1beta1
       kind: Kanidm

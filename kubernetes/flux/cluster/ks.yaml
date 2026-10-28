@@ -55,7 +55,9 @@ spec:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
     - # A passive kopiur populator Restore stays Pending until a new PVC claims
-      # it, which kstatus reads as in-progress forever and would stall `wait`
+      # it, which kstatus reads as in-progress forever and would stall `wait`.
+      # The patch replaces the whole list, so Kustomizations with their own
+      # healthCheckExprs opt out via the label and carry this entry themselves
       patch: |-
         apiVersion: kustomize.toolkit.fluxcd.io/v1
         kind: Kustomization
@@ -70,6 +72,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
+        labelSelector: "!home-ops/custom-health-check-exprs"
   prune: true
   sourceRef:
     kind: GitRepository
