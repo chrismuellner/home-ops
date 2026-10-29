@@ -28,6 +28,7 @@ spec:
   # Never initialize: a wrong mount must fail, not create an empty repository
   create:
     enabled: false
+  # system holds the operator-managed Maintenance CR
   allowedNamespaces:
     list:
       - home-automation
@@ -35,6 +36,7 @@ spec:
       - observability
       - security
       - selfhosted
+      - system
   identityDefaults:
     usernameExpr: policyName
     hostnameExpr: namespace
