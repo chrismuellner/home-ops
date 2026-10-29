@@ -29,6 +29,19 @@ spec:
             image:
               repository: eclipse-mosquitto
               tag: 2.0.22
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: {drop: ["ALL"]}
+
+    # The image's mosquitto user; the broker already dropped to it, and its
+    # data is owned by it
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1883
+        runAsGroup: 1883
+        fsGroup: 1883
+        fsGroupChangePolicy: OnRootMismatch
 
     service:
       app:

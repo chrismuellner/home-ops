@@ -20,9 +20,9 @@ spec:
   postBuild:
     substitute:
       APP: radarr
-      VOLSYNC_CLAIM: radarr-config
-      VOLSYNC_PUID: "2000"
-      VOLSYNC_PGID: "2000"
+      KOPIUR_CLAIM: radarr-config
+      KOPIUR_PUID: "2000"
+      KOPIUR_PGID: "2000"
   prune: true
   sourceRef:
     kind: GitRepository

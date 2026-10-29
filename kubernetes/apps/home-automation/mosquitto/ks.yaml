@@ -20,9 +20,9 @@ spec:
   postBuild:
     substitute:
       APP: mosquitto
-      VOLSYNC_CLAIM: mosquitto-config
-      VOLSYNC_PUID: "1883"
-      VOLSYNC_PGID: "1883"
+      KOPIUR_CLAIM: mosquitto-config
+      KOPIUR_PUID: "1883"
+      KOPIUR_PGID: "1883"
   prune: true
   sourceRef:
     kind: GitRepository

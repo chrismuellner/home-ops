@@ -30,6 +30,21 @@ spec:
                 memory: 2Gi
               limits:
                 memory: 8Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: {drop: ["ALL"]}
+
+    # The render node is world read/write and the NAS squashes every client to
+    # one owner, so neither GPU nor media access needs extra groups
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        # Always for the first rollout, so kubelet makes the files root wrote
+        # with 0600 group-readable; then back to OnRootMismatch
+        fsGroupChangePolicy: Always
 
     service:
       app:

@@ -19,7 +19,7 @@ spec:
   postBuild:
     substitute:
       APP: kavita
-      VOLSYNC_CAPACITY: 5Gi
+      KOPIUR_CAPACITY: 5Gi
   prune: true
   sourceRef:
     kind: GitRepository

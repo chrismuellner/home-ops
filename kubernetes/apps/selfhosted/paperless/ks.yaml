@@ -20,7 +20,7 @@ spec:
   postBuild:
     substitute:
       APP: paperless
-      VOLSYNC_CAPACITY: 15Gi
+      KOPIUR_CAPACITY: 15Gi
   prune: true
   sourceRef:
     kind: GitRepository

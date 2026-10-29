@@ -21,7 +21,7 @@ spec:
     enableFileDeletion: true
   mover:
     securityContext:
-      runAsUser: ${VOLSYNC_PUID:=1000}
-      runAsGroup: ${VOLSYNC_PGID:=1000}
+      runAsUser: ${KOPIUR_PUID:=1000}
+      runAsGroup: ${KOPIUR_PGID:=1000}
     podSecurityContext:
-      fsGroup: ${VOLSYNC_PGID:=1000}
+      fsGroup: ${KOPIUR_PGID:=1000}

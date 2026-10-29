@@ -17,7 +17,7 @@ spec:
   postBuild:
     substitute:
       APP: immich
-      VOLSYNC_CAPACITY: 10Gi
+      KOPIUR_CAPACITY: 10Gi
   prune: true
   sourceRef:
     kind: GitRepository

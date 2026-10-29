@@ -20,7 +20,7 @@ spec:
   postBuild:
     substitute:
       APP: zigbee2mqtt
-      VOLSYNC_CLAIM: zigbee2mqtt-config
+      KOPIUR_CLAIM: zigbee2mqtt-config
   prune: true
   sourceRef:
     kind: GitRepository

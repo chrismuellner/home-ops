@@ -10,13 +10,13 @@ spec:
     name: nas
   sources:
     - pvc:
-        name: "${VOLSYNC_CLAIM:=${APP}}"
+        name: "${KOPIUR_CLAIM:=${APP}}"
       # The VolSync fork recorded every snapshot under /data
       sourcePathOverride: /data
   credentialProjection:
     enabled: true
   copyMethod: Snapshot
-  volumeSnapshotClassName: ${VOLSYNC_SNAPSHOTCLASS:=host-zfs-snapshot}
+  volumeSnapshotClassName: ${KOPIUR_SNAPSHOTCLASS:=host-zfs-snapshot}
   compression:
     compressor: zstd-fastest
   upload:
@@ -32,11 +32,11 @@ spec:
     keepAnnual: 3
   mover:
     cache:
-      capacity: ${VOLSYNC_CAPACITY:=5Gi}
+      capacity: ${KOPIUR_CAPACITY:=5Gi}
       mode: Ephemeral
-      storageClassName: ${VOLSYNC_STORAGECLASS:=host-zfs}
+      storageClassName: ${KOPIUR_STORAGECLASS:=host-zfs}
     securityContext:
-      runAsUser: ${VOLSYNC_PUID:=1000}
-      runAsGroup: ${VOLSYNC_PGID:=1000}
+      runAsUser: ${KOPIUR_PUID:=1000}
+      runAsGroup: ${KOPIUR_PGID:=1000}
     podSecurityContext:
-      fsGroup: ${VOLSYNC_PGID:=1000}
+      fsGroup: ${KOPIUR_PGID:=1000}

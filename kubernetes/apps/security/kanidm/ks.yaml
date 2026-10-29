@@ -60,10 +60,10 @@ spec:
     substitute:
       APP: kanidm
       # PVC created by the operator's StatefulSet (volumeClaimTemplate "kanidm-data")
-      VOLSYNC_CLAIM: kanidm-data-kanidm-default-0
-      VOLSYNC_CAPACITY: 1Gi
-      VOLSYNC_PUID: "389"
-      VOLSYNC_PGID: "389"
+      KOPIUR_CLAIM: kanidm-data-kanidm-default-0
+      KOPIUR_CAPACITY: 1Gi
+      KOPIUR_PUID: "389"
+      KOPIUR_PGID: "389"
   prune: true
   sourceRef:
     kind: GitRepository

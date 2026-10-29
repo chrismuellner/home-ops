@@ -20,7 +20,7 @@ spec:
   postBuild:
     substitute:
       APP: prowlarr
-      VOLSYNC_CLAIM: prowlarr-config
+      KOPIUR_CLAIM: prowlarr-config
   prune: true
   sourceRef:
     kind: GitRepository

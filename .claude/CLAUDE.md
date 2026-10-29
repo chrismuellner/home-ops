@@ -58,7 +58,7 @@ All apps use the [bjw-s/app-template](https://bjw-s-labs.github.io/helm-charts/d
 - `kubernetes/flux/cluster/ks.yaml` is the root — it patches all HelmReleases with cluster-wide defaults (CRD handling, remediation, timeouts)
 - Use `chartRef` (OCIRepository), not `sourceRef` + `HelmRepository`
 - `dependsOn` is common — apps typically depend on `openebs` or other prerequisites
-- `postBuild.substitute` provides variable substitution (e.g. `APP`, `VOLSYNC_CAPACITY`, read by the kopiur backup component)
+- `postBuild.substitute` provides variable substitution (e.g. `APP`, `KOPIUR_CAPACITY`, read by the kopiur backup component)
 - Reusable Kustomize components live in `kubernetes/components/` (e.g. kopiur backup config)
 
 ## Secret Management

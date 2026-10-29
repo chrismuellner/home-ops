@@ -12,7 +12,6 @@ spec:
       app.kubernetes.io/instance: homeassistant
   components:
     - ../../../../components/kopiur/backup
-    - ../../../../components/kopiur/root
   dependsOn:
     - name: kanidm
     - name: kopiur-repositories
@@ -22,8 +21,8 @@ spec:
   postBuild:
     substitute:
       APP: homeassistant
-      VOLSYNC_CLAIM: homeassistant-config
-      VOLSYNC_CAPACITY: 10Gi
+      KOPIUR_CLAIM: homeassistant-config
+      KOPIUR_CAPACITY: 10Gi
   prune: true
   sourceRef:
     kind: GitRepository

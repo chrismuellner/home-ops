@@ -22,6 +22,8 @@ spec:
               # Kanidm OIDC. Env vars render alphabetically, so OIDC_CLIENT_SECRET is defined before
               # SOCIALACCOUNT_PROVIDERS, which references it as $(OIDC_CLIENT_SECRET).
               DATABASE_URL: sqlite://localhost//opt/recipes/database/db.sqlite3 # db string compliant with custom parser used by tandoorrecipes
+              # gunicorn's control socket goes to $HOME, which is / for a UID without a passwd entry
+              HOME: /tmp
               ALLOWED_HOSTS: recipes.muellner.dev,tandoorrecipes.selfhosted
               ENABLE_SIGNUP: "0"
               OIDC_CLIENT_SECRET:
@@ -40,6 +42,23 @@ spec:
             envFrom:
               - secretRef:
                   name: tandoorrecipes-secret
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: {drop: ["ALL"]}
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        # Always for the first rollout, so kubelet makes the files root wrote
+        # group-writable; then back to OnRootMismatch
+        fsGroupChangePolicy: Always
+        # The bundled nginx listens on 80
+        sysctls:
+          - name: net.ipv4.ip_unprivileged_port_start
+            value: "0"
 
     service:
       web:
@@ -82,3 +101,10 @@ spec:
                 subPath: mediafiles
               - path: /opt/recipes/database
                 subPath: database
+      # nginx.conf logs here, and the image's directory belongs to its nginx user
+      nginx-logs:
+        type: emptyDir
+        advancedMounts:
+          web:
+            main:
+              - path: /var/log/nginx

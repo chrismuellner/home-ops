@@ -20,7 +20,7 @@ spec:
   postBuild:
     substitute:
       APP: qbittorrent
-      VOLSYNC_CLAIM: qbittorrent-config
+      KOPIUR_CLAIM: qbittorrent-config
   prune: true
   sourceRef:
     kind: GitRepository

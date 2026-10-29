@@ -30,6 +30,19 @@ spec:
                 spec:
                   failureThreshold: 30
                   periodSeconds: 5
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: {drop: ["ALL"]}
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        # Always for the first rollout, so kubelet makes the files root wrote
+        # group-writable; then back to OnRootMismatch
+        fsGroupChangePolicy: Always
 
     service:
       app:

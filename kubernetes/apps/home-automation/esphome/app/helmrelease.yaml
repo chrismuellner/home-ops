@@ -20,8 +20,26 @@ spec:
               tag: 2026.10.1
             env:
               ESPHOME_DASHBOARD_USE_PING: true # https://github.com/esphome/issues/issues/641#issuecomment-534156628
+              # The image's /root is root-only; toolchains and caches already
+              # live under /config/.esphome, only PlatformIO's appstate uses HOME
+              HOME: /tmp
             securityContext:
-              privileged: true
+              allowPrivilegeEscalation: false
+              capabilities: {drop: ["ALL"]}
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        # Always for the first rollout, so kubelet makes the files root wrote
+        # with 0600 group-readable; then back to OnRootMismatch
+        fsGroupChangePolicy: Always
+        # Unprivileged ICMP for the dashboard's ping status checks
+        sysctls:
+          - name: net.ipv4.ping_group_range
+            value: "0 2147483647"
 
     service:
       esphome:

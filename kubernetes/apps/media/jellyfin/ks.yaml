@@ -12,7 +12,6 @@ spec:
       app.kubernetes.io/instance: jellyfin
   components:
     - ../../../../components/kopiur/backup
-    - ../../../../components/kopiur/root
   dependsOn:
     - name: intel-gpu-resource-driver
     - name: kanidm
@@ -23,8 +22,8 @@ spec:
   postBuild:
     substitute:
       APP: jellyfin
-      VOLSYNC_CLAIM: jellyfin-config
-      VOLSYNC_CAPACITY: 10Gi
+      KOPIUR_CLAIM: jellyfin-config
+      KOPIUR_CAPACITY: 10Gi
   prune: true
   sourceRef:
     kind: GitRepository
