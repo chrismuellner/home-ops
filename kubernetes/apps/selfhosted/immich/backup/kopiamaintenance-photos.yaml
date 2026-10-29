@@ -1,6 +1,6 @@
 ---
-# Maintenance for the dedicated Hetzner SFTP repo — the shared-repo
-# KopiaMaintenance in system/volsync does not cover it.
+# Maintenance for the dedicated Hetzner SFTP repo — kopiur's maintenance of
+# the shared NAS repo does not cover it.
 # The maintenance CronJob loads its repository secret via envFrom and, unlike
 # the ReplicationSource mover, never writes SFTP_KEY_FILE to a file. So it gets
 # its own secret where SFTP_KEY_FILE is a path, and the key from the backup
