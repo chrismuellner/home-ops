@@ -9,6 +9,12 @@
       "matchCurrentVersion": "!/^0/",
       "automerge": true,
       "ignoreTests": true
+    },
+    {
+      description: "Review Cilium minor/major updates: they carry the node's networking and change datapath behaviour; patches still automerge",
+      matchPackageNames: ["quay.io/cilium/charts/cilium"],
+      matchUpdateTypes: ["minor", "major"],
+      automerge: false
     }
   ]
 }
