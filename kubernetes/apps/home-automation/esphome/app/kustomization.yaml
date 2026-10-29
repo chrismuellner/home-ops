@@ -6,3 +6,29 @@ namespace: home-automation
 resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+patches:
+  # Skip the toolchains and build output ESPHome rebuilds on the next compile
+  # (~3.4 GB). An explicit list replaces kopiur's defaults, so those come first.
+  # Matched by kind: the component names it ${APP}, substituted only after the build
+  - target:
+      group: kopiur.home-operations.com
+      kind: SnapshotPolicy
+    patch: |-
+      - op: add
+        path: /spec/files
+        value:
+          ignoreRules:
+            - /lost+found
+            - System Volume Information
+            - $RECYCLE.BIN
+            - "@eaDir"
+            - .snapshot
+            - /.esphome/build
+            - /.esphome/idf
+            - /.esphome/platformio
+            - /.esphome/platformio-ccache
+            - /.esphome/pio_components
+            - /.esphome/.espressif
+            - /.esphome/sdk-nrf
+            - /.esphome/arduino8266
+            - /.esphome/host
