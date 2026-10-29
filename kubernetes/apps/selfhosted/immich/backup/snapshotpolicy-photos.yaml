@@ -1,0 +1,47 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kopiur.home-operations.com/snapshotpolicy_v1alpha1.json
+# Off-site backup of the Immich photos NFS share, read directly from the NAS
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotPolicy
+metadata:
+  name: immich-photos
+spec:
+  repository:
+    kind: Repository
+    name: immich-photos
+  sources:
+    - nfs:
+        server: nas.local
+        path: /var/nfs/shared/photos
+      # The VolSync fork recorded every snapshot under /data
+      sourcePathOverride: /data
+  copyMethod: Direct
+  compression:
+    compressor: zstd-fastest
+  # thumbs/ and encoded-video/ are regenerable by Immich (~320G saved)
+  files:
+    ignoreRules:
+      - /immich/thumbs
+      - /immich/encoded-video
+      - .DS_Store
+  upload:
+    maxParallelFileReads: 2
+  # VolSync's effective retention: latest and hourly came from kopia's global
+  # policy, which kopiur does not inherit
+  retention:
+    keepLatest: 10
+    keepHourly: 48
+    keepDaily: 7
+    keepWeekly: 4
+    keepMonthly: 12
+    keepAnnual: 1
+  mover:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        memory: 4Gi
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1000

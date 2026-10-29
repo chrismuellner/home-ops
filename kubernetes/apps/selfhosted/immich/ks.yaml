@@ -25,7 +25,7 @@ spec:
   wait: true
   targetNamespace: selfhosted
 ---
-# Off-site Kopia backup of the photos NFS share (dedicated Hetzner SFTP repo)
+# Off-site kopiur backup of the photos NFS share (dedicated Hetzner SFTP repo)
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -34,7 +34,7 @@ metadata:
 spec:
   dependsOn:
     - name: immich
-    - name: volsync
+    - name: kopiur
   interval: 10m
   path: ./kubernetes/apps/selfhosted/immich/backup
   prune: true

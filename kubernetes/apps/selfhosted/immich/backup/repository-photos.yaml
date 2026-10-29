@@ -1,0 +1,58 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kopiur.home-operations.com/repository_v1alpha1.json
+# Adopts the dedicated Kopia repository on the Hetzner Storage Box (SFTP) that
+# the VolSync fork wrote. Snapshots were recorded as immich-photos@selfhosted:/data,
+# which identityDefaults + the policy's sourcePathOverride reproduce.
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: Repository
+metadata:
+  name: immich-photos
+spec:
+  backend:
+    sftp:
+      host: u352985.your-storagebox.de
+      port: 23
+      path: /home
+      username: u352985-sub1
+      auth:
+        secretRef:
+          name: immich-photos-kopiur-secret
+  encryption:
+    passwordSecretRef:
+      name: immich-photos-kopiur-secret
+      key: KOPIA_PASSWORD
+  # Never initialize: a wrong path must fail, not create an empty repository
+  create:
+    enabled: false
+  identityDefaults:
+    usernameExpr: policyName
+    hostnameExpr: namespace
+  # Force takes the maintenance lease over from maintenance@volsync. Full runs
+  # stay weekly as under VolSync: the repository only grows by a few new photos
+  # a day, so there is little garbage to collect
+  maintenance:
+    takeoverPolicy: Force
+    schedule:
+      quick:
+        cron: 0 4 * * 1-6
+        jitter: 30m
+      full:
+        cron: 0 4 * * 0
+        jitter: 30m
+  moverDefaults:
+    # Warm caches across runs so the index is not re-downloaded every time
+    cache:
+      capacity: 20Gi
+      mode: Persistent
+      storageClassName: host-zfs
+      contentCacheSizeMb: 2048
+      metadataCacheSizeMb: 10240
+    # Cilium Bandwidth Manager egress cap, in bits/s: 60 Mbit/s (~7.5 MB/s) of
+    # the 100 Mbit/s uplink
+    podAnnotations:
+      kubernetes.io/egress-bandwidth: 60M
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+    podSecurityContext:
+      fsGroup: 1000
