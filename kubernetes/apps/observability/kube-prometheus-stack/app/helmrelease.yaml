@@ -170,14 +170,15 @@ spec:
             rules:
               # a failed job keeps firing until it is garbage collected, even after
               # later runs succeed, so cronjobs are judged by their last run instead
-              # and volsync movers are covered by the volsync rules
+              # and kopiur backup/restore movers are covered by kopiur's own rules
+              # (maintenance has no kopiur alert, so its failed Jobs still fire here)
               - alert: KubeJobFailed
                 annotations:
                   summary: Job {{ $labels.namespace }}/{{ $labels.job_name }} failed to complete.
                 expr: |-
-                  kube_job_failed{job="kube-state-metrics", job_name!~"volsync-.*"} > 0
+                  kube_job_failed{job="kube-state-metrics"} > 0
                     unless on (namespace, job_name)
-                  kube_job_owner{job="kube-state-metrics", owner_kind="CronJob"}
+                  kube_job_owner{job="kube-state-metrics", owner_kind=~"CronJob|Snapshot|Restore"}
                 for: 15m
                 labels:
                   severity: warning
@@ -186,7 +187,7 @@ spec:
                   summary: Job {{ $labels.namespace }}/{{ $labels.job_name }} is taking more than 12 hours to complete.
                 expr: |-
                   time() - max by (namespace, job_name) (
-                    kube_job_status_start_time{job="kube-state-metrics", job_name!~"volsync-.*"}
+                    kube_job_status_start_time{job="kube-state-metrics"}
                       and
                     kube_job_status_active{job="kube-state-metrics"} > 0
                   ) > 43200
@@ -212,7 +213,7 @@ spec:
                   severity: warning
               # KubePodNotReady ignores job pods, so a job whose pod can't be
               # scheduled would otherwise go unnoticed. Grouped by job since
-              # some controllers (e.g. volsync) recreate the pending pod.
+              # a Job controller may recreate the pending pod.
               - alert: KubeJobPodPending
                 annotations:
                   summary: Job {{ $labels.namespace }}/{{ $labels.owner_name }} has had a pod stuck in Pending for more than 30 minutes.

@@ -18,7 +18,7 @@ home-ops/
 │   │   ├── selfhosted/
 │   │   ├── system/
 │   │   └── system-upgrade/
-│   ├── components/        # Reusable Kustomize components (e.g. volsync)
+│   ├── components/        # Reusable Kustomize components (e.g. kopiur)
 │   └── flux/
 │       └── cluster/
 │           └── ks.yaml    # Root Flux Kustomization — entry point for all apps
@@ -58,8 +58,8 @@ All apps use the [bjw-s/app-template](https://bjw-s-labs.github.io/helm-charts/d
 - `kubernetes/flux/cluster/ks.yaml` is the root — it patches all HelmReleases with cluster-wide defaults (CRD handling, remediation, timeouts)
 - Use `chartRef` (OCIRepository), not `sourceRef` + `HelmRepository`
 - `dependsOn` is common — apps typically depend on `openebs` or other prerequisites
-- `postBuild.substitute` provides variable substitution (e.g. `APP`, `VOLSYNC_CAPACITY`)
-- Reusable Kustomize components live in `kubernetes/components/` (e.g. volsync backup config)
+- `postBuild.substitute` provides variable substitution (e.g. `APP`, `VOLSYNC_CAPACITY`, read by the kopiur backup component)
+- Reusable Kustomize components live in `kubernetes/components/` (e.g. kopiur backup config)
 
 ## Secret Management
 
@@ -92,7 +92,7 @@ All apps use the [bjw-s/app-template](https://bjw-s-labs.github.io/helm-charts/d
 | `network` | Envoy Gateway, certificates |
 | `observability` | Grafana, kube-prometheus-stack |
 | `selfhosted` | Paperless-ngx, Tandoor Recipes |
-| `system` | OpenEBS, Volsync/Kopia backups, Reloader |
+| `system` | OpenEBS, kopiur/Kopia backups, Reloader |
 | `system-upgrade` | Talos/Kubernetes upgrade controller (TUPR) |
 
 ## Conventions

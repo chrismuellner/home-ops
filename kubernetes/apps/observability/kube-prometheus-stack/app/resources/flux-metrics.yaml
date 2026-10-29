@@ -22,9 +22,10 @@ kube-state-metrics:
           - list
           - watch
       - apiGroups:
-          - volsync.backube
+          - kopiur.home-operations.com
         resources:
-          - replicationsources
+          - snapshotschedules
+          - maintenances
         verbs:
           - list
           - watch
@@ -369,13 +370,13 @@ kube-state-metrics:
                   webhook_path:
                     - status
                     - webhookPath
-          # volsync only exports an out-of-sync flag; the dashboard also needs
-          # when the last backup ran and whether the mover succeeded
+          # kopiur's own metrics have no schedule times; the dashboard also
+          # needs when the next backup is due and when maintenance last ran
           - groupVersionKind:
-              group: volsync.backube
+              group: kopiur.home-operations.com
               version: v1alpha1
-              kind: ReplicationSource
-            metricNamePrefix: volsync_replicationsource
+              kind: SnapshotSchedule
+            metricNamePrefix: kopiur_snapshotschedule
             labelsFromPath:
               exported_namespace:
                 - metadata
@@ -384,34 +385,65 @@ kube-state-metrics:
                 - metadata
                 - name
             metrics:
-              - name: info
-                help: The state of a VolSync ReplicationSource.
-                each:
-                  type: Info
-                  info:
-                    labelsFromPath:
-                      result:
-                        - status
-                        - latestMoverStatus
-                        - result
-                      synchronizing:
-                        - status
-                        - conditions
-                        - "[type=Synchronizing]"
-                        - reason
-              - name: last_sync_timestamp_seconds
-                help: Time of the last successful sync of a VolSync ReplicationSource.
+              - name: next_run_timestamp_seconds
+                help: Time of the next scheduled run of a kopiur SnapshotSchedule.
                 each:
                   type: Gauge
                   gauge:
                     path:
                       - status
-                      - lastSyncTime
-              - name: next_sync_timestamp_seconds
-                help: Time of the next scheduled sync of a VolSync ReplicationSource.
+                      - nextSchedule
+                      - at
+          - groupVersionKind:
+              group: kopiur.home-operations.com
+              version: v1alpha1
+              kind: Maintenance
+            metricNamePrefix: kopiur_maintenance_schedule
+            labelsFromPath:
+              exported_namespace:
+                - metadata
+                - namespace
+              name:
+                - metadata
+                - name
+            metrics:
+              - name: quick_last_run_timestamp_seconds
+                help: Time of the last quick run of a kopiur Maintenance.
                 each:
                   type: Gauge
                   gauge:
                     path:
                       - status
-                      - nextSyncTime
+                      - quick
+                      - lastRunAt
+              - name: quick_consecutive_failures
+                help: Back-to-back failed quick runs of a kopiur Maintenance.
+                each:
+                  type: Gauge
+                  gauge:
+                    # omitted from the status while there are none
+                    nilIsZero: true
+                    path:
+                      - status
+                      - quick
+                      - consecutiveFailures
+              - name: full_last_run_timestamp_seconds
+                help: Time of the last full run of a kopiur Maintenance.
+                each:
+                  type: Gauge
+                  gauge:
+                    path:
+                      - status
+                      - full
+                      - lastRunAt
+              - name: full_consecutive_failures
+                help: Back-to-back failed full runs of a kopiur Maintenance.
+                each:
+                  type: Gauge
+                  gauge:
+                    # omitted from the status while there are none
+                    nilIsZero: true
+                    path:
+                      - status
+                      - full
+                      - consecutiveFailures
