@@ -37,6 +37,10 @@ spec:
               SOCIALACCOUNT_LOGIN_ON_GET: "1"
               # SSO only: allauth disables local login, signup and password reset; hide the form too
               SOCIALACCOUNT_ONLY: "1"
+              # SOCIALACCOUNT_ONLY fails Django's system check unless email verification is off
+              # (Tandoor copies it to SOCIALACCOUNT_EMAIL_VERIFICATION). The failed check made
+              # boot.sh's migrate abort on every start; Kanidm already vouches for the email
+              ACCOUNT_EMAIL_VERIFICATION: none
               HIDE_LOGIN_FORM: "1"
               SOCIALACCOUNT_PROVIDERS: '{"openid_connect":{"OAUTH_PKCE_ENABLED":true,"APPS":[{"provider_id":"kanidm","name":"Kanidm","client_id":"tandoor","secret":"$(OIDC_CLIENT_SECRET)","settings":{"server_url":"https://idm.muellner.dev/oauth2/openid/tandoor/.well-known/openid-configuration"}}]}}'
             envFrom:
