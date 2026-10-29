@@ -52,9 +52,7 @@ spec:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
-        # Always for the first rollout, so kubelet makes the files root wrote
-        # group-writable; then back to OnRootMismatch
-        fsGroupChangePolicy: Always
+        fsGroupChangePolicy: OnRootMismatch
         # The bundled nginx listens on 80
         sysctls:
           - name: net.ipv4.ip_unprivileged_port_start

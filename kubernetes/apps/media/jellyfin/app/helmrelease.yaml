@@ -42,9 +42,7 @@ spec:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
-        # Always for the first rollout, so kubelet makes the files root wrote
-        # with 0600 group-readable; then back to OnRootMismatch
-        fsGroupChangePolicy: Always
+        fsGroupChangePolicy: OnRootMismatch
 
     service:
       app:

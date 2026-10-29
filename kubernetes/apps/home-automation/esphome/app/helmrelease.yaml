@@ -33,9 +33,7 @@ spec:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
-        # Always for the first rollout, so kubelet makes the files root wrote
-        # with 0600 group-readable; then back to OnRootMismatch
-        fsGroupChangePolicy: Always
+        fsGroupChangePolicy: OnRootMismatch
         # Unprivileged ICMP for the dashboard's ping status checks
         sysctls:
           - name: net.ipv4.ping_group_range
