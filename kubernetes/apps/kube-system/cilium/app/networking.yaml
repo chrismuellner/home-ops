@@ -5,8 +5,11 @@ metadata:
   name: default-pool
 spec:
   allowFirstLastIPs: "No"
+  # Keep clear of the node IP (192.168.10.100) and the router: since Cilium 1.19 an LB-IPAM
+  # address drops all traffic on ports without a Service, which would cut off Talos and kube-apiserver
   blocks:
-    - cidr: 192.168.10.0/24
+    - start: 192.168.10.110
+      stop: 192.168.10.119
 ---
 apiVersion: cilium.io/v2alpha1
 kind: CiliumL2AnnouncementPolicy
