@@ -10,3 +10,23 @@ resources:
   - ./kanidm.yaml
   - ./ocirepository.yaml
   - ./resourceclaimtemplate.yaml
+patches:
+  # Skip the subtitle tracks and fonts Jellyfin extracts from the media files
+  # it re-extracts them on the next playback. An explicit list
+  # replaces kopiur's defaults, so those come first.
+  # Matched by kind: the component names it ${APP}, substituted only after the build
+  - target:
+      group: kopiur.home-operations.com
+      kind: SnapshotPolicy
+    patch: |-
+      - op: add
+        path: /spec/files
+        value:
+          ignoreRules:
+            - /lost+found
+            - System Volume Information
+            - $RECYCLE.BIN
+            - "@eaDir"
+            - .snapshot
+            - /data/subtitles
+            - /data/attachments
