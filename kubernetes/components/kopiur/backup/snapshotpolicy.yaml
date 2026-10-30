@@ -4,6 +4,11 @@ apiVersion: kopiur.home-operations.com/v1alpha1
 kind: SnapshotPolicy
 metadata:
   name: ${APP}
+  annotations:
+    # Moves new snapshots from <app>@<namespace>:/data to /pvc/<claim>. Old ones stay
+    # restorable via Restore.spec.source.identity and age out under the same
+    # retention. Remove once every policy has a snapshot under the new path
+    kopiur.home-operations.com/allow-identity-change: "drop VolSync /data path"
 spec:
   repository:
     kind: ClusterRepository
@@ -11,8 +16,6 @@ spec:
   sources:
     - pvc:
         name: "${KOPIUR_CLAIM:=${APP}}"
-      # The VolSync fork recorded every snapshot under /data
-      sourcePathOverride: /data
   credentialProjection:
     enabled: true
   copyMethod: Snapshot
