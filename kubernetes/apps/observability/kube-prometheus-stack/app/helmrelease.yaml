@@ -27,6 +27,11 @@ spec:
               # Alertmanager >= v0.35 (alertmanager#5098) and drop the plugin
               - url_file: /etc/alertmanager/secrets/alertmanager-signal/url
                 send_resolved: true
+          # informational one-shot messages, no "resolved" follow-up
+          - name: signal-info
+            webhook_configs:
+              - url_file: /etc/alertmanager/secrets/alertmanager-signal/url
+                send_resolved: false
         route:
           receiver: signal
           group_by:
@@ -39,6 +44,9 @@ spec:
             - receiver: "null"
               matchers:
                 - alertname = "InfoInhibitor"
+            - receiver: signal-info
+              matchers:
+                - alertname = "ClusterUpgraded"
       route:
         main:
           enabled: true
@@ -230,8 +238,9 @@ spec:
         groups:
           - name: pods
             rules:
-              # after a node reboot (e.g. a talos upgrade) the old pods of
-              # deployments/statefulsets are left behind as Completed/Error
+              # after an unplanned node reboot the old pods of deployments/
+              # statefulsets are left behind as Completed/Error (talos upgrades
+              # drain the node first, so they shouldn't trigger this)
               - alert: KubePodTerminatedNotCleanedUp
                 annotations:
                   summary: Pod {{ $labels.namespace }}/{{ $labels.pod }} has terminated and is not owned by a job. It needs to be cleaned up.
@@ -250,6 +259,26 @@ spec:
                 for: 15m
                 labels:
                   severity: warning
+      upgrade-rules:
+        groups:
+          - name: upgrades
+            rules:
+              # one Signal message per finished tuppr upgrade; failures are covered
+              # by the PrometheusRule shipped with the tuppr chart. Uses the
+              # completion timestamp since the counters reset when the reboot
+              # restarts tuppr. The on () join assumes a single node.
+              - alert: ClusterUpgraded
+                annotations:
+                  summary: >-
+                    {{ $labels.upgrade_type | title }} upgrade finished: node runs Talos {{ $labels.talos_version }}, Kubernetes {{ $labels.kubernetes_version }}.
+                expr: |-
+                  max by (namespace, upgrade_type, name) (
+                    time() - tuppr_upgrade_last_completion_timestamp_seconds{result="success"} < 3600
+                  )
+                    * on () group_left (talos_version, kubernetes_version)
+                  max by (talos_version, kubernetes_version) (tuppr_node_info)
+                labels:
+                  severity: info
       oom-rules:
         groups:
           - name: oom

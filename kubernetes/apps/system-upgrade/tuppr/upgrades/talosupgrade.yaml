@@ -10,6 +10,11 @@ spec:
     version: v1.14.5
   policy:
     rebootMode: default
+  # Single node: tuppr disables talosctl's own drain (it would evict its own
+  # upgrade pod), so without this the reboot leaves every pod behind as
+  # Completed/Error. Deprecated, but the only option that drains a single node.
+  drain:
+    enabled: true
   healthChecks:
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: Snapshot
