@@ -44,9 +44,37 @@ spec:
             - receiver: "null"
               matchers:
                 - alertname = "InfoInhibitor"
+            # keep in sync with the InfoInhibitor exemption below
             - receiver: signal-info
               matchers:
-                - alertname = "ClusterUpgraded"
+                - alertname =~ "ClusterUpgraded|LocalBackupsCompleted|OffsiteBackupCompleted"
+        # chart defaults, except that the signal-info alerts are exempt from
+        # InfoInhibitor: it fires for every info alert in a namespace without a
+        # warning, so it would mute them before they are ever sent
+        inhibit_rules:
+          - source_matchers:
+              - severity = "critical"
+            target_matchers:
+              - severity =~ "warning|info"
+            equal:
+              - namespace
+              - alertname
+          - source_matchers:
+              - severity = "warning"
+            target_matchers:
+              - severity = "info"
+            equal:
+              - namespace
+              - alertname
+          - source_matchers:
+              - alertname = "InfoInhibitor"
+            target_matchers:
+              - severity = "info"
+              - alertname !~ "ClusterUpgraded|LocalBackupsCompleted|OffsiteBackupCompleted"
+            equal:
+              - namespace
+          - target_matchers:
+              - alertname = "InfoInhibitor"
       route:
         main:
           enabled: true
@@ -277,6 +305,35 @@ spec:
                   )
                     * on () group_left (talos_version, kubernetes_version)
                   max by (talos_version, kubernetes_version) (tuppr_node_info)
+                labels:
+                  severity: info
+      backup-rules:
+        groups:
+          - name: backups
+            rules:
+              # one Signal message per day for each repository; failures are covered
+              # by the PrometheusRule shipped with the kopiur chart. Sizes are
+              # kopia's logical size of each source's latest snapshot (before
+              # dedup/compression). The delta looks back 12h, between two daily
+              # runs, as completion times drift with jitter and backup duration.
+              # max by (namespace, policy) drops the pod label, which changes
+              # whenever the controller restarts.
+              - alert: OffsiteBackupCompleted
+                annotations:
+                  summary: >-
+                    Photo backup to Hetzner finished: {{ with query `max(kopiur_policy_last_backup_size_bytes{policy="immich-photos"})` }}{{ . | first | value | humanize1024 }}B{{ end }} of data ({{ range query `max(kopiur_policy_last_backup_size_bytes{policy="immich-photos"}) - max(kopiur_policy_last_backup_size_bytes{policy="immich-photos"} offset 12h)` }}{{ if ge .Value 0.0 }}+{{ end }}{{ .Value | humanize1024 }}B{{ end }} since the previous backup).
+                expr: |-
+                  time() - max by (namespace, policy) (kopiur_policy_last_backup_success_timestamp_seconds{policy="immich-photos"}) < 3600
+                labels:
+                  severity: info
+              # Grouped: fires once the last NAS policy has finished, so one failed
+              # app suppresses the message for that day
+              - alert: LocalBackupsCompleted
+                annotations:
+                  summary: >-
+                    Local backups to the NAS finished: {{ with query `count(max by (namespace, policy) (kopiur_policy_last_backup_size_bytes{policy!="immich-photos"}))` }}{{ . | first | value }}{{ end }} apps, {{ with query `sum(max by (namespace, policy) (kopiur_policy_last_backup_size_bytes{policy!="immich-photos"}))` }}{{ . | first | value | humanize1024 }}B{{ end }} of data ({{ range query `sum(max by (namespace, policy) (kopiur_policy_last_backup_size_bytes{policy!="immich-photos"})) - sum(max by (namespace, policy) (kopiur_policy_last_backup_size_bytes{policy!="immich-photos"} offset 12h))` }}{{ if ge .Value 0.0 }}+{{ end }}{{ .Value | humanize1024 }}B{{ end }} since the previous backup).
+                expr: |-
+                  time() - min(max by (namespace, policy) (kopiur_policy_last_backup_success_timestamp_seconds{policy!="immich-photos"})) < 3600
                 labels:
                   severity: info
       oom-rules:
