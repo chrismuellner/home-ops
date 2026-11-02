@@ -26,8 +26,13 @@ local function format(payload)
 		end
 	end
 
+	-- info alerts are one-shot notices (upgrades, backups), not problems
+	local info = labels.severity == "info"
+
 	local header
-	if status == "firing" then
+	if info then
+		header = string.format("ℹ️ %s", labels.alertname or "info")
+	elseif status == "firing" then
 		header = string.format("🔥 FIRING (%d): %s", firing, labels.alertname or "alert")
 	else
 		header = string.format("✅ RESOLVED: %s", labels.alertname or "alert")
@@ -39,11 +44,11 @@ local function format(payload)
 		local l = alert.labels or {}
 		local text = a.summary or a.description or a.message or l.alertname or ""
 		local scope = l.namespace and (" [" .. l.namespace .. "]") or ""
-		local severity = l.severity and (l.severity .. ": ") or ""
+		local severity = (l.severity and not info) and (l.severity .. ": ") or ""
 		table.insert(lines, "• " .. severity .. text .. scope)
 	end
 
-	if payload.externalURL then
+	if payload.externalURL and not info then
 		table.insert(lines, payload.externalURL)
 	end
 	return table.concat(lines, "\n")
