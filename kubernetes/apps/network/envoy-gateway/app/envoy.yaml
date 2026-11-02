@@ -100,6 +100,7 @@ spec:
               - key: kubernetes.io/metadata.name
                 operator: In
                 values:
+                  - flux-system
                   - home-automation
                   - media
                   - security

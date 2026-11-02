@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.envoyproxy.io/securitypolicy_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: github-webhook
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: github-webhook
+  # Only GitHub's webhook senders may reach the receiver; the HMAC signature is still verified by Flux.
+  # Source: `curl -s https://api.github.com/meta | jq .hooks` (refresh if deliveries start failing with 403)
+  authorization:
+    defaultAction: Deny
+    rules:
+      - name: github-hooks
+        action: Allow
+        principal:
+          clientCIDRs:
+            - 9.234.98.160/28
+            - 9.234.98.176/28
+            - 9.234.106.48/28
+            - 140.82.112.0/20
+            - 143.55.64.0/20
+            - 185.199.108.0/22
+            - 192.30.252.0/22
+            - 2606:50c0::/32
+            - 2a0a:a440::/29

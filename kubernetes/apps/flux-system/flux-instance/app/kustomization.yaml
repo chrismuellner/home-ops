@@ -8,3 +8,9 @@ resources:
   - ./grafanadashboard.yaml
   - ./podmonitor.yaml
   - ./prometheusrule.yaml
+  - ./github-webhook-token-secret.sops.yaml
+  - ./receiver.yaml
+  - ./httproute.yaml
+  - ./backendtrafficpolicy.yaml
+  - ./securitypolicy.yaml
+  - ./ciliumnetworkpolicy.yaml

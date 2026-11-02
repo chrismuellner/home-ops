@@ -50,6 +50,15 @@ spec:
             - port: "18000"
               protocol: TCP
     # Publicly exposed backends: add an entry here when exposing an app
+    # Flux webhook receiver (GitHub push events); 9292 is the pod port behind the webhook-receiver Service
+    - toEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: flux-system
+            app: notification-controller
+      toPorts:
+        - ports:
+            - port: "9292"
+              protocol: TCP
     - toEndpoints:
         - matchLabels:
             io.kubernetes.pod.namespace: home-automation

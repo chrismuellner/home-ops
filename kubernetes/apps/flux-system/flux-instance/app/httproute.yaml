@@ -1,0 +1,24 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: github-webhook
+spec:
+  hostnames:
+    - flux-webhook.muellner.dev
+  # GitHub calls in from the internet; only the receiver path is routed
+  parentRefs:
+    - name: envoy-external
+      namespace: network
+  rules:
+    - backendRefs:
+        - name: webhook-receiver
+          namespace: flux-system
+          port: 80
+      # GitHub only POSTs deliveries
+      matches:
+        - method: POST
+          path:
+            type: PathPrefix
+            value: /hook/
