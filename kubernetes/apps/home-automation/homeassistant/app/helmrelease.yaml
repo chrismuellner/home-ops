@@ -96,3 +96,9 @@ spec:
         globalMounts:
           - path: /config/template.yaml
             subPath: template.yaml
+      automations-file:
+        type: configMap
+        name: homeassistant-automations
+        globalMounts:
+          - path: /config/automations.yaml
+            subPath: automations.yaml

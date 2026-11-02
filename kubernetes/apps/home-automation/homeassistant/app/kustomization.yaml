@@ -22,5 +22,8 @@ configMapGenerator:
   - name: homeassistant-template
     files:
       - ./config/template.yaml
+  - name: homeassistant-automations
+    files:
+      - ./config/automations.yaml
 generatorOptions:
   disableNameSuffixHash: true

@@ -1,0 +1,61 @@
+---
+# SmartThings silently stops delivering some events (home-assistant/core#176244); a config-entry
+# reload re-fetches the full device status. The washer plug is the ground truth. Rate-limited to
+# one reload per hour: repeated reloads can exhaust the SmartThings subscription limit (#178381).
+- id: smartthings_washer_watchdog
+  alias: SmartThings washer watchdog
+  description: Reload SmartThings when its washer state disagrees with the plug's power draw
+  mode: single
+  triggers:
+    - trigger: state
+      entity_id: sensor.washer_cycle
+      to: running
+      for: "00:05:00"
+    - trigger: state
+      entity_id: sensor.washer_cycle
+      to: idle
+      for: "00:10:00"
+    - trigger: time_pattern
+      minutes: /15
+  conditions:
+    - condition: or
+      conditions:
+        # Plug shows a running cycle, SmartThings has said "stop" for 5 min
+        - condition: and
+          conditions:
+            - condition: state
+              entity_id: sensor.washer_cycle
+              state: running
+              for: "00:05:00"
+            - condition: state
+              entity_id: sensor.washing_machine_machine_state
+              state: stop
+              for: "00:05:00"
+        # Plug is idle, SmartThings still reports a run (stuck "drying" on 2026-10-22)
+        - condition: and
+          conditions:
+            - condition: state
+              entity_id: sensor.washer_cycle
+              state: idle
+              for: "00:10:00"
+            - condition: state
+              entity_id: sensor.washing_machine_machine_state
+              state:
+                - run
+                - pause
+              for: "00:10:00"
+    - condition: template
+      value_template: >-
+        {{ this.attributes.last_triggered is none
+           or now() - this.attributes.last_triggered > timedelta(hours=1) }}
+  actions:
+    - action: logbook.log
+      data:
+        name: SmartThings watchdog
+        message: >-
+          reloading: plug cycle {{ states('sensor.washer_cycle') }}, SmartThings machine
+          {{ states('sensor.washing_machine_machine_state') }}
+        entity_id: sensor.washing_machine_machine_state
+    - action: homeassistant.reload_config_entry
+      target:
+        entity_id: sensor.washing_machine_machine_state
