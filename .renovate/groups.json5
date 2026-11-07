@@ -27,6 +27,15 @@
       },
     },
     {
+      description: "Keep kubectl in mise.toml in the Kubernetes group",
+      groupName: "kubernetes",
+      matchManagers: ["mise"],
+      matchDepNames: ["kubectl"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
       description: "Talos Group",
       groupName: "talos",
       matchPackageNames: ["siderolabs/talos"],

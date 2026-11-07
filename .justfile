@@ -1,7 +1,7 @@
-#!/usr/bin/env -S just --justfile
+#!/usr/bin/env -S mise x -- just --justfile
 
-set quiet := true
-set shell := ['bash', '-euo', 'pipefail', '-c']
+set quiet
+set shell := ['mise', 'x', '--', 'bash', '-euo', 'pipefail', '-c']
 
 mod bootstrap "bootstrap"
 mod talos "talos"

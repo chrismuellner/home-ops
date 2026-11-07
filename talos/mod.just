@@ -1,6 +1,6 @@
-set positional-arguments := true
-set quiet := true
-set shell := ['bash', '-euo', 'pipefail', '-c']
+set positional-arguments
+set quiet
+set shell := ['mise', 'x', '--', 'bash', '-euo', 'pipefail', '-c']
 
 talos_dir := justfile_dir() + '/talos'
 secrets := talos_dir + '/talos-secrets.yaml'
@@ -16,7 +16,7 @@ default:
 
 [doc('Generate Talos config for a single-node cluster')]
 genconfig endpoint:
-    #!/usr/bin/env bash
+    #!/usr/bin/env -S mise x -- bash
     set -euo pipefail
     if [ ! -f "{{ secrets }}" ]; then
         echo "Error: talos-secrets.yaml not found at {{ secrets }}"

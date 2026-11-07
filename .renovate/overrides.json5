@@ -7,5 +7,18 @@
       matchManagers: ["helmfile"],
       overrideDepName: "{{packageName}}",
     },
+    {
+      description: "Track talosctl in mise.toml from the Talos Factory, same source as the tuppr TalosUpgrade",
+      matchManagers: ["mise"],
+      matchPackageNames: ["siderolabs/talos"],
+      overrideDatasource: "custom.talos-factory",
+    },
+    {
+      description: "Track kubectl in mise.toml from the kubelet image, same source as the tuppr KubernetesUpgrade",
+      matchManagers: ["mise"],
+      matchDepNames: ["kubectl"],
+      overrideDatasource: "docker",
+      overridePackageName: "ghcr.io/siderolabs/kubelet",
+    },
   ],
 }

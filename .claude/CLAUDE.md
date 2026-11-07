@@ -70,8 +70,11 @@ All apps use the [bjw-s/app-template](https://bjw-s-labs.github.io/helm-charts/d
 
 ## CLI Tools
 
+All tools are pinned in `mise.toml` (short registry names, exact versions, checksums in `mise.lock`; run `mise lock` after changing versions by hand) and invoked through mise (`mise x -- <tool>`); justfile recipes and lefthook hooks already run under `mise x`.
+
 | Tool | Purpose |
 |------|---------|
+| `mise` | Tool version manager — `mise install` installs everything below |
 | `kubectl` | Kubernetes cluster interaction |
 | `flux` | Flux CD — check status, reconcile, view logs |
 | `talosctl` | Talos OS management (uses `talos/talosconfig`) |

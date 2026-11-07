@@ -4,11 +4,8 @@ Bootstrap a bare Talos cluster to a fully Flux-managed Kubernetes environment.
 
 ## Prerequisites
 
-- [talosctl](https://www.talos.dev/latest/introduction/getting-started/#talosctl)
-- [kubectl](https://kubernetes.io/docs/tasks/tools/)
-- [just](https://github.com/casey/just)
-- [helmfile](https://github.com/helmfile/helmfile)
-- [yq](https://github.com/mikefarah/yq)
+- [mise](https://mise.jdx.dev/) — run `mise install` at the repository root to install the
+  pinned tools from `mise.toml` (talosctl, kubectl, just, helmfile, helm, yq, ...)
 
 `talosctl` must be configured with the cluster endpoint and node IPs (see [talos/README.md](../talos/README.md)).
 
@@ -24,7 +21,7 @@ just bootstrap
 
 This executes the following stages in order:
 
-1. **check** — verifies all required binaries are installed
+1. **check** — installs the tools pinned in `mise.toml` via `mise install`
 2. **talos** — applies machine config to nodes (skips already-configured nodes)
 2. **kube** — bootstraps the Kubernetes control plane
 3. **kubeconfig** — fetches kubeconfig via talosctl
