@@ -99,6 +99,9 @@
 # silently drops events (home-assistant/core#176244); SmartThings only adds temperature and
 # drying. All logic lives in the action's variables so every entity reads the pre-update state.
 # Measured profiles: sensitive 30 ~1h26/0.3 kWh, wash 30 ~3h20/0.6 kWh, drying adds ~0.8 kWh.
+# Heat energy in the first 40 min tells dry programs apart when SmartThings gives no temperature:
+# wash 30 + dry ~0.25 kWh (2026-10-31), eco 40-60 + dry 0.07 kWh (2026-11-07), 60 + dry not seen
+# yet (assumed >= 0.5). Eco 40-60 and 60 are used interchangeably, so both count as wash_60_dry.
 - trigger:
     - trigger: numeric_state
       id: power_on
@@ -164,7 +167,7 @@
           {% elif dried or (energy_kwh is not none and energy_kwh >= 0.9) %}
             {% if temperature | string == '60' %}wash_60_dry
             {% elif temperature | string == '30' %}wash_30_dry
-            {% elif temperature is none and heat_energy is not none %}{{ 'wash_60_dry' if heat_energy >= 0.5 else 'wash_30_dry' }}
+            {% elif temperature is none and heat_energy is not none %}{{ 'wash_60_dry' if heat_energy >= 0.5 or heat_energy < 0.15 else 'wash_30_dry' }}
             {% else %}other_dry{% endif %}
           {% elif duration_min < 150 %}sensitive_30
           {% else %}wash_30{% endif %}
@@ -223,7 +226,7 @@
       attributes:
         duration_min: "{{ duration_min if program == 'wash_30_dry' else this.attributes.get('duration_min', 222) }}"
         energy_kwh: "{{ energy_kwh if program == 'wash_30_dry' else this.attributes.get('energy_kwh', 1.18) }}"
-    - name: Washer last wash 60 dry
+    - name: Washer last wash 60 or eco dry
       unique_id: washer_last_wash_60_dry
       default_entity_id: sensor.washer_last_wash_60_dry
       device_class: timestamp
