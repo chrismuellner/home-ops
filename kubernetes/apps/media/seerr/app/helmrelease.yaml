@@ -60,7 +60,6 @@ spec:
           gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_SEERR_KEY}}" }}'
         hostnames:
           - "seerr.muellner.dev"
-          - "jellyseerr.muellner.dev"
         # LAN DNS resolves to envoy-internal, public DNS to envoy-external
         parentRefs:
           - name: envoy-internal

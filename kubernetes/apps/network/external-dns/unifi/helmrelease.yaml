@@ -20,6 +20,9 @@ spec:
         env:
           - name: UNIFI_HOST
             value: https://192.168.10.1
+          # Without a per-attempt timeout a dropped connection hangs silently until the liveness probe kills the container
+          - name: UNIFI_REQUEST_TIMEOUT
+            value: 4s
           - name: UNIFI_API_KEY
             valueFrom:
               secretKeyRef:
