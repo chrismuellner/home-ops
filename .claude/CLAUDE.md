@@ -61,6 +61,17 @@ All apps use the [bjw-s/app-template](https://bjw-s-labs.github.io/helm-charts/d
 - `postBuild.substitute` provides variable substitution (e.g. `APP`, `KOPIUR_CAPACITY`, read by the kopiur backup component)
 - Reusable Kustomize components live in `kubernetes/components/` (e.g. kopiur backup config)
 
+## DNS
+
+DNS records are managed by two external-dns instances in `kubernetes/apps/network/external-dns/` — do not create route records by hand in Cloudflare or UniFi.
+
+- `external-dns-unifi` (LAN): every hostname on a route attached to `envoy-internal` gets an A record to the gateway's address in UniFi. Also reads `DNSEndpoint` resources for other LAN records.
+- `external-dns-cloudflare` (public): every hostname on a route attached to `envoy-external` gets an unproxied CNAME to `external.muellner.dev`, set by the `external-dns.kubernetes.io/target` annotation on the gateway.
+- `external.muellner.dev` is the only manual record; the router's DDNS client keeps it on the WAN IP.
+- Routes attached to both gateways rely on this split: LAN clients reach `envoy-internal`, public clients `envoy-external`.
+- Both instances run with `policy: sync`: removing a hostname from a route deletes its record. Records without an external-dns ownership TXT record are never touched.
+- The UniFi instance needs the router API at `https://192.168.10.1` (firewall: DMZ → Gateway, TCP 443).
+
 ## Secret Management
 
 - Encrypted with [SOPS](https://getsops.io/) + age; config in `.sops.yaml`
@@ -92,7 +103,7 @@ All tools are pinned in `mise.toml` (short registry names, exact versions, check
 | `home-automation` | Home Assistant, Mosquitto MQTT, Zigbee2MQTT |
 | `kube-system` | Cilium CNI, metrics-server |
 | `media` | Jellyfin, Immich, *arr stack, qBittorrent, SABnzbd, Seerr |
-| `network` | Envoy Gateway, certificates |
+| `network` | Envoy Gateway, certificates, external-dns (Cloudflare and UniFi) |
 | `observability` | Grafana, kube-prometheus-stack |
 | `selfhosted` | Paperless-ngx, Tandoor Recipes |
 | `system` | OpenEBS, kopiur/Kopia backups, Reloader |
