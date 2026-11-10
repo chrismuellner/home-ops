@@ -1,0 +1,38 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app external-dns-cloudflare
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: external-dns-cloudflare
+  interval: 30m
+  values:
+    fullnameOverride: *app
+    provider:
+      name: cloudflare
+    env:
+      - name: CF_API_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: &secret external-dns-cloudflare-secret
+            key: CF_API_TOKEN
+    extraArgs:
+      # Public DNS only covers routes on the public gateway. Records are CNAMEs to the
+      # gateway's external-dns target annotation and stay unproxied: the UniFi region rules
+      # and the Flux webhook IP allowlist both match on the real client address.
+      - --gateway-name=envoy-external
+    triggerLoopOnEvent: true
+    policy: sync
+    sources:
+      - gateway-httproute
+    txtOwnerId: default
+    txtPrefix: k8s.%{record_type}-
+    domainFilters:
+      - muellner.dev
+    serviceMonitor:
+      enabled: true
+    podAnnotations:
+      secret.reloader.stakater.com/reload: *secret

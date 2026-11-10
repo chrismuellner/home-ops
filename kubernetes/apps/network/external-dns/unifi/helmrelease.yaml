@@ -1,0 +1,57 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app external-dns-unifi
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: external-dns-unifi
+  interval: 30m
+  values:
+    fullnameOverride: *app
+    provider:
+      name: webhook
+      webhook:
+        image:
+          repository: ghcr.io/home-operations/external-dns-unifi-webhook
+          tag: 0.11.0@sha256:663442f116d7b45546782bdf7ace50d05ac15cc630c7236d443d69593845e992
+        env:
+          - name: UNIFI_HOST
+            value: https://192.168.10.1
+          - name: UNIFI_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: &secret external-dns-unifi-secret
+                key: UNIFI_API_KEY
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http-webhook
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: http-webhook
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+    extraArgs:
+      # LAN DNS only covers routes on the internal gateway. Routes attached to both gateways
+      # would otherwise resolve to both load balancer addresses.
+      - --gateway-name=envoy-internal
+    triggerLoopOnEvent: true
+    policy: sync
+    sources:
+      - crd
+      - gateway-httproute
+      - service
+    txtOwnerId: main
+    txtPrefix: k8s.main.%{record_type}-
+    domainFilters:
+      - muellner.dev
+    serviceMonitor:
+      enabled: true
+    podAnnotations:
+      secret.reloader.stakater.com/reload: *secret
