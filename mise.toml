@@ -11,7 +11,7 @@ yq = "4.54.3"
 helmfile = "1.8.3"
 helm = "4.3.1"
 # Renovate keeps these in sync with kubernetes/apps/system-upgrade/tuppr/upgrades/*.yaml
-talosctl = "1.14.5"
+talosctl = "1.14.6"
 kubectl = "1.37.2"
 # secrets
 sops = "3.13.3"
