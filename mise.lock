@@ -14,13 +14,13 @@ url = "https://github.com/fluxcd/flux2/releases/download/v2.10.0/flux_2.10.0_lin
 url_api = "https://api.github.com/repos/fluxcd/flux2/releases/assets/678609567"
 
 [[tools.helm]]
-version = "4.3.1"
+version = "4.3.2"
 backend = "aqua:helm/helm"
-specifiers = ["4.3.1"]
+specifiers = ["4.3.2"]
 
 [tools.helm."platforms.linux-x64"]
-checksum = "sha256:0403a88ae20913d11b10a2467b50087721fea7581736da6b9d3992f5357fe54b"
-url = "https://get.helm.sh/helm-v4.3.1-linux-amd64.tar.gz"
+checksum = "sha256:d1c0278d46beab79582d7e50f5b3dc206944ba8e577cde618513fd07daa53983"
+url = "https://get.helm.sh/helm-v4.3.2-linux-amd64.tar.gz"
 
 [[tools.helmfile]]
 version = "1.8.4"
