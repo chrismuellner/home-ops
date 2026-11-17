@@ -16,7 +16,7 @@ spec:
           init-passwd:
             image:
               repository: eclipse-mosquitto
-              tag: 2.0.22
+              tag: 2.0.23
             command:
               - /bin/sh
               - -c
@@ -28,7 +28,7 @@ spec:
           app:
             image:
               repository: eclipse-mosquitto
-              tag: 2.0.22
+              tag: 2.0.23
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: {drop: ["ALL"]}
