@@ -3,15 +3,15 @@
 lockfile_version = 4
 
 [[tools.flux2]]
-version = "2.10.0"
+version = "2.10.1"
 backend = "aqua:fluxcd/flux2"
-specifiers = ["2.10.0"]
+specifiers = ["2.10.1"]
 
 [tools.flux2."platforms.linux-x64"]
-checksum = "sha256:208dd7012c04fedeed5b2d0b6e63df3b15b1c34a381527811685c098bc9f8659"
+checksum = "sha256:967365ff84aabc97871827ff33713ef0c09f62dd83c18759e3a5e39adcea9285"
 checksum_source = "mise-versions"
-url = "https://github.com/fluxcd/flux2/releases/download/v2.10.0/flux_2.10.0_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/fluxcd/flux2/releases/assets/678609567"
+url = "https://github.com/fluxcd/flux2/releases/download/v2.10.1/flux_2.10.1_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/fluxcd/flux2/releases/assets/771871002"
 
 [[tools.helm]]
 version = "4.3.2"
