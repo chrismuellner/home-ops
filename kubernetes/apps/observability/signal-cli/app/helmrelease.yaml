@@ -19,7 +19,7 @@ spec:
           app:
             image:
               repository: docker.io/bbernhard/signal-cli-rest-api
-              tag: "0.101"
+              tag: "0.102"
             env:
               MODE: json-rpc
               PORT: &port 8080
