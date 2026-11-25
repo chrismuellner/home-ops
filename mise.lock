@@ -45,13 +45,13 @@ url = "https://github.com/casey/just/releases/download/1.59.0/just-1.59.0-x86_64
 url_api = "https://api.github.com/repos/casey/just/releases/assets/642949555"
 
 [[tools.kubectl]]
-version = "1.37.2"
+version = "1.37.3"
 backend = "aqua:kubernetes/kubernetes/kubectl"
-specifiers = ["1.37.2"]
+specifiers = ["1.37.3"]
 
 [tools.kubectl."platforms.linux-x64"]
-checksum = "sha256:c04487523e7aa7d1493f7808174c899db93d7a9cf57531420cd76b9bd415f8f4"
-url = "https://dl.k8s.io/v1.37.2/bin/linux/amd64/kubectl"
+checksum = "sha256:9a1b55af2795b25dd288dbef62387db9b5530087ab918d28c6ad067f2e3cb07c"
+url = "https://dl.k8s.io/v1.37.3/bin/linux/amd64/kubectl"
 
 [[tools.lefthook]]
 version = "2.2.3"
