@@ -54,14 +54,14 @@ checksum = "sha256:9a1b55af2795b25dd288dbef62387db9b5530087ab918d28c6ad067f2e3cb
 url = "https://dl.k8s.io/v1.37.3/bin/linux/amd64/kubectl"
 
 [[tools.lefthook]]
-version = "2.2.3"
+version = "2.2.4"
 backend = "aqua:evilmartians/lefthook"
-specifiers = ["2.2.3"]
+specifiers = ["2.2.4"]
 
 [tools.lefthook."platforms.linux-x64"]
-checksum = "sha256:f25a53b1991c2727aa2819fdd7a4b9798fc0c210d1e1a92f035be8f346cec9fb"
-url = "https://github.com/evilmartians/lefthook/releases/download/v2.2.3/lefthook_2.2.3_Linux_x86_64.gz"
-url_api = "https://api.github.com/repos/evilmartians/lefthook/releases/assets/786728948"
+checksum = "sha256:d2ab071d60703a3d3fdc3ea4ac4172cc151a97a3623b83f1003ce1a8eb68e2b3"
+url = "https://github.com/evilmartians/lefthook/releases/download/v2.2.4/lefthook_2.2.4_Linux_x86_64.gz"
+url_api = "https://api.github.com/repos/evilmartians/lefthook/releases/assets/795192860"
 provenance = "github-attestations"
 
 [[tools.sops]]
